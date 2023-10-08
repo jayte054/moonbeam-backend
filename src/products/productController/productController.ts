@@ -65,6 +65,7 @@ import {
   UseInterceptors,
   UploadedFile,
   UsePipes,
+  Get,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -96,5 +97,10 @@ export class ProductController {
       user,
       req,
     );
+  }
+
+  @Get('/getOrders')
+  async getOrders(): Promise<ProductOrderEntity> {
+    return await this.productService.getOrders();
   }
 }

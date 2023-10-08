@@ -27,4 +27,8 @@ export class ProductService {
       //   deliveryDateStr,
     );
   }
+
+  async getOrders(): Promise<ProductOrderEntity> {
+    return await this.productRepository.getOrders();
+  }
 }

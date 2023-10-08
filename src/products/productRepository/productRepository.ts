@@ -2,9 +2,10 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import { ProductOrderDto } from '../productDto/productOrderDto';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
 import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
@@ -76,5 +77,17 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       deliveryDate: order.deliveryDate,
       userId: order.user.id,
     };
+  }
+
+  async getOrders(): Promise<ProductOrderEntity> {
+    const options: FindOneOptions<ProductOrderEntity> = {};
+
+    const orders: any = await this.find(options);
+    if (!orders) {
+      this.logger.error('orders not found');
+      throw new NotFoundException('orders not found');
+    }
+    this.logger.verbose('orders fetched successfully');
+    return orders;
   }
 }
