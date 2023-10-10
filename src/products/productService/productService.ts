@@ -4,6 +4,7 @@ import { Request } from 'express';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { ProductOrderDto } from '../productDto/productOrderDto';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
+import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
 import { ProductRepository } from '../productRepository/productRepository';
 
 @Injectable()
@@ -30,5 +31,32 @@ export class ProductService {
 
   async getOrders(): Promise<ProductOrderEntity> {
     return await this.productRepository.getOrders();
+  }
+
+  async getOrderWithId(
+    id: string,
+    user: AuthEntity,
+  ): Promise<ProductOrderEntity> {
+    return this.productRepository.getOrderWithId(id, user);
+  }
+
+  async updateOrder(
+    id: string,
+    user: AuthEntity,
+    type?: ProductType,
+    layers?: ProductLayers,
+    deliveryDate?: string,
+    // imageUrl?: string,
+    // req?: Request,
+  ): Promise<ProductOrderEntity> {
+    return await this.productRepository.updateOrder(
+      id,
+      user,
+      type,
+      layers,
+      deliveryDate,
+      // imageUrl,
+      // req,
+    );
   }
 }

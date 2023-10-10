@@ -12,6 +12,8 @@ import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
 import { v4 as uuid } from 'uuid';
+import { Type } from 'typescript';
+import { AuthDto } from 'src/authModule/authDto/authDto';
 
 @Injectable()
 export class ProductRepository extends Repository<ProductOrderEntity> {
@@ -89,5 +91,67 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     }
     this.logger.verbose('orders fetched successfully');
     return orders;
+  }
+
+  async getOrderWithId(
+    id: string,
+    user: AuthEntity,
+  ): Promise<ProductOrderEntity> {
+    const orderWithId = await this.findOne({
+      where: {
+        id,
+        userId: user.id,
+      },
+    });
+
+    if (!orderWithId) {
+      throw new NotFoundException(`order with id ${id} not found`);
+    }
+    try {
+      this.logger.verbose(
+        `user ${user.firstname} successfully fetched order with id ${id}`,
+      );
+      return orderWithId;
+    } catch (error) {
+      this.logger.error(
+        `User with ${user.firstname} failed to get order with id ${id}`,
+      );
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async updateOrder(
+    id: string,
+    user: AuthEntity,
+    // authDto: AuthDto,
+    type?: ProductType,
+    layers?: ProductLayers,
+    deliveryDate?: string,
+    // imageUrl?: string,
+    // req?: Request,
+  ): Promise<ProductOrderEntity> {
+    // const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
+    //   req.file,
+    // );
+    // imageUrl = cloudinaryUrl;
+    // const { firstname } = authDto;
+    const order = await this.getOrderWithId(id, user);
+    order.type = type;
+    order.layers = layers;
+    order.deliveryDate = deliveryDate;
+    // order.imageUrl = cloudinaryUrl;
+
+    try {
+      await order.save();
+      this.logger.verbose(
+        `User ${user.firstname} has successfully updated order with id ${id}`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `User ${user.firstname} failed to update order with id  ${id}`,
+      );
+      throw new InternalServerErrorException();
+    }
+    return order;
   }
 }

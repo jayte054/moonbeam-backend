@@ -66,6 +66,8 @@ import {
   UploadedFile,
   UsePipes,
   Get,
+  Param,
+  Patch,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -75,6 +77,7 @@ import { ProductOrderDto } from '../productDto/productOrderDto';
 import { ProductService } from '../productService/productService';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
 import { diskStorage } from 'multer';
+import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -91,7 +94,6 @@ export class ProductController {
     @Request() req: Request | any,
   ): Promise<ProductOrderEntity | any> {
     console.log('wahala');
-    // productOrderDto.file = file;
     return await this.productService.createProductOrder(
       productOrderDto,
       user,
@@ -102,5 +104,39 @@ export class ProductController {
   @Get('/getOrders')
   async getOrders(): Promise<ProductOrderEntity> {
     return await this.productService.getOrders();
+  }
+
+  @Get('/:id')
+  getOrderWithId(
+    @Param('id') id: string,
+    @GetUser() user: AuthEntity,
+  ): Promise<ProductOrderEntity> {
+    return this.productService.getOrderWithId(id, user);
+  }
+  // user: AuthEntity,
+  // type?: ProductType,
+  // layers?: ProductLayers,
+  // deliveryDate?: string,
+  // imageUrl?: string,
+  // req?: Request,
+  @Patch('/:id/update')
+  async updateOrder(
+    @Param('id') id: string,
+    @GetUser() user: AuthEntity,
+    @Body('type') type: ProductType,
+    @Body('layers') layers: ProductLayers,
+    @Body('deliveryDate') deliveryDate: string,
+    // @Body('imageUrl') imageUrl: string,
+    // @Request() req: Request | any,
+  ): Promise<ProductOrderEntity> {
+    return await this.productService.updateOrder(
+      id,
+      user,
+      type,
+      layers,
+      deliveryDate,
+      // imageUrl,
+      // req,
+    );
   }
 }
