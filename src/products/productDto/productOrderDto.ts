@@ -1,5 +1,6 @@
 import { IsDateString, IsNotEmpty, MinLength } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
 // import { UploadedFile } from '@nestjs/platform-express';
 
 export class ProductOrderDto {
@@ -15,4 +16,14 @@ export class ProductOrderDto {
 
   // @Type(() => UploadedFile)
   file: Express.Multer.File;
+}
+
+export class UpdateOrderDto {
+  type?: ProductType;
+
+  layers?: ProductLayers;
+
+  deliveryDate?: string;
+
+  file?: Express.Multer.File;
 }

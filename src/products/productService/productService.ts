@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
-import { ProductOrderDto } from '../productDto/productOrderDto';
+import { ProductOrderDto, UpdateOrderDto } from '../productDto/productOrderDto';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
 import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
 import { ProductRepository } from '../productRepository/productRepository';
@@ -43,20 +43,14 @@ export class ProductService {
   async updateOrder(
     id: string,
     user: AuthEntity,
-    type?: ProductType,
-    layers?: ProductLayers,
-    deliveryDate?: string,
-    // imageUrl?: string,
-    // req?: Request,
+    updateOrderDto: UpdateOrderDto,
+    req?: Request,
   ): Promise<ProductOrderEntity> {
     return await this.productRepository.updateOrder(
       id,
       user,
-      type,
-      layers,
-      deliveryDate,
-      // imageUrl,
-      // req,
+      updateOrderDto,
+      req,
     );
   }
 }

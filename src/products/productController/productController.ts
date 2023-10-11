@@ -73,7 +73,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
-import { ProductOrderDto } from '../productDto/productOrderDto';
+import { ProductOrderDto, UpdateOrderDto } from '../productDto/productOrderDto';
 import { ProductService } from '../productService/productService';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
 import { diskStorage } from 'multer';
@@ -113,30 +113,18 @@ export class ProductController {
   ): Promise<ProductOrderEntity> {
     return this.productService.getOrderWithId(id, user);
   }
-  // user: AuthEntity,
-  // type?: ProductType,
-  // layers?: ProductLayers,
-  // deliveryDate?: string,
-  // imageUrl?: string,
-  // req?: Request,
+
   @Patch('/:id/update')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(ValidationPipe)
   async updateOrder(
     @Param('id') id: string,
     @GetUser() user: AuthEntity,
-    @Body('type') type: ProductType,
-    @Body('layers') layers: ProductLayers,
-    @Body('deliveryDate') deliveryDate: string,
-    // @Body('imageUrl') imageUrl: string,
-    // @Request() req: Request | any,
+    @Body() updateOrderDto: UpdateOrderDto,
+    // @UploadedFile() file: Express.Multer.File,
+    @Request() req: Request | any,
   ): Promise<ProductOrderEntity> {
-    return await this.productService.updateOrder(
-      id,
-      user,
-      type,
-      layers,
-      deliveryDate,
-      // imageUrl,
-      // req,
-    );
+    console.log('wahala');
+    return await this.productService.updateOrder(id, user, updateOrderDto, req);
   }
 }

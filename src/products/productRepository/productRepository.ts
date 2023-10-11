@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
-import { ProductOrderDto } from '../productDto/productOrderDto';
+import { ProductOrderDto, UpdateOrderDto } from '../productDto/productOrderDto';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
 import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
 import { Request } from 'express';
@@ -123,23 +123,24 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
   async updateOrder(
     id: string,
     user: AuthEntity,
-    // authDto: AuthDto,
-    type?: ProductType,
-    layers?: ProductLayers,
-    deliveryDate?: string,
-    // imageUrl?: string,
-    // req?: Request,
+    updateOrderDto: UpdateOrderDto,
+    req?: Request,
   ): Promise<ProductOrderEntity> {
-    // const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
-    //   req.file,
-    // );
-    // imageUrl = cloudinaryUrl;
-    // const { firstname } = authDto;
+    const { type, layers, deliveryDate, file } = updateOrderDto;
     const order = await this.getOrderWithId(id, user);
+    // if (file) {
+    const newImage = await this.cloudinaryService.uploadImage(req.file);
+
+    if (order.imageUrl) {
+      const oldPublicId = this.extractPublicId(order.imageUrl);
+      console.log('old', oldPublicId);
+      await this.cloudinaryService.deleteImage(oldPublicId);
+    }
+    order.imageUrl = newImage.secure_url;
+    // }
     order.type = type;
     order.layers = layers;
     order.deliveryDate = deliveryDate;
-    // order.imageUrl = cloudinaryUrl;
 
     try {
       await order.save();
@@ -150,8 +151,16 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       this.logger.error(
         `User ${user.firstname} failed to update order with id  ${id}`,
       );
+      console.log(error);
       throw new InternalServerErrorException();
     }
     return order;
+  }
+  private extractPublicId(imageUrl: string): string {
+    // Extract the public_id from the imageUrl
+    const parts = imageUrl.split('/');
+    const filename = parts[parts.length - 1];
+    const publicId = filename.split('.')[0];
+    return publicId;
   }
 }
