@@ -8,12 +8,17 @@ import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import { ProductOrderDto, UpdateOrderDto } from '../productDto/productOrderDto';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
-import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
+import {
+  ProductInch,
+  ProductLayers,
+  ProductType,
+} from '../ProductEnum/productEnum';
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
 import { v4 as uuid } from 'uuid';
 import { Type } from 'typescript';
 import { AuthDto } from 'src/authModule/authDto/authDto';
+import { MailerService } from 'src/mailerModule/mailerService';
 
 @Injectable()
 export class ProductRepository extends Repository<ProductOrderEntity> {
@@ -21,6 +26,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
   constructor(
     private dataSource: DataSource,
     private cloudinaryService: CloudinaryService,
+    private readonly mailerService: MailerService,
   ) {
     super(ProductOrderEntity, dataSource.createEntityManager());
   }
@@ -35,6 +41,10 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
       req.file,
     );
+    const layers = Number(ProductLayers.one);
+    const inches = Number(ProductInch.six);
+    const rate = '5000'; //modify later
+    const price = Number(rate) * layers * inches;
 
     const order = new ProductOrderEntity();
     order.id = uuid();
@@ -42,6 +52,9 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.type = ProductType.Birthday;
     order.imageUrl = cloudinaryUrl.secure_url;
     order.layers = ProductLayers.one;
+    order.inches = ProductInch.six;
+    order.rate = rate;
+    order.price = price.toString();
     order.orderDate = new Date().toLocaleDateString('en-US', {
       day: '2-digit',
       month: '2-digit',
@@ -58,6 +71,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     try {
       // await this.cloudinaryService.uploadImage(req.file);
       await order.save();
+      await this.mailerService.productOrderMail(user.email, order);
       this.logger.verbose(
         `user ${user} has successfully placed an order ${order.id}`,
       );
@@ -76,6 +90,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       layers: order.layers,
       imageUrl: order.imageUrl,
       orderDate: order.orderDate,
+      price: order.price,
       deliveryDate: order.deliveryDate,
       userId: order.user.id,
     };
@@ -123,7 +138,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
   async updateOrder(
     id: string,
     user: AuthEntity,
-    updateOrderDto: UpdateOrderDto,
+    updateOrderDto?: UpdateOrderDto,
     req?: Request,
   ): Promise<ProductOrderEntity> {
     const { type, layers, deliveryDate, file } = updateOrderDto;
@@ -144,6 +159,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
 
     try {
       await order.save();
+      await this.mailerService.updateOrderMail(user.email, order);
       this.logger.verbose(
         `User ${user.firstname} has successfully updated order with id ${id}`,
       );

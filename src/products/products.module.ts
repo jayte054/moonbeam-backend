@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/authModule/authmodule';
+import { MailerModule } from 'src/mailerModule/mailerModule';
 import { CloudinaryModule } from '../cloudinary/cloudinaryModule';
 import { ProductController } from './productController/productController';
 import { ProductOrderEntity } from './productEntity/productOrderEntity';
@@ -9,6 +10,7 @@ import { ProductService } from './productService/productService';
 
 @Module({
   imports: [
+    MailerModule,
     CloudinaryModule,
     AuthModule,
     TypeOrmModule.forFeature([ProductOrderEntity, ProductRepository]),

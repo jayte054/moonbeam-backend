@@ -26,13 +26,6 @@ export class AuthRepository extends Repository<AuthEntity> {
     super(AuthEntity, dataSource.createEntityManager());
   }
 
-  //   private async hashedPassword(
-  //     password: string,
-  //     salt: string,
-  //   ): Promise<string> {
-  //     return await bcrypt.hash(password, salt);
-  //   }
-
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<string> {
     const { firstname, lastname, phoneNumber, email, password } =
       authCredentialsDto;

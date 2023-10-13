@@ -6,7 +6,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
+import {
+  ProductInch,
+  ProductLayers,
+  ProductType,
+} from '../ProductEnum/productEnum';
 
 @Entity()
 export class ProductOrderEntity extends BaseEntity {
@@ -24,6 +28,15 @@ export class ProductOrderEntity extends BaseEntity {
 
   @Column()
   layers: ProductLayers;
+
+  @Column()
+  inches: ProductInch;
+
+  @Column()
+  rate: string;
+
+  @Column()
+  price: string;
 
   @Column({ default: new Date() })
   orderDate: string;

@@ -6,21 +6,21 @@ export enum ProductType {
 }
 
 export enum ProductInch {
-  six = 'six inches',
-  eight = 'eight inches',
-  ten = 'ten inches',
-  twelve = 'twelve inches',
-  fourteen = 'fourteen inches',
-  sixteen = 'sixteen inches',
-  eighteen = 'eighteen inches',
-  twenty = 'twenty inches',
+  six = '6',
+  eight = '8',
+  ten = '10',
+  twelve = '12',
+  fourteen = '14',
+  sixteen = '16',
+  eighteen = '18',
+  twenty = '20',
 }
 
 export enum ProductLayers {
-  one = 'one layer',
-  two = 'two layers',
-  three = 'three layers',
-  four = 'four layers',
-  five = 'five layers',
-  six = 'six layers',
+  one = '1',
+  two = '2',
+  three = '3',
+  four = '4',
+  five = '5',
+  six = '6',
 }

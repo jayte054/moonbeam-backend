@@ -10,6 +10,7 @@ import { PasswordResetTokenEntity } from 'src/authModule/passwordResetTokenEntit
 import { ResetPasswordEmailDto } from './resetpassword.dto';
 import { Gmail_Password, Gmail_User } from '../cloudinaryConfig';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
+import { ProductOrderEntity } from 'src/products/productEntity/productOrderEntity';
 
 @Injectable()
 export class MailerService {
@@ -121,5 +122,70 @@ export class MailerService {
       expiresAt: passwordResetToken.expiresAt,
       message: 'reset token sent successfully',
     };
+  }
+
+  async productOrderMail(
+    email: string,
+    order: ProductOrderEntity,
+  ): Promise<void> {
+    const name = order.orderName;
+    const inches = order.inches;
+    const layers = order.layers;
+    const price = order.price;
+    const deliveryDate = order.deliveryDate;
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+             <p> Order Name: ${name}</p>
+             <p> Inches: ${inches}</p>
+             <p> Layers: ${layers}</p>
+             <p> Price: ${price}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully made.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`User ${email} product order mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async updateOrderMail(
+    email: string,
+    order: ProductOrderEntity,
+  ): Promise<void> {
+    const name = order.orderName;
+    const inches = order.inches;
+    const layers = order.layers;
+    const price = order.price;
+    const deliveryDate = order.deliveryDate;
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Updated Order',
+      html: ` 
+            Dear ${email}, this is to notify you that the update to your order </br>
+             <p> Order Name: ${name}</p>
+             <p> Inches: ${inches}</p>
+             <p> Layers: ${layers}</p>
+             <p> Price: ${price}</p>
+             <p> DeliveryDate: ${deliveryDate} </p> 
+             has been successful`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`User ${email} order update mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException();
+    }
   }
 }
