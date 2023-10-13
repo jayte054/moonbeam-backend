@@ -6,7 +6,11 @@ import {
 } from '@nestjs/common';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
-import { ProductOrderDto, UpdateOrderDto } from '../productDto/productOrderDto';
+import {
+  CustomProductOrderDto,
+  GenericProductOrderDto,
+  UpdateOrderDto,
+} from '../productDto/productOrderDto';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
 import {
   ProductInch,
@@ -30,13 +34,13 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
   ) {
     super(ProductOrderEntity, dataSource.createEntityManager());
   }
-  async createProductOrder(
-    productOrderDto: ProductOrderDto,
+  async createCustomProductOrder(
+    customProductOrderDto: CustomProductOrderDto,
     user: AuthEntity,
     req: Request,
   ): Promise<ProductOrderEntity | any> {
     console.log('hereeee');
-    const { orderName, deliveryDate } = productOrderDto;
+    const { orderName, deliveryDate } = customProductOrderDto;
 
     const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
       req.file,
@@ -70,6 +74,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
 
     try {
       // await this.cloudinaryService.uploadImage(req.file);
+      console.log('nod done');
       await order.save();
       await this.mailerService.productOrderMail(user.email, order);
       this.logger.verbose(
@@ -87,12 +92,74 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       id: order.id,
       orderName: order.orderName,
       type: order.type,
+      inches: order.inches,
       layers: order.layers,
       imageUrl: order.imageUrl,
       orderDate: order.orderDate,
       price: order.price,
       deliveryDate: order.deliveryDate,
       userId: order.user.id,
+    };
+  }
+
+  async genericProductOrder(
+    genericProductOrderDto: GenericProductOrderDto,
+    user: AuthEntity,
+  ): Promise<ProductOrderEntity | any> {
+    const { orderName, deliveryDate, imageUrl } = genericProductOrderDto;
+
+    const layers = Number(ProductLayers.one);
+    const inches = Number(ProductInch.six);
+    const rate = '5000'; //modify later
+    const price = Number(rate) * layers * inches;
+
+    const order = new ProductOrderEntity();
+    order.id = uuid();
+    order.orderName = orderName;
+    order.type = ProductType.Birthday;
+    order.layers = ProductLayers.one;
+    order.inches = ProductInch.six;
+    order.rate = rate;
+    order.deliveryDate = deliveryDate;
+    order.imageUrl = imageUrl;
+    order.price = price.toString();
+    order.orderDate = new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    order.deliveryDate = deliveryDate;
+    order.date = new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    order.user = user;
+
+    try {
+      await order.save();
+      await this.mailerService.productOrderMail(user.email, order);
+      this.logger.verbose(
+        `user ${user} has successfully placed an order ${order.id}`,
+      );
+    } catch (error) {
+      console.log(error);
+      this.logger.error('error placing order');
+      throw new InternalServerErrorException(
+        'error creating order, please try again later',
+      );
+    }
+
+    return {
+      id: order.id,
+      orderName: order.orderName,
+      type: order.type,
+      inches: order.inches,
+      layers: order.layers,
+      imageUrl: order.imageUrl,
+      orderDate: order.orderDate,
+      price: order.price,
+      deliveryDate: order.deliveryDate,
     };
   }
 
@@ -111,7 +178,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
   async getOrderWithId(
     id: string,
     user: AuthEntity,
-  ): Promise<ProductOrderEntity> {
+  ): Promise<ProductOrderEntity | any> {
     const orderWithId = await this.findOne({
       where: {
         id,
@@ -140,8 +207,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     user: AuthEntity,
     updateOrderDto?: UpdateOrderDto,
     req?: Request,
-  ): Promise<ProductOrderEntity> {
-    const { type, layers, deliveryDate, file } = updateOrderDto;
+  ): Promise<ProductOrderEntity | any> {
+    const { type, layers, deliveryDate, inches } = updateOrderDto;
     const order = await this.getOrderWithId(id, user);
     // if (file) {
     const newImage = await this.cloudinaryService.uploadImage(req.file);
@@ -155,6 +222,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     // }
     order.type = type;
     order.layers = layers;
+    order.inches = inches;
     order.deliveryDate = deliveryDate;
 
     try {
@@ -178,5 +246,25 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     const filename = parts[parts.length - 1];
     const publicId = filename.split('.')[0];
     return publicId;
+  }
+
+  async deleteOrder(id: string, user: AuthEntity): Promise<string> {
+    const result = await this.delete({
+      id,
+      userId: user.id,
+    });
+
+    if (!result) {
+      throw new NotFoundException();
+    }
+
+    try {
+      return id;
+    } catch (error) {
+      this.logger.error(
+        `User ${user} encountered an error deleting order with ${id}`,
+      );
+      throw new InternalServerErrorException();
+    }
   }
 }

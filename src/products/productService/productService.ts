@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
-import { ProductOrderDto, UpdateOrderDto } from '../productDto/productOrderDto';
+import {
+  CustomProductOrderDto,
+  GenericProductOrderDto,
+  UpdateOrderDto,
+} from '../productDto/productOrderDto';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
 import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
 import { ProductRepository } from '../productRepository/productRepository';
@@ -14,18 +18,28 @@ export class ProductService {
     private productRepository: ProductRepository,
   ) {}
 
-  async createProductOrder(
-    productOrderDto: ProductOrderDto,
+  async createCustomProductOrder(
+    customProductOrderDto: CustomProductOrderDto,
     user: AuthEntity,
     // file: Express.Multer.File,
     req: Request,
     // deliveryDateStr: string,
   ): Promise<ProductOrderEntity | any> {
-    return this.productRepository.createProductOrder(
-      productOrderDto,
+    return this.productRepository.createCustomProductOrder(
+      customProductOrderDto,
       user,
       req,
       //   deliveryDateStr,
+    );
+  }
+
+  async genericProductOrder(
+    genericProductOrderDto: GenericProductOrderDto,
+    user: AuthEntity,
+  ): Promise<ProductOrderEntity | any> {
+    return await this.productRepository.genericProductOrder(
+      genericProductOrderDto,
+      user,
     );
   }
 
@@ -52,5 +66,9 @@ export class ProductService {
       updateOrderDto,
       req,
     );
+  }
+
+  async deleteOrder(id: string, user: AuthEntity): Promise<string> {
+    return await this.deleteOrder(id, user);
   }
 }
