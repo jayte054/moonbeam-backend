@@ -12,7 +12,7 @@ import { AuthCredentialsDto } from '../authDto/authCredentialsDto';
 import { AuthEntity } from '../authEntity/authEntity';
 import { AuthSigninDto } from '../authDto/authSigninDto';
 import { MailerService } from 'src/mailerModule/mailerService';
-import { ResetPasswordEmailDto } from 'src/mailerModule/resetpassword.dto';
+import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.dto';
 import { ResetPasswordDto } from '../authDto/resetPasswordDto';
 import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
 

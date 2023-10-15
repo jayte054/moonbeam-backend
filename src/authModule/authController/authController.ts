@@ -1,5 +1,5 @@
 import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
-import { ResetPasswordEmailDto } from 'src/mailerModule/resetpassword.dto';
+import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.dto';
 import { AuthCredentialsDto } from '../authDto/authCredentialsDto';
 import { AuthSigninDto } from '../authDto/authSigninDto';
 import { ResetPasswordDto } from '../authDto/resetPasswordDto';

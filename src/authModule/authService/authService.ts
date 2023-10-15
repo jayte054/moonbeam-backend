@@ -1,7 +1,7 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResetPasswordEmailDto } from 'src/mailerModule/resetpassword.dto';
+import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.dto';
 import { AuthCredentialsDto } from '../authDto/authCredentialsDto';
 import { AuthSigninDto } from '../authDto/authSigninDto';
 import { ResetPasswordDto } from '../authDto/resetPasswordDto';

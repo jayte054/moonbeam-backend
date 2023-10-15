@@ -61,4 +61,6 @@ export class UpdateOrderDto {
   description?: string;
 
   status?: OrderStatus;
+
+  token?: string;
 }

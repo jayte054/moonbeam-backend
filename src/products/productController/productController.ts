@@ -98,6 +98,16 @@ export class ProductController {
     return await this.productService.cancelOrder(id, user, updateOrderDto);
   }
 
+  @Patch('/:id/deliverOrder')
+  @UsePipes(ValidationPipe)
+  async orderDelivered(
+    @Param('id') id: string,
+    @Body() updateOrderDto: UpdateOrderDto,
+    @GetUser() user: AuthEntity,
+  ): Promise<ProductOrderEntity | string> {
+    return await this.productService.orderDelivered(id, user, updateOrderDto);
+  }
+
   @Delete('/:id/deleteOrder')
   async deleteOrder(
     @Param('id') id: string,

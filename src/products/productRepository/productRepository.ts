@@ -271,7 +271,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     id: string,
     user: AuthEntity,
     updateOrderDto: UpdateOrderDto,
-  ): Promise<ProductOrderEntity | any> {
+  ): Promise<ProductOrderEntity | string> {
     const { deliveryDate } = updateOrderDto;
     const order = await this.getOrderWithId(id, user);
 
@@ -279,16 +279,46 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.deliveryDate = deliveryDate;
 
     try {
-      await order.save();
-      await this.mailerService.cancelOrderMail(user.email, order);
-      this.logger.verbose(`order with id ${id} has been canceled`);
+      if (order.status === OrderStatus.cancel) {
+        return order;
+      } else {
+        await order.save();
+        await this.mailerService.cancelOrderMail(user.email, order);
+        this.logger.verbose(`order with id ${id} has been canceled`);
+      }
     } catch (error) {
       throw new NotFoundException(`order with id ${id} not found`);
     }
     if (order.status === OrderStatus.cancel) {
-      return `order with id ${id} already canceled`;
+      return `order with id ${id} has already been canceled`;
     }
     return `order with ${id} has been canceled`;
+  }
+
+  async orderDelivered(
+    id: string,
+    user: AuthEntity,
+    updateOrderDto: UpdateOrderDto,
+  ): Promise<ProductOrderEntity | string> {
+    const { token } = updateOrderDto;
+
+    const order = await this.getOrderWithId(id, user);
+
+    order.token = token;
+    order.status = OrderStatus.delivered;
+
+    try {
+      await order.save();
+      await this.mailerService.orderDeliveryMail(user.email, order);
+      this.logger.verbose(`order with ${id} has been delivered`);
+    } catch (error) {
+      this.logger.error(`token not valid`);
+      throw new NotFoundException(`token ${token} not valid`);
+    }
+    if (order.status === OrderStatus.delivered) {
+      return `order with id ${id} has already been delivered`;
+    }
+    return `order with ${id} has been delivered`;
   }
 
   async deleteOrder(id: string, user: AuthEntity): Promise<string> {

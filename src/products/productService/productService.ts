@@ -76,6 +76,18 @@ export class ProductService {
     return await this.productRepository.cancelOrder(id, user, updateOrderDto);
   }
 
+  async orderDelivered(
+    id: string,
+    user: AuthEntity,
+    updateOrderDto: UpdateOrderDto,
+  ): Promise<ProductOrderEntity | string> {
+    return await this.productRepository.orderDelivered(
+      id,
+      user,
+      updateOrderDto,
+    );
+  }
+
   async deleteOrder(id: string, user: AuthEntity): Promise<string> {
     return await this.productRepository.deleteOrder(id, user);
   }
