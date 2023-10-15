@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import {
+  OrderStatus,
   ProductInch,
   ProductLayers,
   ProductType,
@@ -37,6 +38,12 @@ export class ProductOrderEntity extends BaseEntity {
 
   @Column()
   price: string;
+
+  @Column()
+  description: string;
+
+  @Column()
+  status: OrderStatus;
 
   @Column({ default: new Date() })
   orderDate: string;

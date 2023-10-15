@@ -1,6 +1,13 @@
-import { IsDateString, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import {
+  OrderStatus,
   ProductInch,
   ProductLayers,
   ProductType,
@@ -16,6 +23,10 @@ export class CustomProductOrderDto {
   deliveryDate: string;
 
   file: Express.Multer.File;
+
+  @IsNotEmpty()
+  @MaxLength(80)
+  description: string;
 }
 
 export class GenericProductOrderDto {
@@ -28,9 +39,15 @@ export class GenericProductOrderDto {
 
   @IsString()
   imageUrl: string;
+
+  @IsNotEmpty()
+  @MaxLength(80)
+  description: string;
 }
 
 export class UpdateOrderDto {
+  orderName?: string;
+
   type?: ProductType;
 
   layers?: ProductLayers;
@@ -40,4 +57,8 @@ export class UpdateOrderDto {
   deliveryDate?: string;
 
   file?: Express.Multer.File;
+
+  description?: string;
+
+  status?: OrderStatus;
 }

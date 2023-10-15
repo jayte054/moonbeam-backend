@@ -12,6 +12,7 @@ import {
   Param,
   Patch,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -34,10 +35,10 @@ export class ProductController {
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   async postOrder(
-    @Body() customProductOrderDto: CustomProductOrderDto,
     @GetUser() user: AuthEntity,
     @UploadedFile() file: Express.Multer.File,
     @Request() req: Request | any,
+    @Body() customProductOrderDto?: CustomProductOrderDto,
   ): Promise<ProductOrderEntity | any> {
     console.log('wahala');
     return await this.productService.createCustomProductOrder(
@@ -87,7 +88,17 @@ export class ProductController {
     return await this.productService.updateOrder(id, user, updateOrderDto, req);
   }
 
-  @Delete('/:id')
+  @Put('/:id/cancelOrder')
+  @UsePipes(ValidationPipe)
+  async cancelOrder(
+    @Param('id') id: string,
+    @Body() updateOrderDto: UpdateOrderDto,
+    @GetUser() user: AuthEntity,
+  ): Promise<ProductOrderEntity> {
+    return await this.productService.cancelOrder(id, user, updateOrderDto);
+  }
+
+  @Delete('/:id/deleteOrder')
   async deleteOrder(
     @Param('id') id: string,
     @GetUser() user: AuthEntity,

@@ -24,3 +24,9 @@ export enum ProductLayers {
   five = '5',
   six = '6',
 }
+
+export enum OrderStatus {
+  progress = 'in progress',
+  cancel = 'canceled',
+  delivered = 'delivered',
+}

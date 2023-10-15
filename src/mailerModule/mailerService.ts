@@ -132,6 +132,8 @@ export class MailerService {
     const inches = order.inches;
     const layers = order.layers;
     const price = order.price;
+    const status = order.status;
+    const description = order.deliveryDate;
     const deliveryDate = order.deliveryDate;
     const mailOptions: nodemailer.SendMailOptions = {
       from: Gmail_User,
@@ -143,6 +145,8 @@ export class MailerService {
              <p> Inches: ${inches}</p>
              <p> Layers: ${layers}</p>
              <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${description}</p>
              <p> DeliveryDate: ${deliveryDate} </p>  </br> 
           has been successfully made.
           We will get back to you shortly`,
@@ -165,6 +169,8 @@ export class MailerService {
     const inches = order.inches;
     const layers = order.layers;
     const price = order.price;
+    const status = order.status;
+    const description = order.description;
     const deliveryDate = order.deliveryDate;
     const mailOptions: nodemailer.SendMailOptions = {
       from: Gmail_User,
@@ -176,6 +182,8 @@ export class MailerService {
              <p> Inches: ${inches}</p>
              <p> Layers: ${layers}</p>
              <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${description}</p>
              <p> DeliveryDate: ${deliveryDate} </p> 
              has been successful`,
     };
@@ -183,6 +191,44 @@ export class MailerService {
     try {
       await this.transporter.sendMail(mailOptions);
       this.logger.verbose(`User ${email} order update mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async cancelOrderMail(
+    email: string,
+    order: ProductOrderEntity,
+  ): Promise<void> {
+    const name = order.orderName;
+    const inches = order.inches;
+    const layers = order.layers;
+    const price = order.price;
+    const description = order.description;
+    const status = order.status;
+    const deliveryDate = order.deliveryDate;
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moobeamcakes order canceled',
+      html: ` 
+      Dear ${email}, this is to notify you that the update to your order </br>
+       <p> Order Name: ${name}</p>
+       <p> Inches: ${inches}</p>
+       <p> Layers: ${layers}</p>
+       <p> Price: ${price}</p>
+       <p> Status: ${status}</p>
+       <p> Description: ${description}</p>
+       <p> DeliveryDate: ${deliveryDate} </p> 
+       has been canceled`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(
+        `cancel order mail from email ${email} has been sent successfully`,
+      );
     } catch (error) {
       this.logger.error(`User ${email} invalid email address`);
       throw new InternalServerErrorException();

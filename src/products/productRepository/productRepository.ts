@@ -13,6 +13,7 @@ import {
 } from '../productDto/productOrderDto';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
 import {
+  OrderStatus,
   ProductInch,
   ProductLayers,
   ProductType,
@@ -40,7 +41,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     req: Request,
   ): Promise<ProductOrderEntity | any> {
     console.log('hereeee');
-    const { orderName, deliveryDate } = customProductOrderDto;
+    const { orderName, deliveryDate, description } = customProductOrderDto;
 
     const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
       req.file,
@@ -59,6 +60,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.inches = ProductInch.six;
     order.rate = rate;
     order.price = price.toString();
+    order.status = OrderStatus.progress;
+    order.description = description;
     order.orderDate = new Date().toLocaleDateString('en-US', {
       day: '2-digit',
       month: '2-digit',
@@ -99,6 +102,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       price: order.price,
       deliveryDate: order.deliveryDate,
       userId: order.user.id,
+      description: order.description,
+      status: order.status,
     };
   }
 
@@ -106,7 +111,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     genericProductOrderDto: GenericProductOrderDto,
     user: AuthEntity,
   ): Promise<ProductOrderEntity | any> {
-    const { orderName, deliveryDate, imageUrl } = genericProductOrderDto;
+    const { orderName, deliveryDate, imageUrl, description } =
+      genericProductOrderDto;
 
     const layers = Number(ProductLayers.one);
     const inches = Number(ProductInch.six);
@@ -123,6 +129,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.deliveryDate = deliveryDate;
     order.imageUrl = imageUrl;
     order.price = price.toString();
+    order.status = OrderStatus.progress;
+    order.description = description;
     order.orderDate = new Date().toLocaleDateString('en-US', {
       day: '2-digit',
       month: '2-digit',
@@ -159,7 +167,10 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       imageUrl: order.imageUrl,
       orderDate: order.orderDate,
       price: order.price,
+      description: order.description,
+      userId: order.user.id,
       deliveryDate: order.deliveryDate,
+      status: order.status,
     };
   }
 
@@ -208,22 +219,30 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     updateOrderDto?: UpdateOrderDto,
     req?: Request,
   ): Promise<ProductOrderEntity | any> {
-    const { type, layers, deliveryDate, inches } = updateOrderDto;
-    const order = await this.getOrderWithId(id, user);
-    // if (file) {
-    const newImage = await this.cloudinaryService.uploadImage(req.file);
+    const { type, layers, deliveryDate, inches, description, orderName, file } =
+      updateOrderDto;
 
-    if (order.imageUrl) {
-      const oldPublicId = this.extractPublicId(order.imageUrl);
-      console.log('old', oldPublicId);
-      await this.cloudinaryService.deleteImage(oldPublicId);
+    const rate = '5000'; //modify later
+
+    const order = await this.getOrderWithId(id, user);
+
+    if (file) {
+      const newImage = await this.cloudinaryService.uploadImage(req.file);
+
+      if (order.imageUrl) {
+        const oldPublicId = this.extractPublicId(order.imageUrl);
+        console.log('old', oldPublicId);
+        await this.cloudinaryService.deleteImage(oldPublicId);
+      }
+      order.imageUrl = newImage.secure_url;
     }
-    order.imageUrl = newImage.secure_url;
-    // }
+    order.orderName = orderName;
     order.type = type;
-    order.layers = layers;
-    order.inches = inches;
+    order.layers = Number(layers);
+    order.inches = Number(inches);
     order.deliveryDate = deliveryDate;
+    order.description = description;
+    order.price = Number(rate) * order.layers * order.inches;
 
     try {
       await order.save();
@@ -248,6 +267,30 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     return publicId;
   }
 
+  async cancelOrder(
+    id: string,
+    user: AuthEntity,
+    updateOrderDto: UpdateOrderDto,
+  ): Promise<ProductOrderEntity | any> {
+    const { deliveryDate } = updateOrderDto;
+    const order = await this.getOrderWithId(id, user);
+
+    order.status = OrderStatus.cancel;
+    order.deliveryDate = deliveryDate;
+
+    try {
+      await order.save();
+      await this.mailerService.cancelOrderMail(user.email, order);
+      this.logger.verbose(`order with id ${id} has been canceled`);
+    } catch (error) {
+      throw new NotFoundException(`order with id ${id} not found`);
+    }
+    if (order.status === OrderStatus.cancel) {
+      return `order with id ${id} already canceled`;
+    }
+    return `order with ${id} has been canceled`;
+  }
+
   async deleteOrder(id: string, user: AuthEntity): Promise<string> {
     const result = await this.delete({
       id,
@@ -259,7 +302,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     }
 
     try {
-      return id;
+      this.logger.verbose(`order with id ${id} has been successfully deleted`);
+      return `order with ${id}, successfully deleted`;
     } catch (error) {
       this.logger.error(
         `User ${user} encountered an error deleting order with ${id}`,
