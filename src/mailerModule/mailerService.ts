@@ -49,6 +49,24 @@ export class MailerService {
     }
   }
 
+  async sendAdminWelcomeMail(email: string): Promise<void> {
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes',
+      html: ` 
+          Dear ${email}, welcome to moonbeamcakes! We look forward to a delightful experience with you`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`Admin ${email} welcome mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`Admin ${email} invalid email address`);
+      throw new InternalServerErrorException();
+    }
+  }
+
   //======= send reset token to email =======//
 
   async sendPasswordResetEmail(

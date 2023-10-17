@@ -21,8 +21,6 @@ import {
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
 import { v4 as uuid } from 'uuid';
-import { Type } from 'typescript';
-import { AuthDto } from 'src/authModule/authDto/authDto';
 import { MailerService } from 'src/mailerModule/mailerService';
 
 @Injectable()
@@ -76,7 +74,6 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.user = user;
 
     try {
-      // await this.cloudinaryService.uploadImage(req.file);
       console.log('nod done');
       await order.save();
       await this.mailerService.productOrderMail(user.email, order);

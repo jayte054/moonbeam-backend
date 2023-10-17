@@ -43,7 +43,9 @@ export class AuthRepository extends Repository<AuthEntity> {
     try {
       console.log('done');
       await user.save();
-      this.logger.verbose('New user created');
+      this.logger.verbose(
+        `New user with id of ${user.id} successfully created`,
+      );
       await this.mailerService.sendWelcomeMail(user.email);
     } catch (error) {
       if (error.code === '23505') {

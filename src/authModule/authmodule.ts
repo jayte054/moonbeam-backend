@@ -10,6 +10,10 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt/jwt-strategy';
 import { MailerModule } from 'src/mailerModule/mailerModule';
 import { MailerService } from 'src/mailerModule/mailerService';
+import { AdminAuthRepository } from './adminAuthRepository/adminAuthRepository';
+import { AdminAuthService } from './adminAuthService/adminAuthService';
+import { AdminAuthEntity } from './adminAuthEntity/adminAuthEntity';
+import { AdminAuthController } from './adminAuthController/adminAuthController';
 
 const jwtConfig: any | unknown = config.get('jwt');
 
@@ -23,10 +27,22 @@ const jwtConfig: any | unknown = config.get('jwt');
         expiresIn: jwtConfig.expiresIn,
       },
     }),
-    TypeOrmModule.forFeature([AuthRepository, AuthEntity]),
+    TypeOrmModule.forFeature([
+      AuthRepository,
+      AuthEntity,
+      AdminAuthRepository,
+      AdminAuthEntity,
+    ]),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, AuthRepository, JwtStrategy, MailerService],
+  controllers: [AuthController, AdminAuthController],
+  providers: [
+    AuthService,
+    AuthRepository,
+    JwtStrategy,
+    MailerService,
+    AdminAuthRepository,
+    AdminAuthService,
+  ],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

@@ -6,6 +6,8 @@ import { JwtPayload } from './jwt-payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthRepository } from '../authRepository/authRepository';
 import { AuthEntity } from '../authEntity/authEntity';
+import { AdminAuthRepository } from '../adminAuthRepository/adminAuthRepository';
+import { AdminAuthEntity } from '../adminAuthEntity/adminAuthEntity';
 
 const jwtConfig: any | unknown = config.get('jwt');
 
@@ -15,7 +17,9 @@ const jwtConfig: any | unknown = config.get('jwt');
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(AuthRepository)
+    @InjectRepository(AdminAuthRepository)
     private authRepository: AuthRepository,
+    private adminAuthRepository: AdminAuthRepository,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -45,5 +49,30 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const response = user.id;
     console.log(response);
     return user;
+  }
+
+  async adminValidate(payload: JwtPayload): Promise<AdminAuthEntity> {
+    const { id, email } = payload;
+
+    const queryBuilder = this.adminAuthRepository.createQueryBuilder('user');
+    queryBuilder
+      .select([
+        'admin.id',
+        'admin.email',
+        'admin.password',
+        'admin.salt',
+        'admin.isAdmin',
+      ])
+      .where('admin.email = :email', { email: email, id });
+
+    const admin = await queryBuilder.getOne();
+
+    if (!admin) {
+      console.log('unauthorized');
+      throw new UnauthorizedException();
+    }
+    const response = admin.id;
+    console.log(response);
+    return admin;
   }
 }
