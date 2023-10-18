@@ -37,7 +37,7 @@ export class AdminAuthEntity extends BaseEntity {
   @Column({ default: true })
   isAdmin: boolean;
 
-  @OneToMany(() => PasswordResetTokenEntity, (resetToken) => resetToken.user, {
+  @OneToMany(() => PasswordResetTokenEntity, (resetToken) => resetToken.admin, {
     eager: true,
   })
   resetToken: PasswordResetTokenEntity[];
@@ -49,6 +49,13 @@ export class AdminAuthEntity extends BaseEntity {
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
-    return hash === this.password;
+    try {
+      if (hash === this.password) {
+        return hash === this.password;
+      }
+    } catch (error) {
+      throw new Error('incorrect password');
+    }
+    // return hash === this.password;
   }
 }

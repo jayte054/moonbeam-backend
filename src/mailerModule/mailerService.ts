@@ -13,6 +13,7 @@ import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { ProductOrderEntity } from 'src/products/productEntity/productOrderEntity';
 import { OrderDeliveryDto } from './mailerDto/orderDeliveryDto';
 import { DeliveryTokenEntity } from 'src/products/deliveryTokenEntity/deliveryTokenEntity';
+import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 
 @Injectable()
 export class MailerService {
@@ -129,11 +130,90 @@ export class MailerService {
       await passwordResetToken.save();
       await this.transporter.sendMail(mailOptions);
       this.logger.verbose(
-        `${resetToken} for user ${user.id} sent successfully`,
+        `reset password token ${resetToken} for user ${user.id} sent successfully`,
       );
     } catch (error) {
       console.log(error);
       this.logger.error(`reset token for user ${user.id} not sent`);
+      throw new Error('failed to send password reset token');
+    }
+
+    console.log(passwordResetToken.expiresAt);
+
+    return {
+      id: passwordResetToken.id,
+      resetToken: passwordResetToken.resetToken,
+      email: passwordResetToken.email,
+      expiresAt: passwordResetToken.expiresAt,
+      message: 'reset token sent successfully',
+    };
+  }
+
+  async sendAdminPasswordResetEmail(
+    resetPasswordEmaildto: ResetPasswordEmailDto,
+  ): Promise<PasswordResetTokenEntity | any> {
+    const { email } = resetPasswordEmaildto;
+
+    const generateResetToken = () => {
+      //   const token = crypto.randomBytes(15).toString('hex');
+      const generateNumericToken = () => {
+        const randomBytes = crypto.randomBytes(3);
+        const numericCode = parseInt(randomBytes.toString('hex'), 16);
+        const code = String(numericCode).slice(-6).padStart(6, '0');
+        return code;
+      };
+      const token = generateNumericToken();
+      const expiresInMinutes = 10;
+      const expiresAt = new Date();
+      expiresAt.setMinutes(expiresAt.getMinutes() + expiresInMinutes);
+      console.log(expiresAt);
+      return token;
+    };
+
+    const generateResetLink = (resetToken: string): string => {
+      const resetLink = `localhost:3005/reset-password?token=${resetToken}`;
+      return resetLink;
+    };
+
+    const resetToken = generateResetToken();
+    const resetLink = generateResetLink(resetToken);
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Password Reset Token',
+      html: `
+        <h1>Password Reset Email</h1>
+        <p> My dear customer, you have requested a password reset,</br>
+            please use this reset token as prompted <br/> <strong>${resetToken}</strong>
+        </p>
+        <p> Please bear in mind that this token expires in 10mins</p>
+        `,
+    };
+
+    const getTimeStampPlusMinutes = (minutes: number) => {
+      const date = new Date();
+      date.setMinutes(date.getMinutes() + minutes);
+      return date;
+    };
+
+    const admin = await AdminAuthEntity.findOne({ where: { email } });
+    const passwordResetToken = new PasswordResetTokenEntity();
+    passwordResetToken.id = uuidV4();
+    passwordResetToken.resetToken = resetToken;
+    passwordResetToken.expiresAt = getTimeStampPlusMinutes(20);
+    passwordResetToken.email = email;
+    passwordResetToken.admin = admin;
+
+    try {
+      await passwordResetToken.save();
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(
+        `reset password token ${resetToken} for admin ${admin.id} sent successfully`,
+      );
+    } catch (error) {
+      console.log(error);
+      this.logger.error(`reset token for admin ${admin.id} not sent`);
       throw new Error('failed to send password reset token');
     }
 

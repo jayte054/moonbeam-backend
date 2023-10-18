@@ -1,10 +1,19 @@
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from 'src/mailerModule/mailerService';
 import { DataSource, Repository } from 'typeorm';
 import { AdminAuthEntity } from '../adminAuthEntity/adminAuthEntity';
 import { AdminAuthCredentialsDto } from '../adminAuthDto/AdminAuthDto';
 import { AdminAuthSigninDto } from '../adminAuthDto/adminAuthSigninDto';
+import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.dto';
+import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
+import { ResetPasswordDto } from '../authDto/resetPasswordDto';
 
 @Injectable()
 export class AdminAuthRepository extends Repository<AdminAuthEntity> {
@@ -71,6 +80,56 @@ export class AdminAuthRepository extends Repository<AdminAuthEntity> {
       return { id: admin.id, email: admin.email, isAdmin: admin.isAdmin };
     } else {
       return null;
+    }
+  }
+
+  //======= admin reset password email ========
+
+  async adminResetPasswordEmail(
+    resetPasswordEmailDto: ResetPasswordEmailDto,
+  ): Promise<void> {
+    return await this.mailerService.sendAdminPasswordResetEmail(
+      resetPasswordEmailDto,
+    );
+  }
+
+  //=======admin reset password ==========
+
+  async adminResetPassword(
+    resetPasswordDto: ResetPasswordDto,
+  ): Promise<string> {
+    const { token, newPassword } = resetPasswordDto;
+
+    try {
+      const resetToken = await PasswordResetTokenEntity.findOne({
+        where: { resetToken: token },
+      });
+      if (!resetToken) {
+        this.logger.error('invalid or expired token');
+        throw new NotFoundException('Invalid or expired token');
+      }
+      const admin = await AdminAuthEntity.findOne({
+        where: {
+          id: resetToken.adminId,
+        },
+      });
+
+      const isTokenExpired = resetToken.expiresAt > new Date();
+      if (!isTokenExpired) {
+        this.logger.error('token has expired');
+        throw new UnauthorizedException('token has expired');
+      }
+
+      admin.salt = await bcrypt.genSalt();
+      const hash = await bcrypt.hash(newPassword, admin.salt);
+      admin.password = hash;
+      admin.save();
+      resetToken.remove();
+      this.logger.verbose('password reset successful');
+      return 'password reset successful';
+    } catch (error) {
+      this.logger.error('admin password reset unsuccessful');
+      return 'password reset unsuccessful';
     }
   }
 }
