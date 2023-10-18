@@ -1,7 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AdminAuthRepository } from '../adminAuthRepository/adminAuthRepository';
 import { AdminAuthCredentialsDto } from '../adminAuthDto/AdminAuthDto';
+import { AdminAuthSigninDto } from '../adminAuthDto/adminAuthSigninDto';
+import { JwtPayload } from '../jwt/jwt-payload.interface';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AdminAuthService {
@@ -9,6 +12,7 @@ export class AdminAuthService {
   constructor(
     @InjectRepository(AdminAuthRepository)
     private adminAuthRepository: AdminAuthRepository,
+    private jwtService: JwtService,
   ) {}
 
   //========= admin signup ==========
@@ -17,5 +21,36 @@ export class AdminAuthService {
     adminAuthCredentialsDto: AdminAuthCredentialsDto,
   ): Promise<string> {
     return await this.adminAuthRepository.adminSignUp(adminAuthCredentialsDto);
+  }
+
+  async adminSignin(
+    adminAuthSigninDto: AdminAuthSigninDto,
+  ): Promise<{ accessToken: string }> {
+    const adminDetails = await this.adminAuthRepository.validateAdminPassword(
+      adminAuthSigninDto,
+    );
+
+    const { id, email } = adminDetails;
+
+    try {
+      if (!adminDetails) {
+        throw new UnauthorizedException('invalid credentials');
+      }
+
+      const payload: JwtPayload = { id, email };
+
+      const accessToken = await this.jwtService.sign(payload);
+      this.logger.verbose(
+        `JWT token generated with payload: ${JSON.stringify(payload)}`,
+      );
+      const response = {
+        accessToken: accessToken,
+        admin: adminDetails,
+      };
+
+      return response;
+    } catch (error) {
+      throw new Error('incorrect admin Details');
+    }
   }
 }

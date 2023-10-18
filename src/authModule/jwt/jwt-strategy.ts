@@ -54,7 +54,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async adminValidate(payload: JwtPayload): Promise<AdminAuthEntity> {
     const { id, email } = payload;
 
-    const queryBuilder = this.adminAuthRepository.createQueryBuilder('user');
+    const queryBuilder = this.adminAuthRepository.createQueryBuilder('admin');
     queryBuilder
       .select([
         'admin.id',
