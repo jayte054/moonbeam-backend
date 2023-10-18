@@ -228,6 +228,24 @@ export class MailerService {
     };
   }
 
+  async resetPasswordSuccessMail(email: string): Promise<void> {
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      html: `
+        <h1> Password Reset </h1>
+        <p> Dear ${email}, you have successfully reset your password
+      `,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`password reset success mail sent`);
+    } catch {
+      this.logger.error('invalid email address');
+    }
+  }
+
   async productOrderMail(
     email: string,
     order: ProductOrderEntity,

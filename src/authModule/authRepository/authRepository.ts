@@ -126,6 +126,7 @@ export class AuthRepository extends Repository<AuthEntity> {
       user.save();
       resetToken.remove();
       this.logger.verbose('password reset successful');
+      await this.mailerService.resetPasswordSuccessMail(user.email);
       return 'password reset successful';
     } catch (error) {
       console.log(error);

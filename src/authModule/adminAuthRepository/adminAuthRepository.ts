@@ -126,6 +126,7 @@ export class AdminAuthRepository extends Repository<AdminAuthEntity> {
       admin.save();
       resetToken.remove();
       this.logger.verbose('password reset successful');
+      await this.mailerService.resetPasswordSuccessMail(admin.email);
       return 'password reset successful';
     } catch (error) {
       this.logger.error('admin password reset unsuccessful');
