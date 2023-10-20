@@ -6,6 +6,7 @@ import { typeOrmConfig } from './typeormConfig/typeorm.config';
 import { ProductsModule } from './products/products.module';
 import { CloudinaryModule } from './cloudinary/cloudinaryModule';
 import { ConfigModule } from '@nestjs/config';
+import { AdminHubModule } from './adminHubModule/adminHubModule';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
     ProductsModule,
     CloudinaryModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    AdminHubModule,
   ],
 })
 export class AppModule {}

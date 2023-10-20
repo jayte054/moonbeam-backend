@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import config from 'config';
+import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { PasswordResetTokenEntity } from 'src/authModule/passwordResetTokenEntity/passwordResetTokenEntity';
@@ -20,6 +21,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     ProductOrderEntity,
     DeliveryTokenEntity,
     AdminAuthEntity,
+    ProductRateEntity,
   ],
   synchronize: process.env.TypeORM_SYNC || dbConfig.synchronize,
   migrations: ['dist/migrations/*.js'], // Specify your migration directory,

@@ -9,6 +9,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
 import { ProductOrderEntity } from 'src/products/productEntity/productOrderEntity';
+import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
 
 @Entity()
 @Unique(['email'])
@@ -46,6 +47,9 @@ export class AdminAuthEntity extends BaseEntity {
     eager: true,
   })
   orderName: ProductOrderEntity;
+
+  @OneToMany(() => ProductRateEntity, (rateId) => rateId.admin, { eager: true })
+  rateId: ProductRateEntity;
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
