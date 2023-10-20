@@ -72,13 +72,27 @@ export class AuthRepository extends Repository<AuthEntity> {
     const { email, password } = authSigninDto;
     const queryBuilder = this.createQueryBuilder('user');
     queryBuilder
-      .select(['user.id', 'user.email', 'user.password', 'user.salt'])
+      .select([
+        'user.id',
+        'user.email',
+        'user.password',
+        'user.salt',
+        'user.firstname',
+        'user.phoneNumber',
+        'user.isAdmin',
+      ])
       .where('user.email = :email', { email });
 
     const user = await queryBuilder.getOne();
 
     if (user && (await user.validatePassword(password))) {
-      return { id: user.id, email: user.email, isAdmin: user.isAdmin };
+      return {
+        id: user.id,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        user: user.firstname,
+        phoneNumber: user.phoneNumber,
+      };
     } else {
       return null;
     }

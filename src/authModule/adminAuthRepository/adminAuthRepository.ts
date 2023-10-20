@@ -71,13 +71,27 @@ export class AdminAuthRepository extends Repository<AdminAuthEntity> {
     const { email, password } = adminAuthSigninDto;
     const queryBuilder = this.createQueryBuilder('admin');
     queryBuilder
-      .select(['admin.id', 'admin.email', 'admin.password', 'admin.salt'])
+      .select([
+        'admin.id',
+        'admin.email',
+        'admin.password',
+        'admin.salt',
+        'admin.firstname',
+        'admin.isAdmin',
+        'admin.phoneNumber',
+      ])
       .where('admin.email = :email', { email });
 
     const admin = await queryBuilder.getOne();
 
     if (admin && (await admin.validatePassword(password))) {
-      return { id: admin.id, email: admin.email, isAdmin: admin.isAdmin };
+      return {
+        id: admin.id,
+        email: admin.email,
+        isAdmin: admin.isAdmin,
+        firstname: admin.firstname,
+        phoneNumber: admin.phoneNumber,
+      };
     } else {
       return null;
     }
