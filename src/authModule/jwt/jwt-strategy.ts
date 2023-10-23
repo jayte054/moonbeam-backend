@@ -26,6 +26,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: process.env.JWT_SECRET || jwtConfig.secret,
     });
   }
+
   async validate(payload: JwtPayload): Promise<AuthEntity> {
     const { id, email } = payload;
 
@@ -43,7 +44,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await queryBuilder.getOne();
 
     if (!user) {
-      console.log('unauthorized');
+      console.log('auth: unauthorized');
       throw new UnauthorizedException();
     }
     const response = user.id;
@@ -66,9 +67,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       .where('admin.email = :email', { email: email, id });
 
     const admin = await queryBuilder.getOne();
+    console.log('here');
 
     if (!admin) {
-      console.log('unauthorized');
+      console.log('auth: unauthorized');
       throw new UnauthorizedException();
     }
     const response = admin.id;

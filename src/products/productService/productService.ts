@@ -8,7 +8,6 @@ import {
   UpdateOrderDto,
 } from '../productDto/productOrderDto';
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
-import { ProductLayers, ProductType } from '../ProductEnum/productEnum';
 import { ProductRepository } from '../productRepository/productRepository';
 
 @Injectable()
@@ -21,15 +20,12 @@ export class ProductService {
   async createCustomProductOrder(
     customProductOrderDto: CustomProductOrderDto,
     user: AuthEntity,
-    // file: Express.Multer.File,
     req: Request,
-    // deliveryDateStr: string,
   ): Promise<ProductOrderEntity | any> {
     return this.productRepository.createCustomProductOrder(
       customProductOrderDto,
       user,
       req,
-      //   deliveryDateStr,
     );
   }
 

@@ -85,6 +85,7 @@ export class AdminAuthRepository extends Repository<AdminAuthEntity> {
     const admin = await queryBuilder.getOne();
 
     if (admin && (await admin.validatePassword(password))) {
+      console.log('admin here', admin);
       return {
         id: admin.id,
         email: admin.email,

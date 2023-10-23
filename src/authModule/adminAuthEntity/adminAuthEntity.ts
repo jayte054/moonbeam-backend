@@ -43,13 +43,17 @@ export class AdminAuthEntity extends BaseEntity {
   })
   resetToken: PasswordResetTokenEntity[];
 
-  @OneToMany(() => ProductOrderEntity, (orderName) => orderName.user, {
-    eager: true,
-  })
-  orderName: ProductOrderEntity;
+  // @OneToMany(() => ProductOrderEntity, (orderName) => orderName.user, {
+  //   eager: true,
+  // })
+  // orderName: ProductOrderEntity;
 
-  @OneToMany(() => ProductRateEntity, (rateId) => rateId.admin, { eager: true })
-  rateId: ProductRateEntity;
+  @OneToMany(
+    () => ProductRateEntity,
+    (chocolateCakeRate) => chocolateCakeRate.admin,
+    { eager: true },
+  )
+  chocolateCakeRate: ProductRateEntity;
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
@@ -60,6 +64,5 @@ export class AdminAuthEntity extends BaseEntity {
     } catch (error) {
       throw new Error('incorrect password');
     }
-    // return hash === this.password;
   }
 }
