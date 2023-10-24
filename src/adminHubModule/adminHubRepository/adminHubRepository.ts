@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import { AdminHubDto, UpdateProductRateDto } from '../adminHubDto/adminHubDto';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 
@@ -79,6 +79,18 @@ export class AdminHubRepository extends Repository<ProductRateEntity> {
       coconutCakeRate: rate.coconutCakeRate,
       blueberryCakeRate: rate.blueberryCakeRate,
     };
+  };
+
+  getProductRates = async (): Promise<ProductRateEntity[]> => {
+    const options: FindOneOptions<ProductRateEntity> = {};
+
+    const rates = await this.find(options);
+    if (!rates) {
+      this.logger.error('rates not found');
+      throw new NotFoundException('rates not found');
+    }
+    this.logger.verbose('rates fetches successfully');
+    return rates;
   };
 
   getProductRateWithId = async (

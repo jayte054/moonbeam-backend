@@ -20,6 +20,10 @@ export class AdminHubService {
     return await this.adminHubRepository.productRate(admin, adminHubDto);
   };
 
+  getProductRates = async (): Promise<ProductRateEntity[]> => {
+    return await this.adminHubRepository.getProductRates();
+  };
+
   getProductRateWithId = async (
     rateId: string,
     admin: AdminAuthEntity,

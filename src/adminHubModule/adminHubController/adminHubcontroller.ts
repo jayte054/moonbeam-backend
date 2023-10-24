@@ -32,6 +32,11 @@ export class AdminHubController {
     return await this.adminHubService.productRate(admin, adminHubDto);
   }
 
+  @Get('/getProductRates')
+  async getProductRates(): Promise<ProductRateEntity[]> {
+    return this.adminHubService.getProductRates();
+  }
+
   @Get('/getProductRateWithId/:rateId')
   @UsePipes(ValidationPipe)
   async getProductRateWithId(
