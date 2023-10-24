@@ -17,6 +17,8 @@ export class AdminHubRepository extends Repository<ProductRateEntity> {
     super(ProductRateEntity, dataSource.createEntityManager());
   }
 
+  //======Product Rates=========
+
   productRate = async (
     admin: AdminAuthEntity,
     adminHubDto: AdminHubDto,
@@ -167,5 +169,11 @@ export class AdminHubRepository extends Repository<ProductRateEntity> {
     }
 
     return rates;
+  };
+
+  //======== Products =========
+
+  uploadProduct = async () => {
+    console.log('products');
   };
 }

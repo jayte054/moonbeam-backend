@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
 import { ProductOrderEntity } from 'src/products/productEntity/productOrderEntity';
 import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
+import { ProductEntity } from 'src/adminHubModule/productEntity/productEntity';
 
 @Entity()
 @Unique(['email'])
@@ -43,10 +44,10 @@ export class AdminAuthEntity extends BaseEntity {
   })
   resetToken: PasswordResetTokenEntity[];
 
-  // @OneToMany(() => ProductOrderEntity, (orderName) => orderName.user, {
-  //   eager: true,
-  // })
-  // orderName: ProductOrderEntity;
+  @OneToMany(() => ProductEntity, (productId) => productId.admin, {
+    eager: true,
+  })
+  productId: ProductEntity;
 
   @OneToMany(
     () => ProductRateEntity,
