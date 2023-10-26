@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { async } from 'rxjs';
+import { Request } from 'express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
-import { AdminHubDto, UpdateProductRateDto } from '../adminHubDto/adminHubDto';
+import {
+  AdminHubDto,
+  UpdateProductRateDto,
+  UploadProductDto,
+} from '../adminHubDto/adminHubDto';
 import { AdminHubRepository } from '../adminHubRepository/adminHubRepository';
+import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 
 @Injectable()
@@ -40,6 +45,18 @@ export class AdminHubService {
       rateId,
       admin,
       updateProductRate,
+    );
+  };
+
+  uploadProduct = async (
+    uploadProductDto: UploadProductDto,
+    admin: AdminAuthEntity,
+    req: Request,
+  ): Promise<ProductEntity | any> => {
+    return await this.adminHubRepository.uploadProduct(
+      uploadProductDto,
+      admin,
+      req,
     );
   };
 }

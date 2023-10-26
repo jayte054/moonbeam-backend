@@ -1,4 +1,5 @@
-import { IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { ProductType } from 'src/products/ProductEnum/productEnum';
 
 export class AdminHubDto {
   @IsString()
@@ -62,4 +63,18 @@ export class UpdateProductRateDto {
   coconutCakeRate?: string;
 
   blueberryCakeRate?: string;
+}
+
+export class UploadProductDto {
+  @IsNotEmpty()
+  type: ProductType;
+
+  //   file: Express.Multer.File;
+
+  @IsNotEmpty()
+  @MaxLength(150)
+  description: string;
+
+  @IsDateString()
+  date: string;
 }

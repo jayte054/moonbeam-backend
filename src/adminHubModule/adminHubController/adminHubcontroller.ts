@@ -5,17 +5,25 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import { GetAdmin } from 'src/authModule/getAdminDecorator/getAdminDecorator';
 import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 // import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
-import { AdminHubDto, UpdateProductRateDto } from '../adminHubDto/adminHubDto';
+import {
+  AdminHubDto,
+  UpdateProductRateDto,
+  UploadProductDto,
+} from '../adminHubDto/adminHubDto';
 import { AdminHubService } from '../adminHubService/adminHubService';
+import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 
 @Controller('adminHub')
@@ -57,6 +65,21 @@ export class AdminHubController {
       rateId,
       admin,
       updateProductRate,
+    );
+  }
+
+  @Post('/uploadProduct')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(ValidationPipe)
+  async uploadProduct(
+    @GetAdmin() admin: AdminAuthEntity,
+    @Request() req: Request | any,
+    @Body() uploadProductDto: UploadProductDto,
+  ): Promise<ProductEntity | any> {
+    return await this.adminHubService.uploadProduct(
+      uploadProductDto,
+      admin,
+      req,
     );
   }
 }

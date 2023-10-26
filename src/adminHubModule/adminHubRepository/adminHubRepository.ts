@@ -7,13 +7,24 @@ import {
 import { v4 as uuid } from 'uuid';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
-import { AdminHubDto, UpdateProductRateDto } from '../adminHubDto/adminHubDto';
+import { Request } from 'express';
+import {
+  AdminHubDto,
+  UpdateProductRateDto,
+  UploadProductDto,
+} from '../adminHubDto/adminHubDto';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
+import { ProductEntity } from '../productEntity/productEntity';
+import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
+import { ProductType } from 'src/products/ProductEnum/productEnum';
 
 @Injectable()
 export class AdminHubRepository extends Repository<ProductRateEntity> {
   private logger = new Logger('AdminHubRepository');
-  constructor(private dataSource: DataSource) {
+  constructor(
+    private dataSource: DataSource,
+    private cloudinaryService: CloudinaryService,
+  ) {
     super(ProductRateEntity, dataSource.createEntityManager());
   }
 
@@ -173,7 +184,45 @@ export class AdminHubRepository extends Repository<ProductRateEntity> {
 
   //======== Products =========
 
-  uploadProduct = async () => {
-    console.log('products');
+  uploadProduct = async (
+    uploadProductDto: UploadProductDto,
+    admin: AdminAuthEntity,
+    req: Request,
+  ): Promise<ProductEntity | any> => {
+    const { type, description } = uploadProductDto;
+
+    const cloudinaryUrl = await this.cloudinaryService.uploadImage(req.file);
+
+    const product = new ProductEntity();
+    // product.productId = uuid();
+    product.type = type;
+    product.imageUrl = cloudinaryUrl.secure_url;
+    product.description = description;
+    product.date = new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    product.admin = admin;
+
+    try {
+      await product.save();
+      this.logger.verbose(
+        `product with id ${product.productId} saved successfully`,
+      );
+    } catch (error) {
+      console.log(error);
+      this.logger.error(`error uploading product`);
+      throw new InternalServerErrorException(' error uploading product');
+    }
+
+    return {
+      id: product.productId,
+      type: product.type,
+      imageUrl: product.imageUrl,
+      description: product.description,
+      date: product.date,
+      //   adminId: product.admin.id,
+    };
   };
 }
