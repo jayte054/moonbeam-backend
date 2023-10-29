@@ -5,6 +5,7 @@ import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity'
 import { Admin } from 'typeorm';
 import {
   AdminHubDto,
+  UpdateProductDto,
   UpdateProductRateDto,
   UploadProductDto,
 } from '../adminHubDto/adminHubDto';
@@ -32,8 +33,10 @@ export class AdminHubService {
     );
   };
 
-  getProductRates = async (): Promise<ProductRateEntity[]> => {
-    return await this.adminProductRateRepository.getProductRates();
+  getProductRates = async (
+    admin: AdminAuthEntity,
+  ): Promise<ProductRateEntity[]> => {
+    return await this.adminProductRateRepository.getProductRates(admin);
   };
 
   getProductRateWithId = async (
@@ -81,6 +84,20 @@ export class AdminHubService {
     return await this.adminProductRepository.getProductsWithId(
       productId,
       admin,
+    );
+  };
+
+  updateProduct = async (
+    productId: string,
+    admin: AdminAuthEntity,
+    updateProductDto: UpdateProductDto,
+    req?: Request,
+  ): Promise<ProductEntity> => {
+    return await this.adminProductRepository.updateProduct(
+      productId,
+      admin,
+      updateProductDto,
+      req,
     );
   };
 }

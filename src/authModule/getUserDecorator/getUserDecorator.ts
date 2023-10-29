@@ -7,6 +7,6 @@ export const GetUser = createParamDecorator(
     const req = ctx.switchToHttp().getRequest();
     console.log(data);
     console.log('request', req.user);
-    return req.user;
+    return req.user || req.admin;
   },
 );

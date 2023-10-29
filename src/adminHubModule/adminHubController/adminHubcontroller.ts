@@ -19,6 +19,7 @@ import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 // import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 import {
   AdminHubDto,
+  UpdateProductDto,
   UpdateProductRateDto,
   UploadProductDto,
 } from '../adminHubDto/adminHubDto';
@@ -27,7 +28,7 @@ import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 
 @Controller('adminHub')
-// @UseGuards(AuthGuard())
+@UseGuards(AuthGuard())
 export class AdminHubController {
   constructor(private readonly adminHubService: AdminHubService) {}
 
@@ -41,15 +42,17 @@ export class AdminHubController {
   }
 
   @Get('/getProductRates')
-  async getProductRates(): Promise<ProductRateEntity[]> {
-    return this.adminHubService.getProductRates();
+  async getProductRates(
+    @GetUser() admin: AdminAuthEntity,
+  ): Promise<ProductRateEntity[]> {
+    return this.adminHubService.getProductRates(admin);
   }
 
   @Get('/getProductRateWithId/:rateId')
   @UsePipes(ValidationPipe)
   async getProductRateWithId(
     @Param('rateId') rateId: string,
-    @GetAdmin() admin: AdminAuthEntity,
+    @GetUser() admin: AdminAuthEntity,
   ): Promise<ProductRateEntity | any> {
     return await this.adminHubService.getProductRateWithId(rateId, admin);
   }
@@ -72,7 +75,7 @@ export class AdminHubController {
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   async uploadProduct(
-    @GetAdmin() admin: AdminAuthEntity,
+    @GetUser() admin: AdminAuthEntity,
     @Request() req: Request | any,
     @Body() uploadProductDto: UploadProductDto,
   ): Promise<ProductEntity | any> {
@@ -91,8 +94,25 @@ export class AdminHubController {
   @Get('/getProductWithId/:productId')
   async getProductsWithId(
     @Param('productId') productId: string,
-    @GetAdmin() admin: AdminAuthEntity,
+    @GetUser() admin: AdminAuthEntity,
   ): Promise<ProductEntity> {
     return await this.adminHubService.getProductsWithId(productId, admin);
+  }
+
+  @Patch('/updateProduct/:ProductId')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(ValidationPipe)
+  async updateProduct(
+    @Param('productId') productId: string,
+    @GetUser() admin: AdminAuthEntity,
+    @Body() updateProductDto: UpdateProductDto,
+    @Request() req: Request | any,
+  ): Promise<ProductEntity> {
+    return await this.adminHubService.updateProduct(
+      productId,
+      admin,
+      updateProductDto,
+      req,
+    );
   }
 }

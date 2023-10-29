@@ -69,7 +69,7 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
     try {
       await rate.save();
       this.logger.verbose(
-        `new cake rate with id ${rate.rateId} has been successfully saved by admin`,
+        `new cake rate with id ${rate.rateId} has been successfully saved by admin ${rate.adminId}`,
       );
     } catch (error) {
       console.log(error);
@@ -91,10 +91,13 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       coffeeCakeRate: rate.coffeeCakeRate,
       coconutCakeRate: rate.coconutCakeRate,
       blueberryCakeRate: rate.blueberryCakeRate,
+      adminId: rate.adminId,
     };
   };
 
-  getProductRates = async (): Promise<ProductRateEntity[]> => {
+  getProductRates = async (
+    admin: AdminAuthEntity,
+  ): Promise<ProductRateEntity[]> => {
     const options: FindOneOptions<ProductRateEntity> = {};
 
     const rates = await this.find(options);
@@ -102,7 +105,7 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       this.logger.error('rates not found');
       throw new NotFoundException('rates not found');
     }
-    this.logger.verbose('rates fetches successfully');
+    this.logger.verbose(`rates fetches successfully by admin ${admin.id}`);
     return rates;
   };
 
@@ -113,7 +116,7 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
     const productRateWithId = await this.findOne({
       where: {
         rateId,
-        // adminId: admin.id,
+        adminId: admin.id,
       },
     });
 
@@ -123,7 +126,7 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
 
     try {
       this.logger.verbose(
-        `product rate with id ${rateId} successfully fetched`,
+        `product rate with id ${rateId} successfully fetched by admin ${admin.id}`,
       );
       return productRateWithId;
     } catch (error) {
@@ -136,7 +139,7 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
 
   updateProductRate = async (
     rateId: string,
-    user: AdminAuthEntity,
+    admin: AdminAuthEntity,
     updateAdminHubDto: UpdateProductRateDto,
   ): Promise<ProductRateEntity | any> => {
     const {
@@ -154,7 +157,7 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       blueberryCakeRate,
     } = updateAdminHubDto;
 
-    const rates = await this.getProductRateWithId(rateId, user);
+    const rates = await this.getProductRateWithId(rateId, admin);
 
     rates.chocolateCakeRate = chocolateCakeRate;
     rates.strawberryCakeRate = strawberryCakeRate;
@@ -172,7 +175,7 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
     try {
       await rates.save();
       this.logger.verbose(
-        `productRate with id ${rateId} has been successfully updated`,
+        `productRate with id ${rateId} has been successfully updated by admin ${rates.adminId}`,
       );
     } catch (error) {
       this.logger.error(`failed to update product rate with id ${rateId}`);

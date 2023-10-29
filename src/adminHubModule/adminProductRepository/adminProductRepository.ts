@@ -8,8 +8,9 @@ import { Request } from 'express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
+import { UpdateOrderDto } from 'src/products/productDto/productOrderDto';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
-import { UploadProductDto } from '../adminHubDto/adminHubDto';
+import { UpdateProductDto, UploadProductDto } from '../adminHubDto/adminHubDto';
 import { ProductEntity } from '../productEntity/productEntity';
 
 @Injectable()
@@ -48,7 +49,7 @@ export class AdminProductRepository extends Repository<ProductEntity> {
     try {
       await product.save();
       this.logger.verbose(
-        `product with id ${product.productId} saved successfully`,
+        `product with id ${product.productId} saved successfully by admin ${product.adminId}`,
       );
     } catch (error) {
       console.log(error);
@@ -62,7 +63,7 @@ export class AdminProductRepository extends Repository<ProductEntity> {
       imageUrl: product.imageUrl,
       description: product.description,
       date: product.date,
-      //   adminId: product.admin.id,
+      adminId: product.admin.id,
     };
   };
 
@@ -87,7 +88,7 @@ export class AdminProductRepository extends Repository<ProductEntity> {
     const productWithId = await this.findOne({
       where: {
         productId,
-        // adminId: admin.id,
+        adminId: admin.id,
       },
     });
 
@@ -106,7 +107,44 @@ export class AdminProductRepository extends Repository<ProductEntity> {
     }
   };
 
-  updateProduct = async () => {
-    console.log('update');
+  updateProduct = async (
+    productId: string,
+    admin: AdminAuthEntity,
+    updateProductDto?: UpdateProductDto,
+    req?: Request,
+  ): Promise<ProductEntity> => {
+    const { type, file, description } = updateProductDto;
+
+    const product = await this.getProductsWithId(productId, admin);
+
+    if (file) {
+      const newImage = await this.cloudinaryService.uploadImage(req.file);
+
+      if (product.imageUrl) {
+        const oldPublicId = this.extractPublicId(product.imageUrl);
+        await this.cloudinaryService.deleteImage(oldPublicId);
+      }
+      product.imageUrl = newImage.secure_url;
+    }
+    product.type = type;
+    product.description = description;
+
+    try {
+      await product.save();
+      this.logger.verbose(
+        `Product with id ${productId} has been successfully updated by admin ${product.adminId}`,
+      );
+    } catch (error) {
+      this.logger.error(`Product with id ${productId} update was unsuccessful`);
+      throw new InternalServerErrorException();
+    }
+    return product;
   };
+
+  private extractPublicId(imageUrl: string): string {
+    const parts = imageUrl.split('/');
+    const filename = parts[parts.length - 1];
+    const publicId = filename.split('.')[0];
+    return publicId;
+  }
 }

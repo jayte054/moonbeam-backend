@@ -78,3 +78,11 @@ export class UploadProductDto {
   @IsDateString()
   date: string;
 }
+
+export class UpdateProductDto {
+  type?: ProductType;
+
+  file?: Express.Multer.File;
+
+  description?: string;
+}

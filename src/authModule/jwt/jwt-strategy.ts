@@ -27,11 +27,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<AuthEntity> {
+  async validate(payload: JwtPayload): Promise<AuthEntity | AdminAuthEntity> {
     const { id, email } = payload;
 
-    const queryBuilder = this.authRepository.createQueryBuilder('user');
-    queryBuilder
+    const userQueryBuilder = this.authRepository.createQueryBuilder('user');
+    userQueryBuilder
       .select([
         'user.id',
         'user.email',
@@ -41,22 +41,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ])
       .where('user.email = :email', { email: email, id });
 
-    const user = await queryBuilder.getOne();
-
-    if (!user) {
-      console.log('auth: unauthorized');
-      throw new UnauthorizedException();
-    }
-    const response = user.id;
-    console.log(response);
-    return user;
-  }
-
-  async adminValidate(payload: JwtPayload): Promise<AdminAuthEntity> {
-    const { id, email } = payload;
-
-    const queryBuilder = this.adminAuthRepository.createQueryBuilder('admin');
-    queryBuilder
+    const adminQueryBuilder =
+      this.adminAuthRepository.createQueryBuilder('admin');
+    adminQueryBuilder
       .select([
         'admin.id',
         'admin.email',
@@ -66,15 +53,85 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ])
       .where('admin.email = :email', { email: email, id });
 
-    const admin = await queryBuilder.getOne();
-    console.log('here');
+    const [user, admin] = await Promise.all([
+      userQueryBuilder.getOne(),
+      adminQueryBuilder.getOne(),
+    ]);
 
-    if (!admin) {
-      console.log('auth: unauthorized');
+    if (!user && !admin) {
+      console.log('auth: user and admin unauthorized');
       throw new UnauthorizedException();
+    } else {
+      return user || admin;
     }
-    const response = admin.id;
-    console.log(response);
-    return admin;
   }
+
+  // async validate(payload: JwtPayload): Promise<AuthEntity | AdminAuthEntity> {
+  //   const { id, email } = payload;
+
+  //   const queryBuilder = this.authRepository.createQueryBuilder('user');
+  //   queryBuilder
+  //     .select([
+  //       'user.id',
+  //       'user.email',
+  //       'user.password',
+  //       'user.salt',
+  //       'user.isAdmin',
+  //     ])
+  //     .where('user.email = :email', { email: email, id });
+
+  //   const user = await queryBuilder.getOne();
+
+  //   const adminQueryBuilder =
+  //     this.adminAuthRepository.createQueryBuilder('admin');
+  //   adminQueryBuilder
+  //     .select([
+  //       'admin.id',
+  //       'admin.email',
+  //       'admin.password',
+  //       'admin.salt',
+  //       'admin.isAdmin',
+  //     ])
+  //     .where('admin.email = : email', { email: email, id });
+
+  //   const admin = await adminQueryBuilder.getOne();
+
+  //   if (!user) {
+  //     console.log('auth: user unauthorized');
+  //     throw new UnauthorizedException();
+  //   } else if (!admin) {
+  //     console.log('auth: admin unauthorized');
+  //     throw new UnauthorizedException();
+  //   } else {
+  //     const response = user.id;
+  //     console.log(response);
+  //     return user || admin;
+  //   }
+  // }
+
+  // async adminValidate(payload: JwtPayload): Promise<AdminAuthEntity> {
+  //   const { id, email } = payload;
+
+  //   const queryBuilder = this.adminAuthRepository.createQueryBuilder('admin');
+  //   queryBuilder
+  //     .select([
+  //       'admin.id',
+  //       'admin.email',
+  //       'admin.password',
+  //       'admin.salt',
+  //       'admin.isAdmin',
+  //     ])
+  //     .where('admin.email = :email', { email: email, id });
+
+  //   const admin = await queryBuilder.getOne();
+  //   console.log('here');
+
+  //   if (!admin) {
+  //     console.log('auth: admin unauthorized');
+  //     throw new UnauthorizedException();
+  //   }
+  //   const response = admin.id;
+  //   console.log(response);
+  //   return admin;
+  // }
 }
