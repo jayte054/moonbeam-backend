@@ -7,13 +7,17 @@ import { JwtPayload } from '../jwt/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.dto';
 import { ResetPasswordDto } from '../authDto/resetPasswordDto';
+import { AuthRepository } from '../authRepository/authRepository';
+import { AdminAuthEntity } from '../adminAuthEntity/adminAuthEntity';
 
 @Injectable()
 export class AdminAuthService {
   private logger = new Logger('AdminAuthService');
   constructor(
     @InjectRepository(AdminAuthRepository)
+    @InjectRepository(AuthRepository)
     private adminAuthRepository: AdminAuthRepository,
+    private authRepository: AuthRepository,
     private jwtService: JwtService,
   ) {}
 
@@ -68,5 +72,9 @@ export class AdminAuthService {
     resetPasswordDto: ResetPasswordDto,
   ): Promise<string> {
     return await this.adminAuthRepository.adminResetPassword(resetPasswordDto);
+  }
+
+  async getAllUsers(): Promise<any> {
+    return await this.authRepository.getAllUsers();
   }
 }

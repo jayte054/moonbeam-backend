@@ -6,7 +6,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { AuthCredentialsDto } from '../authDto/authCredentialsDto';
 import { AuthEntity } from '../authEntity/authEntity';
@@ -15,6 +15,8 @@ import { MailerService } from 'src/mailerModule/mailerService';
 import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.dto';
 import { ResetPasswordDto } from '../authDto/resetPasswordDto';
 import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
+import { AdminAuthEntity } from '../adminAuthEntity/adminAuthEntity';
+import { UserDto } from '../authDto/userDto';
 
 @Injectable()
 export class AuthRepository extends Repository<AuthEntity> {
@@ -147,5 +149,26 @@ export class AuthRepository extends Repository<AuthEntity> {
       this.logger.error('password reset failure');
       return 'password reset unsuccessful';
     }
+  }
+
+  async getAllUsers(): Promise<UserDto[] | any> {
+    const options: FindOneOptions<AuthEntity> = {};
+    const users: AuthEntity[] = await this.find(options);
+
+    if (!users) {
+      this.logger.error(`users not found`);
+      throw new NotFoundException('users not found');
+    }
+
+    const userInfo: UserDto[] = users.map((user) => ({
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      orderName: user.orderName,
+    }));
+    this.logger.verbose(`Users fetched successfully by admin`);
+    return userInfo;
   }
 }

@@ -2,9 +2,11 @@ import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.dto';
+import { AdminAuthEntity } from '../adminAuthEntity/adminAuthEntity';
 import { AuthCredentialsDto } from '../authDto/authCredentialsDto';
 import { AuthSigninDto } from '../authDto/authSigninDto';
 import { ResetPasswordDto } from '../authDto/resetPasswordDto';
+import { AuthEntity } from '../authEntity/authEntity';
 import { AuthRepository } from '../authRepository/authRepository';
 import { JwtPayload } from '../jwt/jwt-payload.interface';
 
@@ -65,5 +67,11 @@ export class AuthService {
     resetPasswordDto: ResetPasswordDto,
   ): Promise<string | any> {
     return this.authRepository.resetPassword(resetPasswordDto);
+  }
+
+  //=========get all users =======//
+
+  async getAllUsers(): Promise<AuthEntity[]> {
+    return await this.authRepository.getAllUsers();
   }
 }

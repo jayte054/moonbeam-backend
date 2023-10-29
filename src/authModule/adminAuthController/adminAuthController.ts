@@ -1,9 +1,18 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AdminAuthService } from '../adminAuthService/adminAuthService';
 import { AdminAuthCredentialsDto } from '../adminAuthDto/AdminAuthDto';
 import { AdminAuthSigninDto } from '../adminAuthDto/adminAuthSigninDto';
 import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.dto';
 import { ResetPasswordDto } from '../authDto/resetPasswordDto';
+import { AdminAuthEntity } from '../adminAuthEntity/adminAuthEntity';
+import { GetUser } from '../getUserDecorator/getUserDecorator';
 
 @Controller('adminAuth')
 export class AdminAuthController {
@@ -37,5 +46,11 @@ export class AdminAuthController {
     @Body() resetPasswordDto: ResetPasswordDto,
   ): Promise<string> {
     return await this.adminAuthService.adminResetPassword(resetPasswordDto);
+  }
+
+  @Get('/getAllUsers')
+  @UsePipes(ValidationPipe)
+  async getAllUsers(): Promise<any> {
+    return await this.adminAuthService.getAllUsers();
   }
 }
