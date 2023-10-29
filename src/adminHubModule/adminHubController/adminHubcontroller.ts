@@ -82,4 +82,17 @@ export class AdminHubController {
       req,
     );
   }
+
+  @Get('/getProducts')
+  async getProducts(): Promise<ProductEntity[]> {
+    return await this.adminHubService.getProducts();
+  }
+
+  @Get('/getProductWithId/:productId')
+  async getProductsWithId(
+    @Param('productId') productId: string,
+    @GetAdmin() admin: AdminAuthEntity,
+  ): Promise<ProductEntity> {
+    return await this.adminHubService.getProductsWithId(productId, admin);
+  }
 }

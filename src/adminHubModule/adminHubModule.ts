@@ -4,10 +4,11 @@ import { AuthModule } from 'src/authModule/authmodule';
 import { CloudinaryModule } from 'src/cloudinary/cloudinaryModule';
 import { ProductRepository } from 'src/products/productRepository/productRepository';
 import { AdminHubController } from './adminHubController/adminHubcontroller';
-import { AdminHubRepository } from './adminHubRepository/adminHubRepository';
+import { AdminProductRateRepository } from './adminProductRateRepository/adminProductRateRepository';
 import { AdminHubService } from './adminHubService/adminHubService';
 import { ProductEntity } from './productEntity/productEntity';
 import { ProductRateEntity } from './productRateEntity/productRateEntity';
+import { AdminProductRepository } from './adminProductRepository/adminProductRepository';
 
 @Module({
   imports: [
@@ -19,7 +20,11 @@ import { ProductRateEntity } from './productRateEntity/productRateEntity';
       ProductRepository,
     ]),
   ],
-  providers: [AdminHubRepository, AdminHubService],
+  providers: [
+    AdminProductRateRepository,
+    AdminProductRepository,
+    AdminHubService,
+  ],
   controllers: [AdminHubController],
   exports: [],
 })

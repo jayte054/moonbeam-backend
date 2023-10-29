@@ -171,16 +171,29 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     };
   }
 
-  async getOrders(): Promise<ProductOrderEntity> {
-    const options: FindOneOptions<ProductOrderEntity> = {};
+  async getOrders(user: AuthEntity): Promise<ProductOrderEntity[]> {
+    const query = this.createQueryBuilder('orderName');
+    query.where('orderName.userId = :userId', { userId: user.id });
 
-    const orders: any = await this.find(options);
-    if (!orders) {
-      this.logger.error('orders not found');
-      throw new NotFoundException('orders not found');
+    const orders = await query.getMany();
+    try {
+      this.logger.verbose(
+        `user with id ${user.id} orders fetched successfully`,
+      );
+    } catch (error) {
+      this.logger.error(`orders for user ${user.id} not found`);
     }
-    this.logger.verbose('orders fetched successfully');
+
     return orders;
+    // const options: FindOneOptions<ProductOrderEntity> = {};
+
+    // const orders: any = await this.find(options);
+    // if (!orders) {
+    //   this.logger.error('orders not found');
+    //   throw new NotFoundException('orders not found');
+    // }
+    // this.logger.verbose('orders fetched successfully');
+    // return orders;
   }
 
   async getOrderWithId(

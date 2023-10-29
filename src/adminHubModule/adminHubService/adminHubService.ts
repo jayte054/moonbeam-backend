@@ -2,38 +2,48 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
+import { Admin } from 'typeorm';
 import {
   AdminHubDto,
   UpdateProductRateDto,
   UploadProductDto,
 } from '../adminHubDto/adminHubDto';
-import { AdminHubRepository } from '../adminHubRepository/adminHubRepository';
+import { AdminProductRateRepository } from '../adminProductRateRepository/adminProductRateRepository';
+import { AdminProductRepository } from '../adminProductRepository/adminProductRepository';
 import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 
 @Injectable()
 export class AdminHubService {
   constructor(
-    @InjectRepository(AdminHubRepository)
-    private adminHubRepository: AdminHubRepository,
+    @InjectRepository(AdminProductRateRepository)
+    @InjectRepository(AdminProductRepository)
+    private adminProductRateRepository: AdminProductRateRepository,
+    private adminProductRepository: AdminProductRepository,
   ) {}
 
   productRate = async (
     admin: AdminAuthEntity,
     adminHubDto: AdminHubDto,
   ): Promise<ProductRateEntity | any> => {
-    return await this.adminHubRepository.productRate(admin, adminHubDto);
+    return await this.adminProductRateRepository.productRate(
+      admin,
+      adminHubDto,
+    );
   };
 
   getProductRates = async (): Promise<ProductRateEntity[]> => {
-    return await this.adminHubRepository.getProductRates();
+    return await this.adminProductRateRepository.getProductRates();
   };
 
   getProductRateWithId = async (
     rateId: string,
     admin: AdminAuthEntity,
   ): Promise<ProductRateEntity | any> => {
-    return await this.adminHubRepository.getProductRateWithId(rateId, admin);
+    return await this.adminProductRateRepository.getProductRateWithId(
+      rateId,
+      admin,
+    );
   };
 
   updateProductRate = async (
@@ -41,7 +51,7 @@ export class AdminHubService {
     admin: AdminAuthEntity,
     updateProductRate: UpdateProductRateDto,
   ): Promise<ProductRateEntity | any> => {
-    return await this.adminHubRepository.updateProductRate(
+    return await this.adminProductRateRepository.updateProductRate(
       rateId,
       admin,
       updateProductRate,
@@ -53,10 +63,24 @@ export class AdminHubService {
     admin: AdminAuthEntity,
     req: Request,
   ): Promise<ProductEntity | any> => {
-    return await this.adminHubRepository.uploadProduct(
+    return await this.adminProductRepository.uploadProduct(
       uploadProductDto,
       admin,
       req,
+    );
+  };
+
+  getProducts = async (): Promise<ProductEntity[]> => {
+    return await this.adminProductRepository.getProducts();
+  };
+
+  getProductsWithId = async (
+    productId: string,
+    admin: AdminAuthEntity,
+  ): Promise<ProductEntity> => {
+    return await this.adminProductRepository.getProductsWithId(
+      productId,
+      admin,
     );
   };
 }

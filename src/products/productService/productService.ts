@@ -39,8 +39,8 @@ export class ProductService {
     );
   }
 
-  async getOrders(): Promise<ProductOrderEntity> {
-    return await this.productRepository.getOrders();
+  async getOrders(user: AuthEntity): Promise<ProductOrderEntity[]> {
+    return await this.productRepository.getOrders(user);
   }
 
   async getOrderWithId(

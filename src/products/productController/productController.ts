@@ -62,8 +62,8 @@ export class ProductController {
   }
 
   @Get('/getOrders')
-  async getOrders(): Promise<ProductOrderEntity> {
-    return await this.productService.getOrders();
+  async getOrders(@GetUser() user: AuthEntity): Promise<ProductOrderEntity[]> {
+    return await this.productService.getOrders(user);
   }
 
   @Get('/:id')
