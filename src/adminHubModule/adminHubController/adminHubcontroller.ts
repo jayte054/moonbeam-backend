@@ -115,4 +115,10 @@ export class AdminHubController {
       req,
     );
   }
+
+  //   @Get('/getAllUsers')
+  //   @UsePipes(ValidationPipe)
+  //   async getAllUsers(@GetUser() admin: AdminAuthEntity): Promise<any> {
+  //     return await this.adminHubService.getAllUsers(admin);
+  //   }
 }

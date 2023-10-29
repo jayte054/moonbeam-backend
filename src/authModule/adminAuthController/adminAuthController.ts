@@ -50,7 +50,7 @@ export class AdminAuthController {
 
   @Get('/getAllUsers')
   @UsePipes(ValidationPipe)
-  async getAllUsers(): Promise<any> {
-    return await this.adminAuthService.getAllUsers();
+  async getAllUsers(@GetUser() admin: AdminAuthEntity): Promise<any> {
+    return await this.adminAuthService.getAllUsers(admin);
   }
 }

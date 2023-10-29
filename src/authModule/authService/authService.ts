@@ -71,7 +71,7 @@ export class AuthService {
 
   //=========get all users =======//
 
-  async getAllUsers(): Promise<AuthEntity[]> {
-    return await this.authRepository.getAllUsers();
+  async getAllUsers(admin: AdminAuthEntity): Promise<AuthEntity[]> {
+    return await this.authRepository.getAllUsers(admin);
   }
 }

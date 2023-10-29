@@ -74,7 +74,7 @@ export class AdminAuthService {
     return await this.adminAuthRepository.adminResetPassword(resetPasswordDto);
   }
 
-  async getAllUsers(): Promise<any> {
-    return await this.authRepository.getAllUsers();
+  async getAllUsers(admin: AdminAuthEntity): Promise<any> {
+    return await this.authRepository.getAllUsers(admin);
   }
 }

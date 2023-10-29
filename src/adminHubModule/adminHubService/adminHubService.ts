@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
-import { Admin } from 'typeorm';
+import { AuthRepository } from 'src/authModule/authRepository/authRepository';
 import {
   AdminHubDto,
   UpdateProductDto,
@@ -100,4 +100,8 @@ export class AdminHubService {
       req,
     );
   };
+
+  //   async getAllUsers(admin: AdminAuthEntity): Promise<any> {
+  //     return await this.authRepository.getAllUsers(admin);
+  //   }
 }

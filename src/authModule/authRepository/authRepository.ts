@@ -151,7 +151,7 @@ export class AuthRepository extends Repository<AuthEntity> {
     }
   }
 
-  async getAllUsers(): Promise<UserDto[] | any> {
+  async getAllUsers(admin: AdminAuthEntity): Promise<UserDto[] | any> {
     const options: FindOneOptions<AuthEntity> = {};
     const users: AuthEntity[] = await this.find(options);
 
