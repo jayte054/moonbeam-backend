@@ -6,9 +6,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
-import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
-import { UpdateOrderDto } from 'src/products/productDto/productOrderDto';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import { UpdateProductDto, UploadProductDto } from '../adminHubDto/adminHubDto';
 import { ProductEntity } from '../productEntity/productEntity';

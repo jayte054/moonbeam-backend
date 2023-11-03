@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
-import { AuthRepository } from 'src/authModule/authRepository/authRepository';
 import {
   AdminHubDto,
   UpdateProductDto,

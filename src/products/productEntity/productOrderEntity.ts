@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import {
   OrderStatus,
+  ProductFlavours,
   ProductInch,
   ProductLayers,
   ProductType,
@@ -27,6 +28,9 @@ export class ProductOrderEntity extends BaseEntity {
 
   @Column()
   imageUrl: string;
+
+  @Column()
+  productFlavour: ProductFlavours;
 
   @Column()
   layers: ProductLayers;

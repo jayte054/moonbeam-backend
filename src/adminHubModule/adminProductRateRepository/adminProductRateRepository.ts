@@ -7,16 +7,9 @@ import {
 import { v4 as uuid } from 'uuid';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
-import { Request } from 'express';
-import {
-  AdminHubDto,
-  UpdateProductRateDto,
-  UploadProductDto,
-} from '../adminHubDto/adminHubDto';
+import { AdminHubDto, UpdateProductRateDto } from '../adminHubDto/adminHubDto';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
-import { ProductEntity } from '../productEntity/productEntity';
 import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
-import { ProductType } from 'src/products/ProductEnum/productEnum';
 
 @Injectable()
 export class AdminProductRateRepository extends Repository<ProductRateEntity> {

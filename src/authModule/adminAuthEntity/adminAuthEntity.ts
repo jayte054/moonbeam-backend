@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
-import { ProductOrderEntity } from 'src/products/productEntity/productOrderEntity';
 import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
 import { ProductEntity } from 'src/adminHubModule/productEntity/productEntity';
 

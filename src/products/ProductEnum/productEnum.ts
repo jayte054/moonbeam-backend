@@ -30,3 +30,18 @@ export enum OrderStatus {
   cancel = 'canceled',
   delivered = 'delivered',
 }
+
+export enum ProductFlavours {
+  chocolateCake = ' cheeseCake',
+  strawberryCake = 'strawberryCake',
+  vanillaCake = 'vanillaCake',
+  redvelvetCake = 'redvelvetCake',
+  carrotCake = 'carrotCake',
+  cheeseCake = 'cheeseCake',
+  bananaCake = 'bananaCake',
+  appleCake = 'appleCake',
+  lemonCake = 'lemonCake',
+  coffeeCake = 'coffeeCake',
+  coconutCake = 'coconutCake',
+  blueberryCake = 'blueberryCake',
+}

@@ -7,6 +7,7 @@ import {
 } from 'class-validator';
 import {
   OrderStatus,
+  ProductFlavours,
   ProductInch,
   ProductLayers,
   ProductType,
@@ -26,6 +27,8 @@ export class CustomProductOrderDto {
   @IsNotEmpty()
   @MaxLength(80)
   description: string;
+
+  productFlavour: ProductFlavours;
 }
 
 export class GenericProductOrderDto {

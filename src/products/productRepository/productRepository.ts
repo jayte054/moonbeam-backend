@@ -14,6 +14,7 @@ import {
 import { ProductOrderEntity } from '../productEntity/productOrderEntity';
 import {
   OrderStatus,
+  ProductFlavours,
   ProductInch,
   ProductLayers,
   ProductType,
@@ -22,6 +23,7 @@ import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
 import { v4 as uuid } from 'uuid';
 import { MailerService } from 'src/mailerModule/mailerService';
+import { fetchRate } from '../productUtility';
 
 @Injectable()
 export class ProductRepository extends Repository<ProductOrderEntity> {
@@ -33,30 +35,86 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
   ) {
     super(ProductOrderEntity, dataSource.createEntityManager());
   }
+
   async createCustomProductOrder(
     customProductOrderDto: CustomProductOrderDto,
     user: AuthEntity,
     req: Request,
   ): Promise<ProductOrderEntity | any> {
     console.log('hereeee');
-    const { orderName, deliveryDate, description } = customProductOrderDto;
+    const { orderName, deliveryDate, description, productFlavour } =
+      customProductOrderDto;
 
     const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
       req.file,
     );
-    const layers = Number(ProductLayers.one);
-    const inches = Number(ProductInch.six);
-    const rate = '5000'; //modify later
-    const price = Number(rate) * layers * inches;
 
     const order = new ProductOrderEntity();
+    let rate = 0;
+    console.log('rate_0,', rate);
+
+    const newRate = await fetchRate();
+    console.log(newRate[0].appleCakeRate);
+
+    const flavorRateMap: { [key: string]: string } = {
+      [ProductFlavours.appleCake]: 'appleCakeRate',
+      [ProductFlavours.bananaCake]: 'bananaCakeRate',
+      [ProductFlavours.blueberryCake]: 'blueberryCakeRate',
+      [ProductFlavours.carrotCake]: 'carrotCakeRate',
+      [ProductFlavours.cheeseCake]: 'cheeseCakeRate',
+      [ProductFlavours.chocolateCake]: 'chocolateCakeRate',
+      [ProductFlavours.coconutCake]: 'coconutCakeRate',
+      [ProductFlavours.coffeeCake]: 'coffeeCakeRate',
+      [ProductFlavours.lemonCake]: 'lemonCakeRate',
+      [ProductFlavours.redvelvetCake]: 'redvelvetCakeRate',
+      [ProductFlavours.strawberryCake]: 'strawberryCakeRate',
+      [ProductFlavours.vanillaCake]: 'vanillaCakeRate',
+    };
+    // Set rate based on the selected product flavor
+    if (flavorRateMap.hasOwnProperty(productFlavour)) {
+      rate = Number(newRate[0][flavorRateMap[productFlavour]]);
+    }
+
+    const layers = Number(ProductLayers.one);
+    const inches = Number(ProductInch.six);
+
     order.id = uuid();
     order.orderName = orderName;
     order.type = ProductType.Birthday;
     order.imageUrl = cloudinaryUrl.secure_url;
+    order.productFlavour = productFlavour;
     order.layers = ProductLayers.one;
     order.inches = ProductInch.six;
-    order.rate = rate;
+    // if (order.productFlavour === ProductFlavours.appleCake) {
+    //   console.log('Updating rate');
+    //   rate = Number(newRate[0].appleCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.bananaCake) {
+    //   rate = Number(newRate[0].bananaCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.blueberryCake) {
+    //   rate = Number(newRate[0].blueberryCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.carrotCake) {
+    //   rate = Number(newRate[0].carrotCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.cheeseCake) {
+    //   rate = Number(newRate[0].cheeseCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.chocolateCake) {
+    //   rate = Number(newRate[0].chocolateCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.coconutCake) {
+    //   rate = Number(newRate[0].coconutCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.coffeeCake) {
+    //   rate = Number(newRate[0].coffeeCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.lemonCake) {
+    //   rate = Number(newRate[0].lemonCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.redvelvetCake) {
+    //   rate = Number(newRate[0].redvelvetCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.strawberryCake) {
+    //   rate = Number(newRate[0].strawberryCakeRate);
+    // } else if (order.productFlavour === ProductFlavours.vanillaCake) {
+    //   rate = Number(newRate[0].vanillaCakeRate);
+    // }
+    // console.log('Final rate value:', rate);
+
+    order.rate = rate.toString();
+    const price = rate * layers * inches;
     order.price = price.toString();
     order.status = OrderStatus.progress;
     order.description = description;

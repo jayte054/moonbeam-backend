@@ -14,7 +14,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
-import { GetAdmin } from 'src/authModule/getAdminDecorator/getAdminDecorator';
 import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 // import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 import {
