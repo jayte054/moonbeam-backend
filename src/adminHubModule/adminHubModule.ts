@@ -9,6 +9,7 @@ import { AdminHubService } from './adminHubService/adminHubService';
 import { ProductEntity } from './productEntity/productEntity';
 import { ProductRateEntity } from './productRateEntity/productRateEntity';
 import { AdminProductRepository } from './adminProductRepository/adminProductRepository';
+import { AdminProductDesignRateRepository } from './adminProductDesignRateRepository/adminProductDesignRateRepository';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AdminProductRepository } from './adminProductRepository/adminProductRep
   providers: [
     AdminProductRateRepository,
     AdminProductRepository,
+    AdminProductDesignRateRepository,
     AdminHubService,
   ],
   controllers: [AdminHubController],

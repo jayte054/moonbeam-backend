@@ -45,3 +45,8 @@ export enum ProductFlavours {
   coconutCake = 'coconutCake',
   blueberryCake = 'blueberryCake',
 }
+
+export enum DesignCovering {
+  butterCream = 'butterCream',
+  fundant = 'fundant',
+}

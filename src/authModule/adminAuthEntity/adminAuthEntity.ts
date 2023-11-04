@@ -55,6 +55,13 @@ export class AdminAuthEntity extends BaseEntity {
   )
   chocolateCakeRate: ProductRateEntity;
 
+  @OneToMany(
+    () => ProductRateEntity,
+    (butterCreamRate) => butterCreamRate.admin,
+    { eager: true },
+  )
+  butterCreamRate: ProductRateEntity;
+
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
     try {

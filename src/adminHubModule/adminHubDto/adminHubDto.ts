@@ -86,3 +86,14 @@ export class UpdateProductDto {
 
   description?: string;
 }
+
+export class ProductDesignRateDto {
+  @IsNotEmpty()
+  nakedRate: string;
+
+  @IsNotEmpty()
+  butterCreamRate: string;
+
+  @IsNotEmpty()
+  fundantRate: string;
+}

@@ -18,11 +18,13 @@ import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 // import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 import {
   AdminHubDto,
+  ProductDesignRateDto,
   UpdateProductDto,
   UpdateProductRateDto,
   UploadProductDto,
 } from '../adminHubDto/adminHubDto';
 import { AdminHubService } from '../adminHubService/adminHubService';
+import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
 import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 
@@ -86,8 +88,10 @@ export class AdminHubController {
   }
 
   @Get('/getProducts')
-  async getProducts(): Promise<ProductEntity[]> {
-    return await this.adminHubService.getProducts();
+  async getProducts(
+    @GetUser() admin: AdminAuthEntity,
+  ): Promise<ProductEntity[]> {
+    return await this.adminHubService.getProducts(admin);
   }
 
   @Get('/getProductWithId/:productId')
@@ -115,9 +119,31 @@ export class AdminHubController {
     );
   }
 
-  //   @Get('/getAllUsers')
-  //   @UsePipes(ValidationPipe)
-  //   async getAllUsers(@GetUser() admin: AdminAuthEntity): Promise<any> {
-  //     return await this.adminHubService.getAllUsers(admin);
-  //   }
+  @Post('/productDesignRate')
+  @UsePipes(ValidationPipe)
+  async productDesignRate(
+    @GetUser() admin: AdminAuthEntity,
+    @Body() productDesignRateDto: ProductDesignRateDto,
+  ): Promise<ProductRateEntity | any> {
+    return await this.adminHubService.productDesignRate(
+      admin,
+      productDesignRateDto,
+    );
+  }
+
+  @Get('/getProductDesignRate')
+  async getProductDesignRates(@GetUser() admin: AdminAuthEntity) {
+    return await this.adminHubService.getProductDesignRates(admin);
+  }
+
+  @Get('/getProductDesignRateWithId/:id')
+  async getProductDesignRateWithId(
+    @Param() designId: string,
+    @GetUser() admin: AdminAuthEntity,
+  ): Promise<ProductDesignRateEntity> {
+    return await this.adminHubService.getProductDesignRateWithId(
+      designId,
+      admin,
+    );
+  }
 }

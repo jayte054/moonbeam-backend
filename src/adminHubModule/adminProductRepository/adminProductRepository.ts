@@ -65,7 +65,7 @@ export class AdminProductRepository extends Repository<ProductEntity> {
     };
   };
 
-  getProducts = async (): Promise<ProductEntity[]> => {
+  getProducts = async (admin: AdminAuthEntity): Promise<ProductEntity[]> => {
     // const query = this.createQueryBuilder('productId');
     // query.where('productId.')
     const options: FindOneOptions<ProductEntity> = {};
@@ -75,8 +75,10 @@ export class AdminProductRepository extends Repository<ProductEntity> {
       this.logger.error('products not found');
       throw new NotFoundException('products not found');
     }
-    this.logger.verbose('products fetched successfully');
-    return products;
+    if (admin.isAdmin === true) {
+      this.logger.verbose(`products fetched successfully by admin ${admin.id}`);
+      return products;
+    }
   };
 
   getProductsWithId = async (

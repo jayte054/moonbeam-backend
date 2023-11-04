@@ -7,7 +7,11 @@ import {
 import { v4 as uuid } from 'uuid';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
-import { AdminHubDto, UpdateProductRateDto } from '../adminHubDto/adminHubDto';
+import {
+  AdminHubDto,
+  ProductDesignRateDto,
+  UpdateProductRateDto,
+} from '../adminHubDto/adminHubDto';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
 
@@ -60,10 +64,15 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
     rate.admin = admin;
 
     try {
-      await rate.save();
-      this.logger.verbose(
-        `new cake rate with id ${rate.rateId} has been successfully saved by admin ${rate.adminId}`,
-      );
+      if (admin.isAdmin === true) {
+        await rate.save();
+        this.logger.verbose(
+          `new cake rate with id ${rate.rateId} has been successfully saved by admin ${rate.adminId}`,
+        );
+      } else {
+        this.logger.debug(`user is not admin`);
+        return 'user is not admin';
+      }
     } catch (error) {
       console.log(error);
       this.logger.error(`error saving new cake rate`);
@@ -98,7 +107,7 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       this.logger.error('rates not found');
       throw new NotFoundException('rates not found');
     }
-    this.logger.verbose(`rates fetches successfully by admin ${admin.id}`);
+    this.logger.verbose(`rates fetched successfully by admin ${admin.id}`);
     return rates;
   };
 
@@ -166,10 +175,15 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
     rates.blueberryCakeRate = blueberryCakeRate;
 
     try {
-      await rates.save();
-      this.logger.verbose(
-        `productRate with id ${rateId} has been successfully updated by admin ${rates.adminId}`,
-      );
+      if (admin.isAdmin === true) {
+        await rates.save();
+        this.logger.verbose(
+          `productRate with id ${rateId} has been successfully updated by admin ${rates.adminId}`,
+        );
+      } else {
+        this.logger.debug(`user is not admin`);
+        return 'user is not admin';
+      }
     } catch (error) {
       this.logger.error(`failed to update product rate with id ${rateId}`);
       return 'error updating product rate';

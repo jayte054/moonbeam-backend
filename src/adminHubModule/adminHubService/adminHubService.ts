@@ -4,22 +4,27 @@ import { Request } from 'express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import {
   AdminHubDto,
+  ProductDesignRateDto,
   UpdateProductDto,
   UpdateProductRateDto,
   UploadProductDto,
 } from '../adminHubDto/adminHubDto';
 import { AdminProductRateRepository } from '../adminProductRateRepository/adminProductRateRepository';
 import { AdminProductRepository } from '../adminProductRepository/adminProductRepository';
+import { AdminProductDesignRateRepository } from '../adminProductDesignRateRepository/adminProductDesignRateRepository';
 import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
+import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
 
 @Injectable()
 export class AdminHubService {
   constructor(
     @InjectRepository(AdminProductRateRepository)
     @InjectRepository(AdminProductRepository)
+    @InjectRepository(AdminProductDesignRateRepository)
     private adminProductRateRepository: AdminProductRateRepository,
     private adminProductRepository: AdminProductRepository,
+    private adminProductDesignRateRepository: AdminProductDesignRateRepository,
   ) {}
 
   productRate = async (
@@ -72,8 +77,8 @@ export class AdminHubService {
     );
   };
 
-  getProducts = async (): Promise<ProductEntity[]> => {
-    return await this.adminProductRepository.getProducts();
+  getProducts = async (admin: AdminAuthEntity): Promise<ProductEntity[]> => {
+    return await this.adminProductRepository.getProducts(admin);
   };
 
   getProductsWithId = async (
@@ -100,7 +105,31 @@ export class AdminHubService {
     );
   };
 
-  //   async getAllUsers(admin: AdminAuthEntity): Promise<any> {
-  //     return await this.authRepository.getAllUsers(admin);
-  //   }
+  productDesignRate = async (
+    admin: AdminAuthEntity,
+    productDesignRateDto: ProductDesignRateDto,
+  ): Promise<ProductDesignRateEntity | any> => {
+    return await this.adminProductDesignRateRepository.productDesignRate(
+      admin,
+      productDesignRateDto,
+    );
+  };
+
+  getProductDesignRates = async (
+    admin: AdminAuthEntity,
+  ): Promise<ProductDesignRateEntity[]> => {
+    return await this.adminProductDesignRateRepository.getProductDesignRates(
+      admin,
+    );
+  };
+
+  getProductDesignRateWithId = async (
+    designId: string,
+    admin: AdminAuthEntity,
+  ): Promise<ProductDesignRateEntity> => {
+    return await this.adminProductDesignRateRepository.getProductDesignRateWithId(
+      designId,
+      admin,
+    );
+  };
 }

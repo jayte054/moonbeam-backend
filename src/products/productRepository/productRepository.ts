@@ -85,6 +85,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.productFlavour = productFlavour;
     order.layers = ProductLayers.one;
     order.inches = ProductInch.six;
+
     // if (order.productFlavour === ProductFlavours.appleCake) {
     //   console.log('Updating rate');
     //   rate = Number(newRate[0].appleCakeRate);
