@@ -157,7 +157,7 @@ export class AuthRepository extends Repository<AuthEntity> {
 
     if (!users) {
       this.logger.error(`users not found`);
-      throw new NotFoundException('users not found');
+      throw new NotFoundException(`users not found by ${admin.id}`);
     }
 
     const userInfo: UserDto[] = users.map((user) => ({
@@ -168,7 +168,7 @@ export class AuthRepository extends Repository<AuthEntity> {
       phoneNumber: user.phoneNumber,
       orderName: user.orderName,
     }));
-    this.logger.verbose(`Users fetched successfully by admin`);
+    this.logger.verbose(`Users fetched successfully by admin ${admin.id}`);
     return userInfo;
   }
 }

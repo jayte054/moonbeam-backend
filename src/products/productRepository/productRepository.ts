@@ -275,6 +275,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       );
     } catch (error) {
       this.logger.error(`orders for user ${user.id} not found`);
+      throw new NotFoundException(`orders for user ${user.id} not found`);
     }
 
     return orders;
@@ -303,7 +304,9 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       this.logger.error(
         `User with ${user.firstname} failed to get order with id ${id}`,
       );
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        `failed to get order with id ${id}`,
+      );
     }
   }
 
@@ -395,7 +398,9 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
         `User ${user.firstname} failed to update order with id  ${id}`,
       );
       console.log(error);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        `failed to update order with id ${id}`,
+      );
     }
     return order;
   }
@@ -468,7 +473,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     });
 
     if (!result) {
-      throw new NotFoundException();
+      throw new NotFoundException(`${id} not found`);
     }
 
     try {
@@ -478,7 +483,9 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       this.logger.error(
         `User ${user} encountered an error deleting order with ${id}`,
       );
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        `error deleting order with id ${id}`,
+      );
     }
   }
 }

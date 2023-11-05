@@ -46,7 +46,9 @@ export class MailerService {
       this.logger.verbose(`User ${email} welcome mail sent successfully`);
     } catch (error) {
       this.logger.error(`User ${email} invalid email address`);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
     }
   }
 
@@ -64,7 +66,9 @@ export class MailerService {
       this.logger.verbose(`Admin ${email} welcome mail sent successfully`);
     } catch (error) {
       this.logger.error(`Admin ${email} invalid email address`);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        `admin with email ${email} invalid`,
+      );
     }
   }
 
@@ -279,7 +283,9 @@ export class MailerService {
       this.logger.verbose(`User ${email} product order mail sent successfully`);
     } catch (error) {
       this.logger.error(`User ${email} invalid email address`);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
     }
   }
 
@@ -315,7 +321,9 @@ export class MailerService {
       this.logger.verbose(`User ${email} order update mail sent successfully`);
     } catch (error) {
       this.logger.error(`User ${email} invalid email address`);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
     }
   }
 
@@ -413,7 +421,7 @@ export class MailerService {
       );
     } catch (error) {
       this.logger.error(`delivery token for email ${email} not sent`);
-      throw new Error(`failed to send delivery token`);
+      throw new InternalServerErrorException(`failed to send delivery token`);
     }
 
     return {
@@ -458,7 +466,7 @@ export class MailerService {
       );
     } catch (error) {
       this.logger.error(`User ${email} invalid email address`);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(`user with ${email} invalid`);
     }
   }
 }

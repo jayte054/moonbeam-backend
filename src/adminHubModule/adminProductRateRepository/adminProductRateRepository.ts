@@ -135,7 +135,9 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       this.logger.error(
         `product rate with id ${rateId} was not successfully fetched`,
       );
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        `fetching rate with id ${rateId} unsuccessful`,
+      );
     }
   };
 

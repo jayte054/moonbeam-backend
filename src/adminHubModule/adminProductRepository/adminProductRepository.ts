@@ -66,8 +66,6 @@ export class AdminProductRepository extends Repository<ProductEntity> {
   };
 
   getProducts = async (admin: AdminAuthEntity): Promise<ProductEntity[]> => {
-    // const query = this.createQueryBuilder('productId');
-    // query.where('productId.')
     const options: FindOneOptions<ProductEntity> = {};
 
     const products: any = await this.find(options);
@@ -136,7 +134,9 @@ export class AdminProductRepository extends Repository<ProductEntity> {
       );
     } catch (error) {
       this.logger.error(`Product with id ${productId} update was unsuccessful`);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        `updating product with id ${productId} unsuccessful`,
+      );
     }
     return product;
   };
