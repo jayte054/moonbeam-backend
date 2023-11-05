@@ -1,4 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
+import { ProductDesignRateEntity } from 'src/adminHubModule/ProductDesignRateEntity/ProductDesignRateEntity';
 import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
 import { FindOneOptions } from 'typeorm';
 
@@ -29,12 +30,20 @@ export const fetchRate = async () => {
   return cakeRates;
 };
 
-// const options: FindOneOptions<ProductOrderEntity> = {};
+export const fetchDesignRate = async () => {
+  const options: FindOneOptions<ProductDesignRateEntity> = {};
 
-// const orders: any = await this.find(options);
-// if (!orders) {
-//   this.logger.error('orders not found');
-//   throw new NotFoundException('orders not found');
-// }
-// this.logger.verbose('orders fetched successfully');
-// return orders;
+  const rates = await ProductDesignRateEntity.find(options);
+
+  if (rates.length === 0) {
+    throw new NotFoundException('rates not found');
+  }
+
+  const designRates = rates.map((rate) => ({
+    nakedRate: rate.nakedRate,
+    butterCreamRate: rate.butterCreamRate,
+    fundantRate: rate.fundantRate,
+  }));
+
+  return designRates;
+};

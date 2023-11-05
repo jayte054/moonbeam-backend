@@ -21,6 +21,9 @@ export class ProductDesignRateEntity extends BaseEntity {
   @Column()
   fundantRate: string;
 
+  @Column({ default: new Date() })
+  date: string;
+
   @ManyToOne(() => AdminAuthEntity, (admin) => admin.butterCreamRate, {
     eager: false,
   })

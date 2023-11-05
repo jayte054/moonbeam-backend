@@ -47,6 +47,7 @@ export enum ProductFlavours {
 }
 
 export enum DesignCovering {
+  naked = 'naked',
   butterCream = 'butterCream',
   fundant = 'fundant',
 }

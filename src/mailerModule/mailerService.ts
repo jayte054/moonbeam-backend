@@ -255,7 +255,7 @@ export class MailerService {
     const layers = order.layers;
     const price = order.price;
     const status = order.status;
-    const description = order.deliveryDate;
+    const description = order.description;
     const deliveryDate = order.deliveryDate;
     const mailOptions: nodemailer.SendMailOptions = {
       from: Gmail_User,

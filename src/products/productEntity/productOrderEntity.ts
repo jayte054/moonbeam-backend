@@ -8,6 +8,7 @@ import {
   Unique,
 } from 'typeorm';
 import {
+  DesignCovering,
   OrderStatus,
   ProductFlavours,
   ProductInch,
@@ -33,6 +34,9 @@ export class ProductOrderEntity extends BaseEntity {
   productFlavour: ProductFlavours;
 
   @Column()
+  designCovering: DesignCovering;
+
+  @Column()
   layers: ProductLayers;
 
   @Column()
@@ -40,6 +44,9 @@ export class ProductOrderEntity extends BaseEntity {
 
   @Column()
   rate: string;
+
+  @Column()
+  designRate: string;
 
   @Column()
   price: string;

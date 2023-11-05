@@ -6,6 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 import {
+  DesignCovering,
   OrderStatus,
   ProductFlavours,
   ProductInch,
@@ -29,6 +30,12 @@ export class CustomProductOrderDto {
   description: string;
 
   productFlavour: ProductFlavours;
+
+  designCovering: DesignCovering;
+
+  layers: ProductLayers;
+
+  inches: ProductInch;
 }
 
 export class GenericProductOrderDto {
@@ -45,6 +52,14 @@ export class GenericProductOrderDto {
   @IsNotEmpty()
   @MaxLength(80)
   description: string;
+
+  productFlavour: ProductFlavours;
+
+  designCovering: DesignCovering;
+
+  layers: ProductLayers;
+
+  inches: ProductInch;
 }
 
 export class UpdateOrderDto {
@@ -55,6 +70,12 @@ export class UpdateOrderDto {
   layers?: ProductLayers;
 
   inches?: ProductInch;
+
+  rate?: string;
+
+  productFlavour: ProductFlavours;
+
+  designCovering: DesignCovering;
 
   deliveryDate?: string;
 

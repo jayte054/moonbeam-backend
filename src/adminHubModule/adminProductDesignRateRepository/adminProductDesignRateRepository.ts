@@ -34,6 +34,11 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
     rate.butterCreamRate = butterCreamRate;
     rate.fundantRate = fundantRate;
     rate.nakedRate = nakedRate;
+    rate.date = new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
     rate.admin = admin;
     try {
       if (admin.isAdmin === true) {
