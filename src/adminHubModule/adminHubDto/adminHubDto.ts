@@ -97,3 +97,11 @@ export class ProductDesignRateDto {
   @IsNotEmpty()
   fundantRate: string;
 }
+
+export class UpdateDesignRateDto {
+  nakedRate?: string;
+
+  butterCreamRate?: string;
+
+  fundantRate?: string;
+}

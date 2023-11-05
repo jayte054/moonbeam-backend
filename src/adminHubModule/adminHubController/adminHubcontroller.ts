@@ -19,6 +19,7 @@ import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 import {
   AdminHubDto,
   ProductDesignRateDto,
+  UpdateDesignRateDto,
   UpdateProductDto,
   UpdateProductRateDto,
   UploadProductDto,
@@ -144,6 +145,20 @@ export class AdminHubController {
     return await this.adminHubService.getProductDesignRateWithId(
       designId,
       admin,
+    );
+  }
+
+  @Patch('/updateDesignRate/:id')
+  @UsePipes(ValidationPipe)
+  async updateDesignRate(
+    @Param('designId') designId: string,
+    @GetUser() admin: AdminAuthEntity,
+    @Body() updateDesignRateDto: UpdateDesignRateDto,
+  ): Promise<ProductDesignRateEntity | string> {
+    return await this.adminHubService.updateDesignRate(
+      designId,
+      admin,
+      updateDesignRateDto,
     );
   }
 }

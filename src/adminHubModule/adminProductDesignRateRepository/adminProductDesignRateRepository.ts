@@ -7,7 +7,10 @@ import {
 import { v4 as uuid } from 'uuid';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
-import { ProductDesignRateDto } from '../adminHubDto/adminHubDto';
+import {
+  ProductDesignRateDto,
+  UpdateDesignRateDto,
+} from '../adminHubDto/adminHubDto';
 import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
 
 @Injectable()
@@ -95,5 +98,34 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
       );
       throw new NotFoundException('product not found');
     }
+  };
+
+  updateDesignRate = async (
+    designId: string,
+    admin: AdminAuthEntity,
+    updateDesignRateDto: UpdateDesignRateDto,
+  ): Promise<ProductDesignRateEntity | string> => {
+    const { nakedRate, butterCreamRate, fundantRate } = updateDesignRateDto;
+
+    const designRate = await this.getProductDesignRateWithId(designId, admin);
+
+    designRate.nakedRate = nakedRate;
+    designRate.butterCreamRate = butterCreamRate;
+    designRate.fundantRate = fundantRate;
+
+    try {
+      if (admin.isAdmin === true) {
+        await designRate.save();
+        this.logger.verbose(
+          `designRate with Id ${designId} successfully updated by admin ${admin.id}`,
+        );
+      } else {
+        return 'user is not an admin';
+      }
+    } catch (error) {
+      this.logger.error(`error update design rate with id {designId}`);
+      throw new InternalServerErrorException('error updating design');
+    }
+    return designRate;
   };
 }

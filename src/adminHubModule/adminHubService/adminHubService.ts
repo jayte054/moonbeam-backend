@@ -5,6 +5,7 @@ import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity'
 import {
   AdminHubDto,
   ProductDesignRateDto,
+  UpdateDesignRateDto,
   UpdateProductDto,
   UpdateProductRateDto,
   UploadProductDto,
@@ -131,6 +132,18 @@ export class AdminHubService {
     return await this.adminProductDesignRateRepository.getProductDesignRateWithId(
       designId,
       admin,
+    );
+  };
+
+  updateDesignRate = async (
+    designId: string,
+    admin: AdminAuthEntity,
+    updateDesignRateDto: UpdateDesignRateDto,
+  ): Promise<ProductDesignRateEntity | string> => {
+    return await this.adminProductDesignRateRepository.updateDesignRate(
+      designId,
+      admin,
+      updateDesignRateDto,
     );
   };
 }
