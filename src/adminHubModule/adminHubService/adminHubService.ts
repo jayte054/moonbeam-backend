@@ -127,6 +127,7 @@ export class AdminHubService {
     designId: string,
     admin: AdminAuthEntity,
   ): Promise<ProductDesignRateEntity> => {
+    console.log(designId);
     return await this.adminProductDesignRateRepository.getProductDesignRateWithId(
       designId,
       admin,

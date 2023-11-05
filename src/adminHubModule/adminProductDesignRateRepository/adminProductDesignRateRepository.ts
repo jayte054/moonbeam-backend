@@ -32,7 +32,6 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
     rate.fundantRate = fundantRate;
     rate.nakedRate = nakedRate;
     rate.admin = admin;
-
     try {
       if (admin.isAdmin === true) {
         await rate.save();
@@ -76,21 +75,20 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
     designId: string,
     admin: AdminAuthEntity,
   ): Promise<ProductDesignRateEntity | any> => {
-    console.log('errorhere');
-    const productWithId = await this.findOne({
+    const designRateWithId = await this.findOne({
       where: {
         designId,
         adminId: admin.id,
       },
     });
 
-    if (!productWithId) {
+    if (!designRateWithId) {
       throw new NotFoundException(`product with id ${designId} not found`);
     }
 
     try {
       this.logger.verbose(`product with id ${designId} fetched successfully`);
-      return productWithId;
+      return designRateWithId;
     } catch (error) {
       await this.logger.error(
         `product with id ${designId} fetched unsuccessfully`,

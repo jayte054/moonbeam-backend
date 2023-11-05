@@ -138,7 +138,7 @@ export class AdminHubController {
 
   @Get('/getProductDesignRateWithId/:id')
   async getProductDesignRateWithId(
-    @Param() designId: string,
+    @Param('designId') designId: string,
     @GetUser() admin: AdminAuthEntity,
   ): Promise<ProductDesignRateEntity> {
     return await this.adminHubService.getProductDesignRateWithId(
