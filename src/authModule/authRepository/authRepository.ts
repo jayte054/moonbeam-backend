@@ -55,8 +55,7 @@ export class AuthRepository extends Repository<AuthEntity> {
       } else {
         console.log(error);
         this.logger.error('error creating user');
-        // throw new InternalServerErrorException();
-        return 'error creating user';
+        throw new InternalServerErrorException('error creating user');
       }
     }
     return `user ${JSON.stringify({

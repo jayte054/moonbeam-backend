@@ -7,6 +7,7 @@ import { ProductsModule } from './products/products.module';
 import { CloudinaryModule } from './cloudinary/cloudinaryModule';
 import { ConfigModule } from '@nestjs/config';
 import { AdminHubModule } from './adminHubModule/adminHubModule';
+import { ProfileModule } from './profile/profileModule';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AdminHubModule } from './adminHubModule/adminHubModule';
     CloudinaryModule,
     ConfigModule.forRoot({ isGlobal: true }),
     AdminHubModule,
+    ProfileModule,
   ],
 })
 export class AppModule {}

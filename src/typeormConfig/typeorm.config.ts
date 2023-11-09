@@ -8,6 +8,7 @@ import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { PasswordResetTokenEntity } from 'src/authModule/passwordResetTokenEntity/passwordResetTokenEntity';
 import { DeliveryTokenEntity } from 'src/products/deliveryTokenEntity/deliveryTokenEntity';
 import { ProductOrderEntity } from 'src/products/productEntity/productOrderEntity';
+import { ProfileEntity } from 'src/profile/profileEntity/profileEntity';
 
 const dbConfig: any | unknown = config.get('db');
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -26,6 +27,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     ProductRateEntity,
     ProductEntity,
     ProductDesignRateEntity,
+    ProfileEntity,
   ],
   synchronize: process.env.TypeORM_SYNC || dbConfig.synchronize,
   migrations: ['dist/migrations/*.js'], // Specify your migration directory,

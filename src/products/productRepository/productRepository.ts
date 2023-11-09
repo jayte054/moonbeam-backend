@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
-import { DataSource, FindOneOptions, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {
   CustomProductOrderDto,
   GenericProductOrderDto,
@@ -16,8 +16,6 @@ import {
   DesignCovering,
   OrderStatus,
   ProductFlavours,
-  ProductInch,
-  ProductLayers,
   ProductType,
 } from '../ProductEnum/productEnum';
 import { Request } from 'express';
