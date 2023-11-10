@@ -13,10 +13,10 @@ export class ProfileEntity extends BaseEntity {
   profileId: string;
 
   @Column()
-  firstName: string;
+  firstname: string;
 
   @Column()
-  lastName: string;
+  lastname: string;
 
   @Column()
   address: string;
