@@ -32,13 +32,19 @@ export class AuthService {
       authSigninDto,
     );
 
-    const { id, email } = userDetails;
+    const { id, email, firstname, lastname, phoneNumber } = userDetails;
     try {
       if (!userDetails) {
         throw new UnauthorizedException('invalid credentials');
       }
 
-      const payload: JwtPayload = { id, email };
+      const payload: JwtPayload = {
+        id,
+        email,
+        firstname,
+        lastname,
+        phoneNumber,
+      };
 
       const accessToken = await this.jwtService.sign(payload);
       this.logger.verbose(

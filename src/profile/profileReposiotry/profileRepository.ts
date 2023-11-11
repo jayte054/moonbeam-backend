@@ -28,17 +28,15 @@ export class ProfileRepository extends Repository<ProfileEntity> {
     createProfileDto: CreateProfileDto,
     req: Request,
   ): Promise<ProfileEntity | any> => {
-    const { firstname, lastname, phoneNumber, address, dateOfBirth } =
-      createProfileDto;
+    const { address, dateOfBirth } = createProfileDto;
     const cloudinaryUrl = await this.cloudinaryService.uploadImage(req.file);
-
     const profile = new ProfileEntity();
 
     profile.user = user;
-    profile.firstname = firstname;
-    profile.lastname = lastname;
+    profile.firstname = user.firstname;
+    profile.lastname = user.lastname;
     profile.address = address;
-    profile.phoneNumber = phoneNumber;
+    profile.phoneNumber = user.phoneNumber;
     profile.dateOfBirth = dateOfBirth;
     profile.imageUrl = cloudinaryUrl.secure_url;
     profile.userId = user.id;
@@ -87,15 +85,6 @@ export class ProfileRepository extends Repository<ProfileEntity> {
       throw new NotFoundException(`profile with id ${profileId} not found`);
     }
 
-    // return {
-    //   profileId: profileWithId.profileId,
-    //   firstname: profileWithId.firstname,
-    //   lastname: profileWithId.lastname,
-    //   dateOfBirth: profileWithId.dateOfBirth,
-    //   phoneNumber: profileWithId.phoneNumber,
-    //   address: profileWithId.address,
-    //   imageUrl: profileWithId.imageUrl,
-    // };
     return profileWithId;
   };
 

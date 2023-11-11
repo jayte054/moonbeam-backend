@@ -28,18 +28,27 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload): Promise<AuthEntity | AdminAuthEntity> {
-    const { id, email } = payload;
+    const { id, email, firstname, lastname, phoneNumber } = payload;
 
     const userQueryBuilder = this.authRepository.createQueryBuilder('user');
     userQueryBuilder
       .select([
         'user.id',
         'user.email',
+        'user.firstname',
+        'user.lastname',
+        'user.phoneNumber',
         'user.password',
         'user.salt',
         'user.isAdmin',
       ])
-      .where('user.email = :email', { email: email, id });
+      .where('user.email = :email', {
+        email: email,
+        id,
+        firstname,
+        lastname,
+        phoneNumber,
+      });
 
     const adminQueryBuilder =
       this.adminAuthRepository.createQueryBuilder('admin');

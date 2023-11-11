@@ -161,4 +161,10 @@ export class AdminHubController {
       updateDesignRateDto,
     );
   }
+
+  @Get('/fetchProfiles')
+  async fetchProfiles(@GetUser() admin: AdminAuthEntity) {
+    console.log('here');
+    return await this.adminHubService.fetchProfiles(admin);
+  }
 }

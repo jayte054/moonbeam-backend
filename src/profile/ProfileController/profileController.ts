@@ -34,6 +34,7 @@ export class ProfileController {
     @Request() req: Request | any,
     @Body() createProfileDto: CreateProfileDto,
   ): Promise<ProfileEntity | any> {
+    console.log('controller')
     return await this.profileService.createProfile(user, createProfileDto, req);
   }
 

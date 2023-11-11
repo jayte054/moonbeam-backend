@@ -36,14 +36,20 @@ export class AdminAuthService {
       adminAuthSigninDto,
     );
 
-    const { id, email } = adminDetails;
+    const { id, email, firstname, lastname, phoneNumber } = adminDetails;
 
     try {
       if (!adminDetails) {
         throw new UnauthorizedException('invalid credentials');
       }
 
-      const payload: JwtPayload = { id, email };
+      const payload: JwtPayload = {
+        id,
+        email,
+        firstname,
+        lastname,
+        phoneNumber,
+      };
 
       const accessToken = await this.jwtService.sign(payload);
       this.logger.verbose(

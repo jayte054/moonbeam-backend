@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
@@ -16,9 +16,10 @@ import { AdminProductDesignRateRepository } from '../adminProductDesignRateRepos
 import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
-
+import { fetchProfiles } from '../adminHubUtils/adminHubUtils';
 @Injectable()
 export class AdminHubService {
+  private logger = new Logger('AdminHubService');
   constructor(
     @InjectRepository(AdminProductRateRepository)
     @InjectRepository(AdminProductRepository)
@@ -145,5 +146,18 @@ export class AdminHubService {
       admin,
       updateDesignRateDto,
     );
+  };
+
+  fetchProfiles = async (admin: AdminAuthEntity) => {
+    const userProfiles = await fetchProfiles();
+    try {
+      this.logger.verbose(`user profiles fetched successfully by ${admin.id}`);
+      return userProfiles;
+    } catch (error) {
+      this.logger.error(
+        `user profiles unsuccessfully fetched by admin ${admin.id}`,
+      );
+      throw new NotFoundException('user profiles not found');
+    }
   };
 }

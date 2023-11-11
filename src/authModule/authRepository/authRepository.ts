@@ -44,11 +44,11 @@ export class AuthRepository extends Repository<AuthEntity> {
 
     try {
       console.log('done');
+      await this.mailerService.sendWelcomeMail(user.email);
       await user.save();
       this.logger.verbose(
         `New user with id of ${user.id} successfully created`,
       );
-      await this.mailerService.sendWelcomeMail(user.email);
     } catch (error) {
       if (error.code === '23505') {
         throw new ConflictException('email already exists');
@@ -79,6 +79,7 @@ export class AuthRepository extends Repository<AuthEntity> {
         'user.password',
         'user.salt',
         'user.firstname',
+        'user.lastname',
         'user.phoneNumber',
         'user.isAdmin',
       ])
@@ -91,7 +92,8 @@ export class AuthRepository extends Repository<AuthEntity> {
         id: user.id,
         email: user.email,
         isAdmin: user.isAdmin,
-        user: user.firstname,
+        firstname: user.firstname,
+        lastname: user.lastname,
         phoneNumber: user.phoneNumber,
       };
     } else {
