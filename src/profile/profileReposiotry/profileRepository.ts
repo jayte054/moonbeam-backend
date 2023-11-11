@@ -87,15 +87,16 @@ export class ProfileRepository extends Repository<ProfileEntity> {
       throw new NotFoundException(`profile with id ${profileId} not found`);
     }
 
-    return {
-      profileId: profileWithId.profileId,
-      firstname: profileWithId.firstname,
-      lastname: profileWithId.lastname,
-      dateOfBirth: profileWithId.dateOfBirth,
-      phoneNumber: profileWithId.phoneNumber,
-      address: profileWithId.address,
-      imageUrl: profileWithId.imageUrl,
-    };
+    // return {
+    //   profileId: profileWithId.profileId,
+    //   firstname: profileWithId.firstname,
+    //   lastname: profileWithId.lastname,
+    //   dateOfBirth: profileWithId.dateOfBirth,
+    //   phoneNumber: profileWithId.phoneNumber,
+    //   address: profileWithId.address,
+    //   imageUrl: profileWithId.imageUrl,
+    // };
+    return profileWithId;
   };
 
   updateProfile = async (
@@ -108,7 +109,7 @@ export class ProfileRepository extends Repository<ProfileEntity> {
       updateProfileDto;
 
     const profile = await this.getProfileWithId(profileId, user);
-
+    console.log(profile);
     if (file) {
       const newImage = await this.cloudinaryService.uploadImage(req.file);
 
@@ -124,13 +125,16 @@ export class ProfileRepository extends Repository<ProfileEntity> {
     profile.dateOfBirth = dateOfBirth;
     profile.phoneNumber = phoneNumber;
     profile.address = address;
-
+    console.log(profile);
     try {
+      console.log(profile);
       await profile.save();
       this.logger.verbose(
         `user profile with id ${profileId} updated successfully`,
       );
+      return profile;
     } catch (error) {
+      console.log(error);
       this.logger.error(
         `user with profile ${profileId} unsuccessfully updated`,
       );
@@ -138,7 +142,6 @@ export class ProfileRepository extends Repository<ProfileEntity> {
         `user with profile ${profileId} unsuccessfully updated`,
       );
     }
-    return profile;
   };
   private extractPublicId(imageUrl: string): string {
     // Extract the public_id from the imageUrl
