@@ -18,7 +18,6 @@ export class ProfileService {
     createProfileDto: CreateProfileDto,
     req: Request,
   ): Promise<ProfileEntity | any> => {
-    console.log('hereeee')
     return await this.profileRepository.createProfile(
       user,
       createProfileDto,

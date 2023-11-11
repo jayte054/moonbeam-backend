@@ -119,14 +119,12 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.user = user;
 
     try {
-      console.log('nod done');
       await order.save();
       await this.mailerService.productOrderMail(user.email, order);
       this.logger.verbose(
         `user ${user} has successfully placed an order ${order.id}`,
       );
     } catch (error) {
-      console.log(error);
       this.logger.error('error placing order');
       throw new InternalServerErrorException(
         'error creating order, please try again later',
