@@ -10,9 +10,9 @@ import { PasswordResetTokenEntity } from 'src/authModule/passwordResetTokenEntit
 import { ResetPasswordEmailDto } from './mailerDto/resetpassword.dto';
 import { Gmail_Password, Gmail_User } from '../cloudinaryConfig';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
-import { ProductOrderEntity } from 'src/products/productEntity/productOrderEntity';
+import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/productOrderEntity';
 import { OrderDeliveryDto } from './mailerDto/orderDeliveryDto';
-import { DeliveryTokenEntity } from 'src/products/deliveryTokenEntity/deliveryTokenEntity';
+import { DeliveryTokenEntity } from 'src/productOrders/deliveryTokenEntity/deliveryTokenEntity';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 
 @Injectable()

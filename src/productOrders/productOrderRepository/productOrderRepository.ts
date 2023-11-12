@@ -10,14 +10,14 @@ import {
   CustomProductOrderDto,
   GenericProductOrderDto,
   UpdateOrderDto,
-} from '../productDto/productOrderDto';
-import { ProductOrderEntity } from '../productEntity/productOrderEntity';
+} from '../productOrderDto/productOrderDto';
+import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import {
   DesignCovering,
   OrderStatus,
   ProductFlavours,
   ProductType,
-} from '../ProductEnum/productEnum';
+} from '../ProductOrderEnum/productOrderEnum';
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
 import { v4 as uuid } from 'uuid';

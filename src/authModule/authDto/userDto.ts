@@ -1,4 +1,4 @@
-import { ProductOrderEntity } from 'src/products/productEntity/productOrderEntity';
+import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/productOrderEntity';
 
 export class UserDto {
   id: string;

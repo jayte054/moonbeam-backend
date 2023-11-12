@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/authModule/authmodule';
 import { CloudinaryModule } from 'src/cloudinary/cloudinaryModule';
-import { ProductRepository } from 'src/products/productRepository/productRepository';
+import { ProductRepository } from 'src/productOrders/productOrderRepository/productOrderRepository';
 import { AdminHubController } from './adminHubController/adminHubcontroller';
 import { AdminProductRateRepository } from './adminProductRateRepository/adminProductRateRepository';
 import { AdminHubService } from './adminHubService/adminHubService';

@@ -22,9 +22,9 @@ import {
   CustomProductOrderDto,
   GenericProductOrderDto,
   UpdateOrderDto,
-} from '../productDto/productOrderDto';
-import { ProductService } from '../productService/productService';
-import { ProductOrderEntity } from '../productEntity/productOrderEntity';
+} from '../productOrderDto/productOrderDto';
+import { ProductService } from '../productOrderService/productOrderService';
+import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 
 @Controller('products')
 @UseGuards(AuthGuard())

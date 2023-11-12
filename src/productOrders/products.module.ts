@@ -3,10 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/authModule/authmodule';
 import { MailerModule } from 'src/mailerModule/mailerModule';
 import { CloudinaryModule } from '../cloudinary/cloudinaryModule';
-import { ProductController } from './productController/productController';
-import { ProductOrderEntity } from './productEntity/productOrderEntity';
-import { ProductRepository } from './productRepository/productRepository';
-import { ProductService } from './productService/productService';
+import { ProductController } from './productOrderController/productOrderController';
+import { ProductOrderEntity } from './productOrderEntity/productOrderEntity';
+import { ProductRepository } from './productOrderRepository/productOrderRepository';
+import { ProductService } from './productOrderService/productOrderService';
 
 @Module({
   imports: [

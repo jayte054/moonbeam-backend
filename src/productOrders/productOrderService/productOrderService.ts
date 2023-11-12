@@ -6,9 +6,9 @@ import {
   CustomProductOrderDto,
   GenericProductOrderDto,
   UpdateOrderDto,
-} from '../productDto/productOrderDto';
-import { ProductOrderEntity } from '../productEntity/productOrderEntity';
-import { ProductRepository } from '../productRepository/productRepository';
+} from '../productOrderDto/productOrderDto';
+import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
+import { ProductRepository } from '../productOrderRepository/productOrderRepository';
 
 @Injectable()
 export class ProductService {

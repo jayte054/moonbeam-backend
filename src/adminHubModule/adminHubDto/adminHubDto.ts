@@ -1,5 +1,5 @@
 import { IsDateString, IsNotEmpty, IsString, MaxLength } from 'class-validator';
-import { ProductType } from 'src/products/ProductEnum/productEnum';
+import { ProductType } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
 
 export class AdminHubDto {
   @IsString()

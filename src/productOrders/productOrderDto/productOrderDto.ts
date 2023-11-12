@@ -12,7 +12,7 @@ import {
   ProductInch,
   ProductLayers,
   ProductType,
-} from '../ProductEnum/productEnum';
+} from '../ProductOrderEnum/productOrderEnum';
 // import { UploadedFile } from '@nestjs/platform-express';
 
 export class CustomProductOrderDto {

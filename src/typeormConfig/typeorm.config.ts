@@ -6,8 +6,8 @@ import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productR
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { PasswordResetTokenEntity } from 'src/authModule/passwordResetTokenEntity/passwordResetTokenEntity';
-import { DeliveryTokenEntity } from 'src/products/deliveryTokenEntity/deliveryTokenEntity';
-import { ProductOrderEntity } from 'src/products/productEntity/productOrderEntity';
+import { DeliveryTokenEntity } from 'src/productOrders/deliveryTokenEntity/deliveryTokenEntity';
+import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/productOrderEntity';
 import { ProfileEntity } from 'src/profile/profileEntity/profileEntity';
 
 const dbConfig: any | unknown = config.get('db');

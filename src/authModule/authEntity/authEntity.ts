@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
-import { ProductOrderEntity } from 'src/products/productEntity/productOrderEntity';
+import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/productOrderEntity';
 
 @Entity()
 @Unique(['email'])

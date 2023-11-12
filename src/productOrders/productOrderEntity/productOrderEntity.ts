@@ -13,7 +13,7 @@ import {
   ProductInch,
   ProductLayers,
   ProductType,
-} from '../ProductEnum/productEnum';
+} from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class ProductOrderEntity extends BaseEntity {

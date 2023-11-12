@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './authModule/authmodule';
 import { MailerModule } from './mailerModule/mailerModule';
 import { typeOrmConfig } from './typeormConfig/typeorm.config';
-import { ProductsModule } from './products/products.module';
+import { ProductsModule } from './productOrders/products.module';
 import { CloudinaryModule } from './cloudinary/cloudinaryModule';
 import { ConfigModule } from '@nestjs/config';
 import { AdminHubModule } from './adminHubModule/adminHubModule';

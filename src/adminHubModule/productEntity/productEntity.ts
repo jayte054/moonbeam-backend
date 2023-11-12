@@ -1,5 +1,5 @@
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
-import { ProductType } from 'src/products/ProductEnum/productEnum';
+import { ProductType } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
 import {
   BaseEntity,
   Column,
