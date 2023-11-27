@@ -7,6 +7,9 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const logger = new Logger('bootstrap');
   const app: any = await NestFactory.create(AppModule);
+
+  app.enableCors({ origin: '*' });
+
   const configService = app.get(ConfigService);
   const port = configService.get('server.port', 3005);
   await app.listen(port);

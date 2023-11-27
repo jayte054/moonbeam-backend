@@ -2,7 +2,8 @@ export enum ProductType {
   Traditional = 'Traditional',
   Wedding = 'Wedding',
   Birthday = 'Birthday',
-  Chops = 'Chops',
+  Anniversary = 'Anniversary',
+  Chops_Pastries = 'Chops & Pastries',
 }
 
 export enum ProductInch {

@@ -79,6 +79,19 @@ export class AdminProductRepository extends Repository<ProductEntity> {
     }
   };
 
+  getProductsGallery = async (): Promise<ProductEntity[]> => {
+    const options: FindOneOptions<ProductEntity> = {};
+
+    const products = await this.find(options);
+    if (!products) {
+      this.logger.error('products not found');
+      throw new NotFoundException('products not found');
+    } else {
+      this.logger.verbose(`products fetched successfully`);
+      return products;
+    }
+  };
+
   getProductsWithId = async (
     productId: string,
     admin: AdminAuthEntity,

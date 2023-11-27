@@ -83,6 +83,10 @@ export class AdminHubService {
     return await this.adminProductRepository.getProducts(admin);
   };
 
+  getProductsGallery = async (): Promise<ProductEntity[]> => {
+    return await this.adminProductRepository.getProductsGallery();
+  };
+
   getProductsWithId = async (
     productId: string,
     admin: AdminAuthEntity,

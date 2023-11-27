@@ -10,6 +10,7 @@ import { ProductEntity } from './productEntity/productEntity';
 import { ProductRateEntity } from './productRateEntity/productRateEntity';
 import { AdminProductRepository } from './adminProductRepository/adminProductRepository';
 import { AdminProductDesignRateRepository } from './adminProductDesignRateRepository/adminProductDesignRateRepository';
+import { BareAdminHubController } from './adminHubController/bareAdminHubcontroller';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { AdminProductDesignRateRepository } from './adminProductDesignRateReposi
     AdminProductDesignRateRepository,
     AdminHubService,
   ],
-  controllers: [AdminHubController],
+  controllers: [AdminHubController, BareAdminHubController],
   exports: [],
 })
 export class AdminHubModule {}
