@@ -37,12 +37,11 @@ export class ProfileController {
     return await this.profileService.createProfile(user, createProfileDto, req);
   }
 
-  @Get('getProfile/:id')
-  async getProfle(
+  @Get('getProfile')
+  async getProfile(
     @GetUser() user: AuthEntity,
-    @Param('profileId') profileId: string,
   ): Promise<ProfileEntity | any> {
-    return await this.profileService.getProfileWithId(profileId, user);
+    return await this.profileService.getProfile(user);
   }
 
   @Patch('updateProfile/:id')

@@ -37,7 +37,7 @@ export class ProfileRepository extends Repository<ProfileEntity> {
     profile.lastname = user.lastname;
     profile.address = address;
     profile.phoneNumber = user.phoneNumber;
-    profile.dateOfBirth = dateOfBirth;
+    profile.dateOfBirth = dateOfBirth.toLocaleString();
     profile.imageUrl = cloudinaryUrl.secure_url;
     profile.userId = user.id;
 
@@ -61,31 +61,30 @@ export class ProfileRepository extends Repository<ProfileEntity> {
     };
   };
 
-  getProfileWithId = async (
-    profileId: string,
+  getProfile = async (
     user: AuthEntity,
   ): Promise<ProfileEntity | any> => {
-    const query = this.createQueryBuilder('firstname');
-    query.where('firstname.userId = :userId', { userId: user.id });
-
-    const profileWithId = await this.findOne({
-      where: {
-        profileId,
-        userId: user.id,
-      },
-    });
-    if (!profileWithId) {
-      throw new NotFoundException(`profile with id ${profileId} not found`);
-    }
+    const query = this.createQueryBuilder('profile');
+    query.where('profile.firstname = :firstname', { firstname: user.firstname });
 
     try {
-      this.logger.verbose(`profile with id ${profileId} fetched successfully`);
+       const profile = await this.findOne({
+      where: {
+        firstname: user.firstname,
+      },
+    });
+    if (!profile) {
+      throw new NotFoundException(`profile with name ${user.firstname} not found`);
+    }
+      this.logger.verbose(`profile with name ${user.firstname} fetched successfully ${{profile}}`);
+    console.log(profile)
+    return profile;
+
     } catch (error) {
-      this.logger.error(`profile with id ${profileId} not found`);
-      throw new NotFoundException(`profile with id ${profileId} not found`);
+      this.logger.error(`profile with name ${user.firstname} not found`);
+      throw new NotFoundException(`profile with name ${user.firstname} not found`);
     }
 
-    return profileWithId;
   };
 
   updateProfile = async (
@@ -97,7 +96,7 @@ export class ProfileRepository extends Repository<ProfileEntity> {
     const { firstname, lastname, dateOfBirth, phoneNumber, address, file } =
       updateProfileDto;
 
-    const profile = await this.getProfileWithId(profileId, user);
+    const profile = await this.getProfile(user);
     console.log(profile);
     if (file) {
       const newImage = await this.cloudinaryService.uploadImage(req.file);

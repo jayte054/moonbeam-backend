@@ -25,11 +25,10 @@ export class ProfileService {
     );
   };
 
-  getProfileWithId = async (
-    profileId: string,
+  getProfile = async (
     user: AuthEntity,
   ): Promise<ProfileEntity | any> => {
-    return await this.profileRepository.getProfileWithId(profileId, user);
+    return await this.profileRepository.getProfile(user);
   };
 
   updateProfile = async (
