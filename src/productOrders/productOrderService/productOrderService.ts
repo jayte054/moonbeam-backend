@@ -32,10 +32,12 @@ export class ProductService {
   async genericProductOrder(
     genericProductOrderDto: GenericProductOrderDto,
     user: AuthEntity,
+    req: Request,
   ): Promise<ProductOrderEntity | any> {
     return await this.productRepository.genericProductOrder(
       genericProductOrderDto,
       user,
+      req
     );
   }
 

@@ -46,8 +46,7 @@ export class GenericProductOrderDto {
   @IsDateString()
   deliveryDate: string;
 
-  @IsString()
-  imageUrl: string;
+  file: Express.Multer.File;
 
   @IsNotEmpty()
   @MaxLength(80)

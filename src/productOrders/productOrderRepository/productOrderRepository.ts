@@ -23,6 +23,7 @@ import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinary
 import { v4 as uuid } from 'uuid';
 import { MailerService } from 'src/mailerModule/mailerService';
 import { fetchDesignRate, fetchRate } from '../productUtility';
+import {CloudinaryUrlDto} from '../../cloudinary/coundinaryDto/cloudinaryUrlDto'
 
 @Injectable()
 export class ProductRepository extends Repository<ProductOrderEntity> {
@@ -151,17 +152,22 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
   async genericProductOrder(
     genericProductOrderDto: GenericProductOrderDto,
     user: AuthEntity,
+    req: Request,
   ): Promise<ProductOrderEntity | any> {
     const {
       orderName,
       deliveryDate,
-      imageUrl,
+      // imageUrl,
       description,
       productFlavour,
       designCovering,
       layers,
       inches,
     } = genericProductOrderDto;
+
+    const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
+      req.file,
+    );
 
     const order = new ProductOrderEntity();
 
@@ -210,7 +216,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.inches = inches;
     order.rate = rate.toString();
     order.deliveryDate = deliveryDate;
-    order.imageUrl = imageUrl;
+    order.imageUrl = cloudinaryUrl.secure_url;
+    // order.imageUrl = imageUrl;
     const price = rate * Number(layers) * Number(inches) * designrate;
     order.price = price.toString();
     order.status = OrderStatus.progress;
@@ -227,10 +234,11 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       year: 'numeric',
     });
     order.user = user;
-
+    console.log(order)
+    const email = user.email
     try {
       await order.save();
-      await this.mailerService.productOrderMail(user.email, order);
+      await this.mailerService.productOrderMail(email, order);
       this.logger.verbose(
         `user ${user} has successfully placed an order ${order.id}`,
       );
@@ -263,8 +271,9 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
   async getOrders(user: AuthEntity): Promise<ProductOrderEntity[]> {
     const query = this.createQueryBuilder('orderName');
     query.where('orderName.userId = :userId', { userId: user.id });
-
+    console.log(user)
     const orders = await query.getMany();
+    console.log(orders)
     try {
       this.logger.verbose(
         `user with id ${user.id} orders fetched successfully`,
@@ -371,17 +380,17 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     if (designRateMap.hasOwnProperty(designCovering)) {
       designrate = Number(designRate[0][designRateMap[designCovering]]);
     }
-    order.orderName = orderName;
-    order.type = type;
+    order.orderName = orderName || order.orderName;
+    order.type = type || order.type;
     order.layers = Number(layers);
     order.inches = Number(inches);
-    order.deliveryDate = deliveryDate;
-    order.description = description;
-    order.productFlavour = productFlavour;
-    order.designCovering = designCovering;
-    order.rate = rate.toString();
-    order.designRate = designrate.toString();
-    order.price = rate * order.layers * order.inches * designrate;
+    order.deliveryDate = deliveryDate || order.deliveryDate;
+    order.description = description || order.description;
+    order.productFlavour = productFlavour || order.productFlavour;
+    order.designCovering = designCovering || order.designCovering;
+    order.rate =  rate.toString();
+    order.designRate =  designrate.toString();
+    order.price =  rate * order.layers * order.inches * designrate;
 
     try {
       await order.save();

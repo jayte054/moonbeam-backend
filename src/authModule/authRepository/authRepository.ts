@@ -44,7 +44,7 @@ export class AuthRepository extends Repository<AuthEntity> {
 
     try {
       console.log('done');
-      await this.mailerService.sendWelcomeMail(user.email);
+      // await this.mailerService.sendWelcomeMail(user.email);
       await user.save();
       this.logger.verbose(
         `New user with id of ${user.id} successfully created`,

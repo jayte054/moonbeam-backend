@@ -1,3 +1,3 @@
-export class CloudinaryUrlDto {
+export type CloudinaryUrlDto = {
   cloudinaryUrl: string;
 }

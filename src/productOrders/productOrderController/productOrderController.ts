@@ -48,17 +48,24 @@ export class ProductController {
     );
   }
 
+  //the title o the file on postman has to be descrbed as file
+
   @Post('/postGenericOrder')
+  @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   async genericProductOrder(
-    @Body() genericProductOrderDto: GenericProductOrderDto,
     @GetUser() user: AuthEntity,
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req: Request | any,
+    @Body() genericProductOrderDto?: GenericProductOrderDto,
   ): Promise<ProductOrderEntity | any> {
     console.log('wahala');
+    
     return await this.productService.genericProductOrder(
       genericProductOrderDto,
       user,
-    );
+      req
+    )
   }
 
   @Get('/getOrders')

@@ -36,9 +36,9 @@ export class AdminAuthService {
       adminAuthSigninDto,
     );
 
-    const { id, email, firstname, lastname, phoneNumber } = adminDetails;
 
     try {
+      const { id, email, firstname, lastname, phoneNumber } = adminDetails;
       if (!adminDetails) {
         throw new UnauthorizedException('invalid credentials');
       }

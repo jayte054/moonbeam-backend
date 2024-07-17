@@ -32,8 +32,9 @@ export class AuthService {
       authSigninDto,
     );
 
-    const { id, email, firstname, lastname, phoneNumber } = userDetails;
     try {
+    const { id, email, firstname, lastname, phoneNumber } = userDetails;
+
       if (!userDetails) {
         throw new UnauthorizedException('invalid credentials');
       }

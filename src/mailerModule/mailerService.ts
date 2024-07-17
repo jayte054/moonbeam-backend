@@ -2,6 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  BadRequestException
 } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto';
@@ -261,6 +262,13 @@ export class MailerService {
     const status = order.status;
     const description = order.description;
     const deliveryDate = order.deliveryDate;
+
+     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    this.logger.error(`Invalid email format: ${email}`);
+    throw new BadRequestException(`Invalid email format: ${email}`);
+  }
+
     const mailOptions: nodemailer.SendMailOptions = {
       from: Gmail_User,
       to: email,
