@@ -12,6 +12,11 @@ import {
   ProductInch,
   ProductLayers,
   ProductType,
+  ChopPackageType,
+  NumberOfPacks,
+  ChopProductType,
+  PastryPackageType,
+  Covering
 } from '../ProductOrderEnum/productOrderEnum';
 // import { UploadedFile } from '@nestjs/platform-express';
 
@@ -36,6 +41,8 @@ export class CustomProductOrderDto {
   layers: ProductLayers;
 
   inches: ProductInch;
+
+  type: ProductType
 }
 
 export class GenericProductOrderDto {
@@ -59,6 +66,8 @@ export class GenericProductOrderDto {
   layers: ProductLayers;
 
   inches: ProductInch;
+
+  type: ProductType;
 }
 
 export class UpdateOrderDto {
@@ -85,4 +94,36 @@ export class UpdateOrderDto {
   status?: OrderStatus;
 
   token?: string;
+}
+
+export class GenericChopsOrderDto {
+  @IsNotEmpty()
+  @MinLength(6)
+  orderTitle: string;
+
+  @IsDateString()
+  deliveryDate: string;
+
+  file?: Express.Multer.File;
+
+  @IsNotEmpty()
+  @MaxLength(80)
+  description: string;
+
+  type: ChopProductType;//change to ChopProductType to cover pastry options and chops option
+  
+  chopPackageType?: ChopPackageType;
+
+  customChopPackage?: string;
+
+  numberOfPacks?: NumberOfPacks;
+
+  customNumberOfPacks?: string;
+
+  pastryPackageType?: PastryPackageType;
+
+  customPastryPackage?: string;
+
+  covering?: Covering;
+
 }

@@ -40,6 +40,22 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       coffeeCakeRate,
       coconutCakeRate,
       blueberryCakeRate,
+      samosaRate,
+      springRollRate,
+      samosa_springrollRate,
+      puffRate,
+      pepperedMeatRate,
+      puff_pepperedMeatRate,
+      samosa_pepperedMeatRate,
+      springroll_pepperedMeatRate,
+      meatPieRate,
+      donutsRate,
+      cinamonRollsRate,
+      pancakesRate,
+      corndogsRate,
+      waffelsRate,
+      meatpie_donutsRate,
+      pancakes_corndogs_waffelsRate
     } = adminHubDto;
 
     const rate = new ProductRateEntity();
@@ -57,6 +73,22 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
     rate.coffeeCakeRate = coffeeCakeRate;
     rate.coconutCakeRate = coconutCakeRate;
     rate.blueberryCakeRate = blueberryCakeRate;
+    rate.samosaRate = samosaRate;
+    rate.springRollRate = springRollRate;
+    rate.samosa_springrollRate = samosa_springrollRate;
+    rate.puffRate = puffRate;
+    rate.pepperedMeatRate = pepperedMeatRate;
+    rate.puff_pepperedMeatRate = puff_pepperedMeatRate;
+    rate.samosa_pepperedMeatRate = samosa_pepperedMeatRate;
+    rate.springroll_pepperedMeatRate = springroll_pepperedMeatRate;
+    rate.meatPieRate = meatPieRate;
+    rate.donutsRate = donutsRate;
+    rate.cinamonRollsRate = cinamonRollsRate;
+    rate.pancakesRate = pancakesRate;
+    rate.corndogsRate = corndogsRate;
+    rate.waffelsRate = waffelsRate;
+    rate.meatpie_donutsRate = meatpie_donutsRate;
+    rate.pancakes_corndogs_waffelsRate = pancakes_corndogs_waffelsRate;
     rate.admin = admin;
 
     try {
@@ -89,6 +121,22 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       coffeeCakeRate: rate.coffeeCakeRate,
       coconutCakeRate: rate.coconutCakeRate,
       blueberryCakeRate: rate.blueberryCakeRate,
+      samosaRate : rate.samosaRate,
+      springRollRate : rate.springRollRate,
+      samosa_springrollRate : rate.samosa_springrollRate,
+      puffRate : rate.puffRate,
+      pepperedMeatRate : rate.pepperedMeatRate,
+      puff_pepperedMeatRate : rate.puff_pepperedMeatRate,
+      samosa_pepperedMeatRate : rate.samosa_pepperedMeatRate,
+      springroll_pepperedMeatRate : rate.springroll_pepperedMeatRate,
+      meatPieRate : rate.meatPieRate,
+      donutsRate : rate.donutsRate,
+      cinamonRollsRate : rate.cinamonRollsRate,
+      pancakesRate : rate.pancakesRate,
+      corndogsRate : rate.corndogsRate,
+      waffelsRate : rate.waffelsRate,
+      meatpie_donutsRate : rate.meatpie_donutsRate,
+      pancakes_corndogs_waffelsRate : rate.pancakes_corndogs_waffelsRate,
       adminId: rate.adminId,
     };
   };
@@ -155,6 +203,22 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       coffeeCakeRate,
       coconutCakeRate,
       blueberryCakeRate,
+      samosaRate,
+      springRollRate,
+      samosa_springrollRate,
+      puffRate,
+      pepperedMeatRate,
+      puff_pepperedMeatRate,
+      samosa_pepperedMeatRate,
+      springroll_pepperedMeatRate,
+      meatPieRate,
+      donutsRate,
+      cinamonRollsRate,
+      pancakesRate,
+      corndogsRate,
+      waffelsRate,
+      meatpie_donutsRate,
+      pancakes_corndogs_waffelsRate
     } = updateAdminHubDto;
 
     const rates = await this.getProductRateWithId(rateId, admin);
@@ -171,6 +235,22 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
     rates.coffeeCakeRate = coffeeCakeRate;
     rates.coconutCakeRate = coconutCakeRate;
     rates.blueberryCakeRate = blueberryCakeRate;
+    rates.samosaRate = samosaRate;
+    rates.springRollRate = springRollRate;
+    rates.samosa_springrollRate = samosa_springrollRate;
+    rates.puffRate = puffRate;
+    rates.pepperedMeatRate = pepperedMeatRate;
+    rates.puff_pepperedMeatRate = puff_pepperedMeatRate;
+    rates.samosa_pepperedMeatRate = samosa_pepperedMeatRate;
+    rates.springroll_pepperedMeatRate = springroll_pepperedMeatRate;
+    rates.meatPieRate = meatPieRate;
+    rates.donutsRate = donutsRate;
+    rates.cinamonRollsRate = cinamonRollsRate;
+    rates.pancakesRate = pancakesRate;
+    rates.corndogsRate = corndogsRate;
+    rates.waffelsRate = waffelsRate;
+    rates.meatpie_donutsRate = meatpie_donutsRate;
+    rates.pancakes_corndogs_waffelsRate = pancakes_corndogs_waffelsRate;
 
     try {
       if (admin.isAdmin === true) {

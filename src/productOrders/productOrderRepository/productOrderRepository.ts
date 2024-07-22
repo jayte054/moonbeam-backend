@@ -10,13 +10,16 @@ import {
   CustomProductOrderDto,
   GenericProductOrderDto,
   UpdateOrderDto,
+  GenericChopsOrderDto
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
+import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
 import {
   DesignCovering,
   OrderStatus,
   ProductFlavours,
   ProductType,
+  ChopProductType
 } from '../ProductOrderEnum/productOrderEnum';
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
@@ -36,6 +39,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     super(ProductOrderEntity, dataSource.createEntityManager());
   }
 
+  //to do: modify customOrder so that its flexible for clients to make particular types of order
   async createCustomProductOrder(
     customProductOrderDto: CustomProductOrderDto,
     user: AuthEntity,
@@ -50,6 +54,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       designCovering,
       layers,
       inches,
+      type
     } = customProductOrderDto;
 
     const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
@@ -94,7 +99,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
 
     order.id = uuid();
     order.orderName = orderName;
-    order.type = ProductType.Birthday;
+    order.type = type;
     order.imageUrl = cloudinaryUrl.secure_url;
     order.productFlavour = productFlavour;
     order.designCovering = designCovering;
@@ -149,6 +154,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     };
   }
 
+
   async genericProductOrder(
     genericProductOrderDto: GenericProductOrderDto,
     user: AuthEntity,
@@ -163,6 +169,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       designCovering,
       layers,
       inches,
+      type
     } = genericProductOrderDto;
 
     const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
@@ -208,7 +215,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
 
     order.id = uuid();
     order.orderName = orderName;
-    order.type = ProductType.Birthday;
+    order.type = type;
     order.productFlavour = productFlavour;
     order.designCovering = designCovering;
     order.designRate = designrate.toString();
@@ -217,7 +224,6 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.rate = rate.toString();
     order.deliveryDate = deliveryDate;
     order.imageUrl = cloudinaryUrl.secure_url;
-    // order.imageUrl = imageUrl;
     const price = rate * Number(layers) * Number(inches) * designrate;
     order.price = price.toString();
     order.status = OrderStatus.progress;

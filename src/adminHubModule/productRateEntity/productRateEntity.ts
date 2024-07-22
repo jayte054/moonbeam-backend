@@ -48,6 +48,54 @@ export class ProductRateEntity extends BaseEntity {
   @Column()
   blueberryCakeRate?: string;
 
+  @Column()
+  samosaRate?: string;
+  
+  @Column()
+  springRollRate?: string;
+  
+  @Column()
+  samosa_springrollRate?: string;
+  
+  @Column()
+  puffRate?: string;
+  
+  @Column()
+  pepperedMeatRate?: string;
+  
+  @Column()
+  puff_pepperedMeatRate?: string;
+  
+  @Column()
+  samosa_pepperedMeatRate?: string;
+  
+  @Column()
+  springroll_pepperedMeatRate?: string;
+
+   @Column()
+  meatPieRate?: string;
+
+   @Column()
+  donutsRate?: string;
+
+   @Column()
+  cinamonRollsRate?: string;
+
+   @Column()
+  pancakesRate?: string;
+
+   @Column()
+  corndogsRate?: string;
+
+   @Column()
+  waffelsRate?: string;
+
+   @Column()
+  meatpie_donutsRate?: string;
+
+   @Column()
+  pancakes_corndogs_waffelsRate?: string;
+
   @ManyToOne(() => AdminAuthEntity, (admin) => admin.chocolateCakeRate, {
     eager: false,
   })

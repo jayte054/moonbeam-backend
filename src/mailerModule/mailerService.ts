@@ -12,6 +12,7 @@ import { ResetPasswordEmailDto } from './mailerDto/resetpassword.dto';
 import { Gmail_Password, Gmail_User } from '../cloudinaryConfig';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/productOrderEntity';
+import { ChopsOrderEntity } from 'src/productOrders/productOrderEntity/chopsOrderEntity';
 import { OrderDeliveryDto } from './mailerDto/orderDeliveryDto';
 import { DeliveryTokenEntity } from 'src/productOrders/deliveryTokenEntity/deliveryTokenEntity';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
@@ -278,6 +279,52 @@ export class MailerService {
              <p> Order Name: ${name}</p>
              <p> Inches: ${inches}</p>
              <p> Layers: ${layers}</p>
+             <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${description}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully made.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`User ${email} product order mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
+    }
+  }
+
+    async chopsOrderMail(
+    email: string,
+    order: ChopsOrderEntity,
+  ): Promise<void> {
+    const name = order.orderTitle;
+    const packageType = order.chopPackageType || order.customChopPackage;
+    const packs = order.numberOfPacks || order.customNumberOfPacks;
+    const price = order.price;
+    const status = order.status;
+    const description = order.description;
+    const deliveryDate = order.deliveryDate;
+
+     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    this.logger.error(`Invalid email format: ${email}`);
+    throw new BadRequestException(`Invalid email format: ${email}`);
+  }
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+             <p> Order Name: ${name}</p>
+             <p> Package: ${packageType}</p>
+             <p> Packs: ${packs}</p>
              <p> Price: ${price}</p>
              <p> Status: ${status}</p>
              <p> Description: ${description}</p>

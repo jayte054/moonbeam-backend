@@ -26,7 +26,7 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
     admin: AdminAuthEntity,
     productDesignRateDto: ProductDesignRateDto,
   ): Promise<ProductDesignRateEntity | any> => {
-    const { butterCreamRate, fundantRate, nakedRate } = productDesignRateDto;
+    const { butterCreamRate, fundantRate, nakedRate, covering } = productDesignRateDto;
 
     const rate = new ProductDesignRateEntity();
 
@@ -34,6 +34,7 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
     rate.butterCreamRate = butterCreamRate;
     rate.fundantRate = fundantRate;
     rate.nakedRate = nakedRate;
+    rate.covering = covering;
     rate.date = new Date().toLocaleDateString('en-US', {
       day: '2-digit',
       month: '2-digit',
@@ -60,6 +61,7 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
       butterCreamRate: rate.butterCreamRate,
       fundantRate: rate.fundantRate,
       nakedrate: rate.nakedRate,
+      covering: rate.covering,
       adminId: rate.adminId,
     };
   };
@@ -110,13 +112,14 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
     admin: AdminAuthEntity,
     updateDesignRateDto: UpdateDesignRateDto,
   ): Promise<ProductDesignRateEntity | string> => {
-    const { nakedRate, butterCreamRate, fundantRate } = updateDesignRateDto;
+    const { nakedRate, butterCreamRate, fundantRate, covering } = updateDesignRateDto;
 
     const designRate = await this.getProductDesignRateWithId(designId, admin);
 
     designRate.nakedRate = nakedRate;
     designRate.butterCreamRate = butterCreamRate;
     designRate.fundantRate = fundantRate;
+    designRate.covering = covering;
 
     try {
       if (admin.isAdmin === true) {

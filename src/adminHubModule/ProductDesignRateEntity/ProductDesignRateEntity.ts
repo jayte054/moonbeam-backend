@@ -6,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import {Covering} from "src/productOrders/ProductOrderEnum/productOrderEnum"
 
 @Entity()
 export class ProductDesignRateEntity extends BaseEntity {
@@ -13,13 +14,16 @@ export class ProductDesignRateEntity extends BaseEntity {
   designId: string;
 
   @Column()
-  nakedRate: string;
+  nakedRate?: string;
 
   @Column()
-  butterCreamRate: string;
+  butterCreamRate?: string;
 
   @Column()
-  fundantRate: string;
+  fundantRate?: string;
+
+  @Column()
+  covering?: Covering;
 
   @Column({ default: new Date() })
   date: string;

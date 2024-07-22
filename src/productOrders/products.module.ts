@@ -5,7 +5,9 @@ import { MailerModule } from 'src/mailerModule/mailerModule';
 import { CloudinaryModule } from '../cloudinary/cloudinaryModule';
 import { ProductController } from './productOrderController/productOrderController';
 import { ProductOrderEntity } from './productOrderEntity/productOrderEntity';
+import { ChopsOrderEntity } from './productOrderEntity/chopsOrderEntity';
 import { ProductRepository } from './productOrderRepository/productOrderRepository';
+import { ChopsOrderRepository } from './productOrderRepository/chopsOrderRepository';
 import { ProductService } from './productOrderService/productOrderService';
 
 @Module({
@@ -13,9 +15,9 @@ import { ProductService } from './productOrderService/productOrderService';
     MailerModule,
     CloudinaryModule,
     AuthModule,
-    TypeOrmModule.forFeature([ProductOrderEntity, ProductRepository]),
+    TypeOrmModule.forFeature([ProductOrderEntity, ChopsOrderEntity, ProductRepository]),
   ],
-  providers: [ProductRepository, ProductService],
+  providers: [ProductRepository, ChopsOrderRepository, ProductService],
   controllers: [ProductController],
 })
 export class ProductsModule {}

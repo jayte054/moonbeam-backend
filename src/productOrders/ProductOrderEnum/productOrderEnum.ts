@@ -34,7 +34,7 @@ export enum OrderStatus {
 }
 
 export enum ProductFlavours {
-  chocolateCake = ' cheeseCake',
+  chocolateCake = 'chocolateCake',
   strawberryCake = 'strawberryCake',
   vanillaCake = 'vanillaCake',
   redvelvetCake = 'redvelvetCake',
@@ -52,4 +52,52 @@ export enum DesignCovering {
   naked = 'naked',
   butterCream = 'butterCream',
   fundant = 'fundant',
+}
+
+export enum ChopProductType {
+  chops = "chops",
+  pastries = "pastries"
+}
+
+export enum ChopPackageType {
+  samosa = "samosa",
+  springroll = "springroll",
+  mixed_SS = "samosa & spingroll",
+  puff = "puff",
+  pepperedMeat = "pepperedMeat",
+  mixed_PP = "puff & pepperedMeat",
+  mixed_SaP = "samosa & pepperedMeat",
+  mixed_SpP = "springroll & pepperedMeat", 
+}
+
+export enum NumberOfPacks {
+  one = '1',
+  two = '2',
+  three = '3',
+  four = '4',
+  five = '5',
+  six = '6',
+  seven = "7",
+  eight = "8",
+  nine = "9",
+  ten_fifteen = "10 - 15",
+  fifteen_twenty = "15-20",
+  twenty_thity = "20-30",
+  thirty_fourty = "30-40"
+}
+
+export enum PastryPackageType{
+  meatPie = "meatPie",
+  donuts = "donuts",
+  cinamonRolls = "cinamon rolls",
+  pancakes = "pancakes",
+  corndogs = "corndogs",
+  waffels = "waffels",
+  mixed_MD = "meatPie & donuts",
+  mixed_PCW = "pancakes, corndogs & waffels"
+}
+
+export enum Covering{
+  true= "true",
+  false= "false"
 }

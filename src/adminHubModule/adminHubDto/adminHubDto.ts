@@ -1,5 +1,6 @@
 import { IsDateString, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ProductType } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
+import {Covering} from "src/productOrders/ProductOrderEnum/productOrderEnum"
 
 export class AdminHubDto {
   @IsString()
@@ -37,6 +38,55 @@ export class AdminHubDto {
 
   @IsString()
   blueberryCakeRate: string;
+
+  @IsString()
+  samosaRate?: string;
+  
+  @IsString()
+  springRollRate?: string;
+  
+  @IsString()
+  samosa_springrollRate?: string;
+  
+  @IsString()
+  puffRate?: string;
+  
+  @IsString()
+  pepperedMeatRate?: string;
+  
+  @IsString()
+  puff_pepperedMeatRate?: string;
+  
+  @IsString()
+  samosa_pepperedMeatRate?: string;
+  
+  @IsString()
+  springroll_pepperedMeatRate?: string;
+
+   @IsString()
+  meatPieRate?: string;
+
+   @IsString()
+  donutsRate?: string;
+
+   @IsString()
+  cinamonRollsRate?: string;
+
+   @IsString()
+  pancakesRate?: string;
+
+   @IsString()
+  corndogsRate?: string;
+
+   @IsString()
+  waffelsRate?: string;
+
+   @IsString()
+  meatpie_donutsRate?: string;
+
+   @IsString()
+  pancakes_corndogs_waffelsRate?: string;
+
 }
 
 export class UpdateProductRateDto {
@@ -63,6 +113,38 @@ export class UpdateProductRateDto {
   coconutCakeRate?: string;
 
   blueberryCakeRate?: string;
+
+  samosaRate?: string;
+  
+  springRollRate?: string;
+  
+  samosa_springrollRate?: string;
+  
+  puffRate?: string;
+  
+  pepperedMeatRate?: string;
+  
+  puff_pepperedMeatRate?: string;
+  
+  samosa_pepperedMeatRate?: string;
+  
+  springroll_pepperedMeatRate?: string;
+
+  meatPieRate?: string;
+
+  donutsRate?: string;
+
+  cinamonRollsRate?: string;
+
+  pancakesRate?: string;
+
+  corndogsRate?: string;
+
+  waffelsRate?: string;
+
+  meatpie_donutsRate?: string;
+
+  pancakes_corndogs_waffelsRate?: string;
 }
 
 export class UploadProductDto {
@@ -88,14 +170,16 @@ export class UpdateProductDto {
 }
 
 export class ProductDesignRateDto {
-  @IsNotEmpty()
-  nakedRate: string;
+ 
+  nakedRate?: string;
 
-  @IsNotEmpty()
-  butterCreamRate: string;
+  
+  butterCreamRate?: string;
 
-  @IsNotEmpty()
-  fundantRate: string;
+  
+  fundantRate?: string;
+
+  covering?: Covering;
 }
 
 export class UpdateDesignRateDto {
@@ -104,4 +188,6 @@ export class UpdateDesignRateDto {
   butterCreamRate?: string;
 
   fundantRate?: string;
+
+  covering?: Covering;
 }

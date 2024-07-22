@@ -1,0 +1,83 @@
+import { AuthEntity } from 'src/authModule/authEntity/authEntity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import {
+  DesignCovering,
+  OrderStatus,
+  ChopPackageType,
+  NumberOfPacks,
+  PastryPackageType,
+  ChopProductType,
+  Covering
+} from '../ProductOrderEnum/productOrderEnum';
+
+@Entity()
+export class ChopsOrderEntity extends BaseEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  orderTitle: string;
+
+  @Column()
+  type: ChopProductType;
+
+  @Column()
+  imageUrl: string;
+
+  @Column()
+  chopPackageType: ChopPackageType;
+
+  @Column()
+  customChopPackage: string;
+
+  @Column()
+  numberOfPacks: NumberOfPacks;
+
+  @Column()
+  customNumberOfPacks: string;
+
+  @Column()
+  pastryPackageType: PastryPackageType;
+
+  @Column()
+  customPastryPackage: string;
+
+  @Column()
+  covering: Covering;
+
+  @Column()
+  rate: string;
+
+  @Column()
+  coveringRate: string;
+
+  @Column()
+  price: string;
+
+  @Column()
+  description: string;
+
+  @Column()
+  status: OrderStatus;
+
+  @Column({ default: new Date() })
+  orderDate: string;
+
+  @Column({ type: 'timestamp', nullable: false })
+  deliveryDate: string;
+
+  @Column({ default: new Date() })
+  date: string;
+
+  @ManyToOne(() => AuthEntity, (user) => user.orderTitle, { eager: false })
+  user: AuthEntity;
+
+  @Column()
+  userId: string;
+}
