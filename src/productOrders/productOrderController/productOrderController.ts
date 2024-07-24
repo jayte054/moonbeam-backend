@@ -22,9 +22,12 @@ import {
   CustomProductOrderDto,
   GenericProductOrderDto,
   UpdateOrderDto,
+  GenericChopsOrderDto
 } from '../productOrderDto/productOrderDto';
 import { ProductService } from '../productOrderService/productOrderService';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
+import {ChopsOrderType} from "../productOrderRepository/chopsOrderRepository"
+
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -48,7 +51,7 @@ export class ProductController {
     );
   }
 
-  //the title o the file on postman has to be descrbed as file
+  //the title of the file on postman has to be descrbed as file
 
   @Post('/postGenericOrder')
   @UseInterceptors(FileInterceptor('file'))
@@ -63,6 +66,22 @@ export class ProductController {
     
     return await this.productService.genericProductOrder(
       genericProductOrderDto,
+      user,
+      req
+    )
+  }
+
+  @Post('/postGenericChopsOrder')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(ValidationPipe)
+  async genericChopsOrder(
+    @GetUser() user: AuthEntity,
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req: Request | any,
+    @Body() genericChopsOderDto: GenericChopsOrderDto
+  ): Promise<ChopsOrderType>{
+    return await this.productService.genericChopsOrder(
+      genericChopsOderDto,
       user,
       req
     )

@@ -13,7 +13,7 @@ export const fetchRate = async () => {
     throw new NotFoundException(' rate not found ');
   }
 
-  const cakeRates = rates.map((rate) => ({
+  const productRates = rates.map((rate) => ({
     chocolateCakeRate: rate.chocolateCakeRate,
     strawberryCakeRate: rate.strawberryCakeRate,
     vanillaCakeRate: rate.vanillaCakeRate,
@@ -26,8 +26,24 @@ export const fetchRate = async () => {
     coffeeCakeRate: rate.coffeeCakeRate,
     coconutCakeRate: rate.coconutCakeRate,
     blueberryCakeRate: rate.blueberryCakeRate,
+      samosaRate : rate.samosaRate,
+      springRollRate : rate.springRollRate,
+      samosa_springrollRate : rate.samosa_springrollRate,
+      puffRate : rate.puffRate,
+      pepperedMeatRate : rate.pepperedMeatRate,
+      puff_pepperedMeatRate : rate.puff_pepperedMeatRate,
+      samosa_pepperedMeatRate : rate.samosa_pepperedMeatRate,
+      springroll_pepperedMeatRate : rate.springroll_pepperedMeatRate,
+      meatPieRate : rate.meatPieRate,
+      donutsRate : rate.donutsRate,
+      cinamonRollsRate : rate.cinamonRollsRate,
+      pancakesRate : rate.pancakesRate,
+      corndogsRate : rate.corndogsRate,
+      waffelsRate : rate.waffelsRate,
+      meatpie_donutsRate : rate.meatpie_donutsRate,
+      pancakes_corndogs_waffelsRate : rate.pancakes_corndogs_waffelsRate,    
   }));
-  return cakeRates;
+  return productRates;
 };
 
 export const fetchDesignRate = async () => {
@@ -43,6 +59,7 @@ export const fetchDesignRate = async () => {
     nakedRate: rate.nakedRate,
     butterCreamRate: rate.butterCreamRate,
     fundantRate: rate.fundantRate,
+    coveringRate: rate.covering
   }));
 
   return designRates;

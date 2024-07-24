@@ -85,6 +85,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     // Set rate based on the selected product flavor
     if (flavorRateMap.hasOwnProperty(productFlavour)) {
       rate = Number(newRate[0][flavorRateMap[productFlavour]]);
+      console.log("nnn",flavorRateMap[productFlavour])
+
     }
 
     const designRateMap: { [Key: string]: string } = {
@@ -201,6 +203,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     // Set rate based on the selected product flavor
     if (flavorRateMap.hasOwnProperty(productFlavour)) {
       rate = Number(newRate[0][flavorRateMap[productFlavour]]);
+      // console.log(chopsRateMap[chopPackageType])
+
     }
 
     const designRateMap: { [Key: string]: string } = {

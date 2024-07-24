@@ -62,12 +62,12 @@ export enum ChopProductType {
 export enum ChopPackageType {
   samosa = "samosa",
   springroll = "springroll",
-  mixed_SS = "samosa & spingroll",
+  samosa_spingroll = "samosa_spingroll",
   puff = "puff",
   pepperedMeat = "pepperedMeat",
-  mixed_PP = "puff & pepperedMeat",
-  mixed_SaP = "samosa & pepperedMeat",
-  mixed_SpP = "springroll & pepperedMeat", 
+  puff_pepperedMeat = "puff_pepperedMeat",
+  samosa_pepperedMeat = "samosa_pepperedMeat",
+  springroll_pepperedMeat = "springroll_pepperedMeat", 
 }
 
 export enum NumberOfPacks {
@@ -89,12 +89,12 @@ export enum NumberOfPacks {
 export enum PastryPackageType{
   meatPie = "meatPie",
   donuts = "donuts",
-  cinamonRolls = "cinamon rolls",
+  cinamonRolls = "cinamonRolls",
   pancakes = "pancakes",
   corndogs = "corndogs",
   waffels = "waffels",
-  mixed_MD = "meatPie & donuts",
-  mixed_PCW = "pancakes, corndogs & waffels"
+  meatPie_donuts = "meatPie_donuts",
+  pancakes_corndogs_waffels = "pancakes_corndogs_waffels"
 }
 
 export enum Covering{

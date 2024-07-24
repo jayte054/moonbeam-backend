@@ -30,26 +30,26 @@ export class ChopsOrderEntity extends BaseEntity {
   @Column()
   imageUrl: string;
 
-  @Column()
-  chopPackageType: ChopPackageType;
+  @Column({nullable: true})
+  chopPackageType?: ChopPackageType;
 
-  @Column()
-  customChopPackage: string;
+  @Column({nullable: true})
+  customChopPackage?: string;
 
   @Column()
   numberOfPacks: NumberOfPacks;
 
-  @Column()
-  customNumberOfPacks: string;
+  @Column({nullable: true})
+  customNumberOfPacks?: string;
 
-  @Column()
-  pastryPackageType: PastryPackageType;
+  @Column({nullable: true})
+  pastryPackageType?: PastryPackageType;
 
-  @Column()
-  customPastryPackage: string;
+  @Column({nullable: true})
+  customPastryPackage?: string;
 
-  @Column()
-  covering: Covering;
+  @Column({nullable: true})
+  covering?: Covering;
 
   @Column()
   rate: string;

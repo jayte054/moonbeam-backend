@@ -31,7 +31,7 @@ import { MailerService } from 'src/mailerModule/mailerService';
 import { fetchDesignRate, fetchRate } from '../productUtility';
 import {CloudinaryUrlDto} from '../../cloudinary/coundinaryDto/cloudinaryUrlDto'
 
-type ChopsOrdeType = {
+export type ChopsOrderType = {
         id: string,
         orderTitle: string,
         type: ChopProductType,
@@ -65,7 +65,7 @@ async genericChopsOrder(
     genericChopsOrderDto: GenericChopsOrderDto,
     user: AuthEntity,
     req: Request
-  ): Promise<ChopsOrdeType> {
+  ): Promise<ChopsOrderType> {
       const {
         orderTitle,
         deliveryDate,
@@ -91,21 +91,25 @@ async genericChopsOrder(
 
     const newRate = await fetchRate(); //modify to suit chop orders
     const coveringRate = await fetchDesignRate(); ////modify to suit chop orders
-
-    const chopsRateMap : { [key: string]: string} = {
+        
+    const chopsRateMap : { [key : string]: string} = {
       [ChopPackageType.samosa]: "samosaRate",
-      [ChopPackageType.springroll]: "springrollRate",
-      [ChopPackageType.mixed_SS]: "samosa_springrollRate",
+      springroll: "springRollRate",
+      [ChopPackageType.samosa_spingroll]: "samosa_springrollRate",
       [ChopPackageType.puff]: "puffRate",
       [ChopPackageType.pepperedMeat]: "pepperedMeatRate",
-      [ChopPackageType.mixed_PP]: "puff_pepperedMeatRate",
-      [ChopPackageType.mixed_SaP]: "samosa_pepperedMeatRate",
-      [ChopPackageType.mixed_SpP]: "springroll_pepperedMeatRate"
+      [ChopPackageType.puff_pepperedMeat]: "puff_pepperedMeatRate",
+      [ChopPackageType.samosa_pepperedMeat]: "samosa_pepperedMeatRate",
+      [ChopPackageType.springroll_pepperedMeat]: "springroll_pepperedMeatRate"
+        
     };
-
+    
     if (chopsRateMap.hasOwnProperty(chopPackageType)) {
       rate = Number(newRate[0][chopsRateMap[chopPackageType]])
-    }
+    }else {
+    this.logger.error('Invalid Chop Package Type:', chopPackageType);
+  }
+    
 
     const pastryRateMap: {[key: string]: string} = {
       [PastryPackageType.meatPie]: "meatPieRate",
@@ -114,22 +118,24 @@ async genericChopsOrder(
       [PastryPackageType.pancakes]: "pancakesRate",
       [PastryPackageType.corndogs]: "corndogsRate",
       [PastryPackageType.waffels]: "waffelsRate",
-      [PastryPackageType.mixed_MD]: "meatpie_donutsRate",
-      [PastryPackageType.mixed_PCW]: "pancakes_corndogs_waffelsRate"
+      [PastryPackageType.meatPie_donuts]: "meatpie_donutsRate",
+      [PastryPackageType.pancakes_corndogs_waffels]: "pancakes_corndogs_waffelsRate"
     }
 
     if (pastryRateMap.hasOwnProperty(pastryPackageType)) {
       rate = Number(newRate[0][pastryRateMap[pastryPackageType]])
+    }else {
+    this.logger.error('Invalid Chop Package Type:', pastryPackageType);
+    }
+  
+
+    if (covering === "true") {
+        coveringrate = Number(coveringRate[0].coveringRate)
+    } else if(covering === "false") {
+        coveringrate = 1
     }
 
-    const coveringRateMap: {[key: string]: string} = {
-      [Covering.true]: "true",
-      [Covering.false]: "false"
-    }
-
-    if (coveringRateMap.hasOwnProperty(covering)) {
-      coveringrate = Number(coveringRate[0][coveringRateMap[covering]])
-    }
+   
 
     order.id = uuid();
     order.orderTitle = orderTitle;
@@ -141,8 +147,9 @@ async genericChopsOrder(
     order.customNumberOfPacks = customNumberOfPacks;
     order.pastryPackageType = pastryPackageType;
     order.customPastryPackage = customPastryPackage;
-    order.covering = covering;
-    const price = rate * Number(numberOfPacks) * coveringrate || rate * Number(customNumberOfPacks) * coveringrate;
+    order.covering = covering ;
+    order.rate = rate.toString()
+    const price =(order.covering ? (rate * Number(numberOfPacks) * coveringrate) : (rate * Number(numberOfPacks)) ) | (order.covering ? rate * Number(customNumberOfPacks) * coveringrate : rate * Number(customNumberOfPacks));
     order.price = price.toString()
     order.description = description;
     order.status = OrderStatus.progress;

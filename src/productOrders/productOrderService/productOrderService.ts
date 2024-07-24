@@ -6,15 +6,19 @@ import {
   CustomProductOrderDto,
   GenericProductOrderDto,
   UpdateOrderDto,
+  GenericChopsOrderDto
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ProductRepository } from '../productOrderRepository/productOrderRepository';
+import { ChopsOrderRepository } from '../productOrderRepository/chopsOrderRepository';
+import {ChopsOrderType} from "../productOrderRepository/chopsOrderRepository"
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(ProductRepository)
     private productRepository: ProductRepository,
+    private chopsOrderRepository: ChopsOrderRepository
   ) {}
 
   async createCustomProductOrder(
@@ -39,6 +43,18 @@ export class ProductService {
       user,
       req
     );
+  }
+
+  async genericChopsOrder(
+    genericChopsOderDto: GenericChopsOrderDto,
+    user: AuthEntity,
+    req: Request
+  ): Promise<ChopsOrderType> {
+    return await this.chopsOrderRepository.genericChopsOrder(
+      genericChopsOderDto,
+      user,
+      req
+    )
   }
 
   async getOrders(user: AuthEntity): Promise<ProductOrderEntity[]> {
