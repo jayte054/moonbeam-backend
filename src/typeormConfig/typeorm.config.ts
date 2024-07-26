@@ -3,6 +3,7 @@ import config from 'config';
 import { ProductDesignRateEntity } from 'src/adminHubModule/ProductDesignRateEntity/ProductDesignRateEntity';
 import { ProductEntity } from 'src/adminHubModule/productEntity/productEntity';
 import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
+import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { PasswordResetTokenEntity } from 'src/authModule/passwordResetTokenEntity/passwordResetTokenEntity';
@@ -30,6 +31,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     ProductDesignRateEntity,
     ProfileEntity,
     ChopsOrderEntity,
+    SurprisePackageEntity,
   ],
   synchronize: process.env.TypeORM_SYNC || dbConfig.synchronize,
   migrations: ['dist/migrations/*.js'], // Specify your migration directory,

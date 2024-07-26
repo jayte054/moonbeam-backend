@@ -17,6 +17,11 @@ import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
 import { fetchProfiles } from '../adminHubUtils/adminHubUtils';
+import {SurprisePackageRepository} from "../adminSurprisePackageRepository/adminSurprisePackageRepository";
+import {SurprisePackageDto} from "../adminHubDto/adminHubDto"
+import {SurprisePackageObject} from "../types";
+
+
 @Injectable()
 export class AdminHubService {
   private logger = new Logger('AdminHubService');
@@ -24,9 +29,11 @@ export class AdminHubService {
     @InjectRepository(AdminProductRateRepository)
     @InjectRepository(AdminProductRepository)
     @InjectRepository(AdminProductDesignRateRepository)
+    @InjectRepository(SurprisePackageRepository)
     private adminProductRateRepository: AdminProductRateRepository,
     private adminProductRepository: AdminProductRepository,
     private adminProductDesignRateRepository: AdminProductDesignRateRepository,
+    private surprisePackageRepository: SurprisePackageRepository,
   ) {}
 
   productRate = async (
@@ -164,4 +171,14 @@ export class AdminHubService {
       throw new NotFoundException('user profiles not found');
     }
   };
+
+  surprisePackage = async(
+    admin: AdminAuthEntity,
+    surprisePackageDto: SurprisePackageDto
+  ): Promise<SurprisePackageObject> => {
+    return await this.surprisePackageRepository.surprisePackage(
+      admin,
+      surprisePackageDto
+    )
+  }
 }

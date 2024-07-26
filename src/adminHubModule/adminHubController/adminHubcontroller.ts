@@ -28,6 +28,8 @@ import { AdminHubService } from '../adminHubService/adminHubService';
 import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
 import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
+import {SurprisePackageDto} from "../adminHubDto/adminHubDto"
+import {SurprisePackageObject} from "../types";
 
 @Controller('adminHub')
 @UseGuards(AuthGuard())
@@ -166,5 +168,17 @@ export class AdminHubController {
   async fetchProfiles(@GetUser() admin: AdminAuthEntity) {
     console.log('here');
     return await this.adminHubService.fetchProfiles(admin);
+  }
+
+  @Post("/surprisePackage")
+  @UsePipes(ValidationPipe)
+  async surprisePackage(
+    @GetUser() admin: AdminAuthEntity,
+    @Body() surprisePackageDto: SurprisePackageDto
+  ): Promise<SurprisePackageObject> {
+    return await this.adminHubService.surprisePackage(
+      admin,
+      surprisePackageDto
+    )
   }
 }

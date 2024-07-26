@@ -8,9 +8,11 @@ import { AdminProductRateRepository } from './adminProductRateRepository/adminPr
 import { AdminHubService } from './adminHubService/adminHubService';
 import { ProductEntity } from './productEntity/productEntity';
 import { ProductRateEntity } from './productRateEntity/productRateEntity';
+import { SurprisePackageEntity } from './surprisePackageEntity/surprisePackageEntity';
 import { AdminProductRepository } from './adminProductRepository/adminProductRepository';
 import { AdminProductDesignRateRepository } from './adminProductDesignRateRepository/adminProductDesignRateRepository';
 import { BareAdminHubController } from './adminHubController/bareAdminHubcontroller';
+import {SurprisePackageRepository} from './adminSurprisePackageRepository/adminSurprisePackageRepository'
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { BareAdminHubController } from './adminHubController/bareAdminHubcontrol
     TypeOrmModule.forFeature([
       ProductRateEntity,
       ProductEntity,
+      SurprisePackageEntity,
       ProductRepository,
     ]),
   ],
@@ -26,6 +29,7 @@ import { BareAdminHubController } from './adminHubController/bareAdminHubcontrol
     AdminProductRateRepository,
     AdminProductRepository,
     AdminProductDesignRateRepository,
+    SurprisePackageRepository,
     AdminHubService,
   ],
   controllers: [AdminHubController, BareAdminHubController],

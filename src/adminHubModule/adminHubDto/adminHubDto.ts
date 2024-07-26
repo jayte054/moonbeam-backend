@@ -191,3 +191,46 @@ export class UpdateDesignRateDto {
 
   covering?: Covering;
 }
+
+export class SurprisePackageDto {
+    @IsNotEmpty()
+    packageName: string;
+
+    @IsNotEmpty()
+    itemOne: string;
+
+    @IsNotEmpty()
+    itemTwo: string;
+
+    @IsNotEmpty()
+    itemThree: string;
+
+    @IsNotEmpty()
+    itemFour: string;
+
+    @IsNotEmpty()
+    itemFive: string;
+
+    @IsNotEmpty()
+    itemSix: string;
+
+    itemSeven?: string;
+
+    itemEight?: string;
+
+    itemNine?: string;
+
+    itemTen?: string;
+
+    itemEleven?: string;
+
+    itemTwelve?: string;
+
+    @IsNotEmpty()
+    price: string;
+
+    @IsNotEmpty()
+    description: string;
+
+    
+}

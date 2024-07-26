@@ -1,5 +1,3 @@
-import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
-import { ProductType } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
 import {
   BaseEntity,
   Column,
@@ -7,6 +5,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ProductType } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
+import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
+
 
 @Entity()
 export class ProductEntity extends BaseEntity {

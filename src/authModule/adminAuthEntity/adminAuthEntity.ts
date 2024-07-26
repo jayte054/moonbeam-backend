@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
 import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
 import { ProductEntity } from 'src/adminHubModule/productEntity/productEntity';
+import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
 
 @Entity()
 @Unique(['email'])
@@ -54,6 +55,13 @@ export class AdminAuthEntity extends BaseEntity {
     { eager: true },
   )
   chocolateCakeRate: ProductRateEntity;
+
+  @OneToMany(
+  () => SurprisePackageEntity, 
+  (packageId) => packageId.admin, 
+  {eager: true}
+  )
+  packageId: SurprisePackageEntity;
 
   @OneToMany(
     () => ProductRateEntity,
