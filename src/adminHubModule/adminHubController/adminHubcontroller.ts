@@ -30,6 +30,7 @@ import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 import {SurprisePackageDto} from "../adminHubDto/adminHubDto"
 import {SurprisePackageObject} from "../types";
+import {SurprisePackageEntity} from '../surprisePackageEntity/surprisePackageEntity'
 
 @Controller('adminHub')
 @UseGuards(AuthGuard())
@@ -61,7 +62,7 @@ export class AdminHubController {
     return await this.adminHubService.getProductRateWithId(rateId, admin);
   }
 
-  @Patch('updateProductRate/:id')
+  @Patch('updateProductRate/:rateId')
   @UsePipes(ValidationPipe)
   async updateProductRate(
     @Param('rateId') rateId: string,
@@ -141,7 +142,7 @@ export class AdminHubController {
 
   @Get('/getProductDesignRateWithId/:id')
   async getProductDesignRateWithId(
-    @Param('designId') designId: string,
+    @Param('id') designId: string,
     @GetUser() admin: AdminAuthEntity,
   ): Promise<ProductDesignRateEntity> {
     return await this.adminHubService.getProductDesignRateWithId(
@@ -153,7 +154,7 @@ export class AdminHubController {
   @Patch('/updateDesignRate/:id')
   @UsePipes(ValidationPipe)
   async updateDesignRate(
-    @Param('designId') designId: string,
+    @Param('id') designId: string,
     @GetUser() admin: AdminAuthEntity,
     @Body() updateDesignRateDto: UpdateDesignRateDto,
   ): Promise<ProductDesignRateEntity | string> {
@@ -179,6 +180,42 @@ export class AdminHubController {
     return await this.adminHubService.surprisePackage(
       admin,
       surprisePackageDto
+    )
+  }
+
+  @Get("/getSurprisePackages")
+  async getSurprisePackages(
+    @GetUser() admin: AdminAuthEntity
+  ): Promise<SurprisePackageEntity[]> {
+    return await this.adminHubService.getSurprisePackages(
+      admin
+    )
+  }
+
+  @Get('/getSurprisePackageWithId/:id')
+  async getSurprisePackageWithId(
+    @Param("id") packageId: string,
+    @GetUser() admin: AdminAuthEntity,
+  ): Promise<SurprisePackageEntity> {
+    console.log(packageId)
+    return await this.adminHubService.getPackageWithId(
+      packageId,
+      admin
+    )
+  }
+
+  @Patch("/updateSurprisePackage/:packageId")
+  @UsePipes(ValidationPipe)
+  async updateSurprisePackage(
+    @GetUser() admin: AdminAuthEntity,
+    @Body() surprisePackageDto: SurprisePackageDto,
+    @Param("packageId") packageId: string
+  ): Promise<SurprisePackageObject> {
+    console.log(packageId)
+    return await this.adminHubService.updateSurprisePackage(
+      admin,
+      surprisePackageDto,
+      packageId
     )
   }
 }

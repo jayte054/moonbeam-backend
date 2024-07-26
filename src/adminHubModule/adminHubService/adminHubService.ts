@@ -16,6 +16,7 @@ import { AdminProductDesignRateRepository } from '../adminProductDesignRateRepos
 import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
+import {SurprisePackageEntity} from '../surprisePackageEntity/surprisePackageEntity'
 import { fetchProfiles } from '../adminHubUtils/adminHubUtils';
 import {SurprisePackageRepository} from "../adminSurprisePackageRepository/adminSurprisePackageRepository";
 import {SurprisePackageDto} from "../adminHubDto/adminHubDto"
@@ -179,6 +180,36 @@ export class AdminHubService {
     return await this.surprisePackageRepository.surprisePackage(
       admin,
       surprisePackageDto
+    )
+  }
+
+  getSurprisePackages = async(
+    admin: AdminAuthEntity
+  ): Promise<SurprisePackageEntity[]> => {
+    return await this.surprisePackageRepository.getSurprisePackages(
+      admin
+    )
+  }
+
+  getPackageWithId = async(
+    packageId: string,
+    admin: AdminAuthEntity
+  ): Promise<SurprisePackageEntity> => {
+    return await this.surprisePackageRepository.getPackageWithId(
+      packageId,
+      admin
+    );
+  }
+
+  updateSurprisePackage = async(
+    admin: AdminAuthEntity,
+    surprisePackageDto: SurprisePackageDto,
+    packageId: string,
+  ): Promise<SurprisePackageObject> => {
+    return await this.surprisePackageRepository.updateSurprisePackage(
+      admin,
+      surprisePackageDto,
+      packageId
     )
   }
 }

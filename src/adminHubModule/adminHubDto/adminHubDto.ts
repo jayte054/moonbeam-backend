@@ -231,6 +231,5 @@ export class SurprisePackageDto {
 
     @IsNotEmpty()
     description: string;
-
     
 }

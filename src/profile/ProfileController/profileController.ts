@@ -45,7 +45,7 @@ export class ProfileController {
     return await this.profileService.getProfile(user);
   }
 
-  @Patch('updateProfile/:id')
+  @Patch('updateProfile/:profileId')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   async updateProfile(

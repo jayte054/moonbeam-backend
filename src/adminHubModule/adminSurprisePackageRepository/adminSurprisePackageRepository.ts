@@ -2,8 +2,9 @@ import {
     Injectable, 
     Logger,
     InternalServerErrorException,
+    NotFoundException,
 } from "@nestjs/common";
-import {Repository, DataSource} from "typeorm";
+import {Repository, DataSource, FindOneOptions} from "typeorm";
 import {SurprisePackageEntity} from "../surprisePackageEntity/surprisePackageEntity"
 import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
@@ -98,6 +99,122 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
         }catch(error){
             this.logger.error("error saving package")
             throw new InternalServerErrorException()
+        }
+    }
+
+    getSurprisePackages = async(
+        admin: AdminAuthEntity
+    ): Promise<SurprisePackageEntity[]> => {
+        const options: FindOneOptions<SurprisePackageEntity> = {};
+
+        const packages = await this.find(options);
+        if(!options) {
+            this.logger.error("packages not found");
+            throw new NotFoundException("packages not found")
+        } else {
+            this.logger.verbose(`packages fetched successfully by admin ${admin.id}`);
+            return packages;
+        }
+    }
+
+    getPackageWithId = async(
+        packageId: string,
+        admin: AdminAuthEntity
+    ): Promise<SurprisePackageEntity> => {
+        console.log(packageId)
+        const packageWithId = await this.findOne({
+            where: {
+                packageId,
+                adminId: admin.id
+            },
+        });
+        console.log(packageId)
+
+        if(!packageWithId) {
+            this.logger.verbose(`
+                package with id ${packageId} does not exist
+            `)
+            throw new NotFoundException(`
+                package with id ${packageId} does not exist
+            `)
+        }
+        try{
+            this.logger.verbose(`
+                successfully fetched package with id ${packageId}
+            `)
+            return packageWithId
+        }catch(error){
+            this.logger.error(`
+                failed to fetch package with id ${packageId}
+            `)
+            throw new InternalServerErrorException(`
+                failed to fetch package with id ${packageId}
+            `)
+        }
+    }
+
+    updateSurprisePackage = async(
+        admin: AdminAuthEntity,
+        surprisePackageDto: SurprisePackageDto,
+        packageId: string 
+    ): Promise<SurprisePackageObject> => {
+        const {
+            packageName,
+            itemOne,
+            itemTwo,
+            itemThree,
+            itemFour,
+            itemFive,
+            itemSix,
+            itemSeven,
+            itemEight,
+            itemNine,
+            itemTen,
+            itemEleven,
+            itemTwelve,
+            price,
+            description,
+        } = surprisePackageDto;
+        console.log(packageId)
+        const saidPackage = await this.getPackageWithId(
+            packageId,
+            admin
+        )
+        console.log(saidPackage)
+
+            saidPackage.packageName = packageName;
+            saidPackage.itemOne = itemOne;
+            saidPackage.itemTwo = itemTwo;
+            saidPackage.itemThree = itemThree;
+            saidPackage.itemFour = itemFour;
+            saidPackage.itemFive = itemFive;
+            saidPackage.itemSix = itemSix;
+            saidPackage.itemSeven = itemSeven;
+            saidPackage.itemEight = itemEight;
+            saidPackage.itemNine = itemNine;
+            saidPackage.itemTen = itemTen;
+            saidPackage.itemEleven = itemEleven;
+            saidPackage.itemTwelve = itemTwelve;
+            saidPackage.price = price;
+            saidPackage.description = description;
+
+        try{
+            if(admin.isAdmin === true) {
+                await saidPackage.save();
+                this.logger.verbose(`
+                successfuly updated package with id ${packageId}
+            `);
+            return saidPackage
+            }else {
+                this.logger.debug(`
+                    user is not admin
+                `)
+            }
+            
+        }catch(error){
+            this.logger.error(`
+                failed to update package with id ${packageId}
+            `)
         }
     }
 }
