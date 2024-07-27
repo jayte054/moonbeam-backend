@@ -5,10 +5,11 @@ import {
     NotFoundException,
 } from "@nestjs/common";
 import {Repository, DataSource, FindOneOptions} from "typeorm";
+import {Request} from "express";
 import {SurprisePackageEntity} from "../surprisePackageEntity/surprisePackageEntity"
 import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
-import {SurprisePackageDto} from "../adminHubDto/adminHubDto"
+import {SurprisePackageDto, UpdateSurprisePackageDto} from "../adminHubDto/adminHubDto"
 import {SurprisePackageObject} from "../types";
 
 
@@ -27,6 +28,7 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
     surprisePackage = async(
         admin: AdminAuthEntity,
         surprisePackageDto: SurprisePackageDto,
+        req: Request | any
     ): Promise<SurprisePackageObject> => {
         const {
             packageName,
@@ -42,9 +44,14 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
             itemTen,
             itemEleven,
             itemTwelve,
+            imageUrl,
             price,
             description,
         } = surprisePackageDto;
+
+        const cloudinaryUrl = await this.cloudinaryService.uploadImage(
+            req.file
+            )
 
         const surprisePackage= new SurprisePackageEntity();
 
@@ -61,6 +68,7 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
         surprisePackage.itemTen = itemTen;
         surprisePackage.itemEleven = itemEleven;
         surprisePackage.itemTwelve = itemTwelve;
+        surprisePackage.imageUrl = cloudinaryUrl.secure_url;
         surprisePackage.price = price;
         surprisePackage.description = description;
         surprisePackage.date = new Date().toLocaleDateString('en-US', {
@@ -90,6 +98,7 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
                     itemTen: surprisePackage.itemTen,
                     itemEleven: surprisePackage.itemEleven,
                     itemTwelve: surprisePackage.itemTwelve,
+                    imageUrl: surprisePackage.imageUrl,
                     price: surprisePackage.price,
                     description: surprisePackage.description,
                     date: surprisePackage.date,
@@ -121,14 +130,12 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
         packageId: string,
         admin: AdminAuthEntity
     ): Promise<SurprisePackageEntity> => {
-        console.log(packageId)
         const packageWithId = await this.findOne({
             where: {
                 packageId,
                 adminId: admin.id
             },
         });
-        console.log(packageId)
 
         if(!packageWithId) {
             this.logger.verbose(`
@@ -155,8 +162,9 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
 
     updateSurprisePackage = async(
         admin: AdminAuthEntity,
-        surprisePackageDto: SurprisePackageDto,
-        packageId: string 
+        updateSurprisePackageDto: UpdateSurprisePackageDto,
+        packageId: string,
+        req: Request 
     ): Promise<SurprisePackageObject> => {
         const {
             packageName,
@@ -172,15 +180,31 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
             itemTen,
             itemEleven,
             itemTwelve,
+            file,
             price,
             description,
-        } = surprisePackageDto;
+        } = updateSurprisePackageDto;
         console.log(packageId)
+
         const saidPackage = await this.getPackageWithId(
             packageId,
             admin
         )
         console.log(saidPackage)
+
+        if(file) {
+            const newImage = await this.cloudinaryService.uploadImage(req.file);
+        
+            if(saidPackage.imageUrl) {
+                const oldPublicId = this.extractPublicId(saidPackage.imageUrl);
+                await this.cloudinaryService.deleteImage(oldPublicId)
+            }
+            saidPackage.imageUrl = newImage.secure_url;
+        }
+
+        const cloudinaryUrl = await this.cloudinaryService.uploadImage(
+            req.file
+        )
 
             saidPackage.packageName = packageName;
             saidPackage.itemOne = itemOne;
@@ -217,4 +241,12 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
             `)
         }
     }
+
+    private extractPublicId(imageUrl: string): string {
+    // Extract the public_id from the imageUrl
+    const parts = imageUrl.split('/');
+    const filename = parts[parts.length - 1];
+    const publicId = filename.split('.')[0];
+    return publicId;
+  }
 }

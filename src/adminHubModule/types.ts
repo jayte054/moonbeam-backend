@@ -25,6 +25,8 @@ export interface SurprisePackageObject{
 
     itemTwelve?: string;
 
+    imageUrl: string;
+
     price: string;
 
     description: string;

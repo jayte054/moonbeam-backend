@@ -54,6 +54,9 @@ export class SurprisePackageEntity extends BaseEntity{
     itemTwelve?: string;
 
     @Column()
+    imageUrl: string;
+
+    @Column()
     price: string;
 
     @Column()

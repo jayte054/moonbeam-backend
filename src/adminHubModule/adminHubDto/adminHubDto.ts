@@ -226,10 +226,47 @@ export class SurprisePackageDto {
 
     itemTwelve?: string;
 
+    imageUrl: string;
+
     @IsNotEmpty()
     price: string;
 
     @IsNotEmpty()
     description: string;
+    
+}
+
+export class UpdateSurprisePackageDto {
+    packageName?: string;
+
+    itemOne?: string;
+
+    itemTwo?: string;
+
+    itemThree?: string;
+
+    itemFour?: string;
+
+    itemFive?: string;
+
+    itemSix?: string;
+
+    itemSeven?: string;
+
+    itemEight?: string;
+
+    itemNine?: string;
+
+    itemTen?: string;
+
+    itemEleven?: string;
+
+    itemTwelve?: string;
+
+    file?: Express.Multer.File;
+
+    price?: string;
+
+    description?: string;
     
 }
