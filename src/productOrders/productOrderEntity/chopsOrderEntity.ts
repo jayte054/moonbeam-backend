@@ -13,7 +13,7 @@ import {
   NumberOfPacks,
   PastryPackageType,
   ChopProductType,
-  Covering
+  Covering,
 } from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
@@ -30,25 +30,25 @@ export class ChopsOrderEntity extends BaseEntity {
   @Column()
   imageUrl: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   chopPackageType?: ChopPackageType;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   customChopPackage?: string;
 
   @Column()
   numberOfPacks: NumberOfPacks;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   customNumberOfPacks?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   pastryPackageType?: PastryPackageType;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   customPastryPackage?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   covering?: Covering;
 
   @Column()
@@ -63,7 +63,11 @@ export class ChopsOrderEntity extends BaseEntity {
   @Column()
   description: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: OrderStatus,
+    default: OrderStatus.progress,
+  })
   status: OrderStatus;
 
   @Column({ default: new Date() })

@@ -10,7 +10,7 @@ import {
   UseInterceptors,
   UsePipes,
   ValidationPipe,
-  UploadedFile
+  UploadedFile,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -29,9 +29,12 @@ import { AdminHubService } from '../adminHubService/adminHubService';
 import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
 import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
-import {SurprisePackageDto, UpdateSurprisePackageDto} from "../adminHubDto/adminHubDto"
-import {SurprisePackageObject} from "../types";
-import {SurprisePackageEntity} from '../surprisePackageEntity/surprisePackageEntity'
+import {
+  SurprisePackageDto,
+  UpdateSurprisePackageDto,
+} from '../adminHubDto/adminHubDto';
+import { SurprisePackageObject } from '../types';
+import { SurprisePackageEntity } from '../surprisePackageEntity/surprisePackageEntity';
 
 @Controller('adminHub')
 @UseGuards(AuthGuard())
@@ -172,7 +175,7 @@ export class AdminHubController {
     return await this.adminHubService.fetchProfiles(admin);
   }
 
-  @Post("/surprisePackage")
+  @Post('/surprisePackage')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   async surprisePackage(
@@ -180,49 +183,44 @@ export class AdminHubController {
     @UploadedFile() file: Express.Multer.File,
     @Request() req: Request | any,
     @Body() surprisePackageDto: SurprisePackageDto,
-  ): Promise<SurprisePackageObject| any> {
+  ): Promise<SurprisePackageObject | any> {
     return await this.adminHubService.surprisePackage(
       admin,
       surprisePackageDto,
-      req
-    )
+      req,
+    );
   }
 
-  @Get("/getSurprisePackages")
+  @Get('/getSurprisePackages')
   async getSurprisePackages(
-    @GetUser() admin: AdminAuthEntity
+    @GetUser() admin: AdminAuthEntity,
   ): Promise<SurprisePackageEntity[]> {
-    return await this.adminHubService.getSurprisePackages(
-      admin
-    )
+    return await this.adminHubService.getSurprisePackages(admin);
   }
 
   @Get('/getSurprisePackageWithId/:id')
   async getSurprisePackageWithId(
-    @Param("id") packageId: string,
+    @Param('id') packageId: string,
     @GetUser() admin: AdminAuthEntity,
   ): Promise<SurprisePackageEntity> {
-    return await this.adminHubService.getPackageWithId(
-      packageId,
-      admin
-    )
+    return await this.adminHubService.getPackageWithId(packageId, admin);
   }
 
-  @Patch("/updateSurprisePackage/:packageId")
-  @UseInterceptors(FileInterceptor("file"))
+  @Patch('/updateSurprisePackage/:packageId')
+  @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   async updateSurprisePackage(
     @GetUser() admin: AdminAuthEntity,
     @Body() updateSurprisePackageDto: UpdateSurprisePackageDto,
-    @Param("packageId") packageId: string,
-    @Request() req: Request | any
+    @Param('packageId') packageId: string,
+    @Request() req: Request | any,
   ): Promise<SurprisePackageObject> {
-    console.log(packageId)
+    console.log(packageId);
     return await this.adminHubService.updateSurprisePackage(
       admin,
       updateSurprisePackageDto,
       packageId,
-      req
-    )
+      req,
+    );
   }
 }

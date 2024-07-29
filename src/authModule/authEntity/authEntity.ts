@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
 import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/productOrderEntity';
 import { ChopsOrderEntity } from 'src/productOrders/productOrderEntity/chopsOrderEntity';
+import { SurprisePackageOrderEntity } from 'src/productOrders/productOrderEntity/surprisePackageOrderEntity';
 
 @Entity()
 @Unique(['email'])
@@ -52,6 +53,15 @@ export class AuthEntity extends BaseEntity {
     eager: true,
   })
   orderTitle: ChopsOrderEntity;
+
+  @OneToMany(
+    () => SurprisePackageOrderEntity,
+    (packageName) => packageName.user,
+    {
+      eager: true,
+    },
+  )
+  packageName: SurprisePackageOrderEntity;
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);

@@ -9,13 +9,19 @@ import { ChopsOrderEntity } from './productOrderEntity/chopsOrderEntity';
 import { ProductRepository } from './productOrderRepository/productOrderRepository';
 import { ChopsOrderRepository } from './productOrderRepository/chopsOrderRepository';
 import { ProductService } from './productOrderService/productOrderService';
+import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
 
 @Module({
   imports: [
     MailerModule,
     CloudinaryModule,
     AuthModule,
-    TypeOrmModule.forFeature([ProductOrderEntity, ChopsOrderEntity, ProductRepository]),
+    TypeOrmModule.forFeature([
+      ProductOrderEntity,
+      ChopsOrderEntity,
+      ProductRepository,
+      SurprisePackageEntity,
+    ]),
   ],
   providers: [ProductRepository, ChopsOrderRepository, ProductService],
   controllers: [ProductController],
