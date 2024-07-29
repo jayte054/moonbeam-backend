@@ -22,12 +22,13 @@ import {
   CustomProductOrderDto,
   GenericProductOrderDto,
   UpdateOrderDto,
-  GenericChopsOrderDto
+  GenericChopsOrderDto,
+  SurprisePackageOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductService } from '../productOrderService/productOrderService';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
-import {ChopsOrderType} from "../productOrderRepository/chopsOrderRepository"
-
+import { ChopsOrderType } from '../productOrderRepository/chopsOrderRepository';
+import { bronzePackageOrderType } from 'src/types';
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -63,12 +64,12 @@ export class ProductController {
     @Body() genericProductOrderDto?: GenericProductOrderDto,
   ): Promise<ProductOrderEntity | any> {
     console.log('wahala');
-    
+
     return await this.productService.genericProductOrder(
       genericProductOrderDto,
       user,
-      req
-    )
+      req,
+    );
   }
 
   @Post('/postGenericChopsOrder')
@@ -78,13 +79,25 @@ export class ProductController {
     @GetUser() user: AuthEntity,
     @UploadedFile() file: Express.Multer.File,
     @Request() req: Request | any,
-    @Body() genericChopsOderDto: GenericChopsOrderDto
-  ): Promise<ChopsOrderType>{
+    @Body() genericChopsOderDto: GenericChopsOrderDto,
+  ): Promise<ChopsOrderType> {
     return await this.productService.genericChopsOrder(
       genericChopsOderDto,
       user,
-      req
-    )
+      req,
+    );
+  }
+
+  @Post('/bronzePackageOrder')
+  @UsePipes(ValidationPipe)
+  async bronzePackageOrder(
+    @GetUser() user: AuthEntity,
+    @Body() surprisePackageOrderDto: SurprisePackageOrderDto,
+  ): Promise<bronzePackageOrderType> {
+    return await this.productService.bronzePackageOrder(
+      surprisePackageOrderDto,
+      user,
+    );
   }
 
   @Get('/getOrders')

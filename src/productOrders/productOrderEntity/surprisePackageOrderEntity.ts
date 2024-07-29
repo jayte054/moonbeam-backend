@@ -21,6 +21,9 @@ export class SurprisePackageOrderEntity extends BaseEntity {
   packageId: string;
 
   @Column()
+  packageOrderName: string;
+
+  @Column()
   packageName: string;
 
   @Column('jsonb', { nullable: true })
@@ -30,10 +33,13 @@ export class SurprisePackageOrderEntity extends BaseEntity {
   silverPackage?: silverPackageObject;
 
   @Column('jsonb', { nullable: true })
-  gold?: goldPackageObject;
+  goldPackage?: goldPackageObject;
 
   @Column('jsonb', { nullable: true })
-  diamond?: diamondPackageObject;
+  diamondPackage?: diamondPackageObject;
+
+  @Column()
+  imageUrl: string;
 
   @Column()
   price: string;
@@ -45,7 +51,7 @@ export class SurprisePackageOrderEntity extends BaseEntity {
   deliveryDate: string;
 
   @Column()
-  description: string;
+  addInfo: string;
 
   @Column({
     type: 'enum',

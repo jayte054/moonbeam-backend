@@ -10,6 +10,8 @@ import { ProductRepository } from './productOrderRepository/productOrderReposito
 import { ChopsOrderRepository } from './productOrderRepository/chopsOrderRepository';
 import { ProductService } from './productOrderService/productOrderService';
 import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
+import { SurprisePackageOrderRepository } from './productOrderRepository/surprisePackageOrderRepository';
+import { SurprisePackageOrderEntity } from './productOrderEntity/surprisePackageOrderEntity';
 
 @Module({
   imports: [
@@ -21,9 +23,15 @@ import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/
       ChopsOrderEntity,
       ProductRepository,
       SurprisePackageEntity,
+      SurprisePackageOrderEntity,
     ]),
   ],
-  providers: [ProductRepository, ChopsOrderRepository, ProductService],
+  providers: [
+    ProductRepository,
+    ChopsOrderRepository,
+    SurprisePackageOrderRepository,
+    ProductService,
+  ],
   controllers: [ProductController],
 })
 export class ProductsModule {}

@@ -16,8 +16,14 @@ import {
   NumberOfPacks,
   ChopProductType,
   PastryPackageType,
-  Covering
+  Covering,
 } from '../ProductOrderEnum/productOrderEnum';
+import {
+  bronzePackageObject,
+  diamondPackageObject,
+  goldPackageObject,
+  silverPackageObject,
+} from 'src/types';
 // import { UploadedFile } from '@nestjs/platform-express';
 
 export class CustomProductOrderDto {
@@ -42,7 +48,7 @@ export class CustomProductOrderDto {
 
   inches: ProductInch;
 
-  type: ProductType
+  type: ProductType;
 }
 
 export class GenericProductOrderDto {
@@ -110,8 +116,8 @@ export class GenericChopsOrderDto {
   @MaxLength(80)
   description: string;
 
-  type: ChopProductType;//change to ChopProductType to cover pastry options and chops option
-  
+  type: ChopProductType; //change to ChopProductType to cover pastry options and chops option
+
   chopPackageType?: ChopPackageType;
 
   customChopPackage?: string;
@@ -125,5 +131,42 @@ export class GenericChopsOrderDto {
   customPastryPackage?: string;
 
   covering?: Covering;
+}
 
+export class bronzePackageDto {
+  packageName: string;
+
+  itemOne: string;
+
+  itemTwo: string;
+
+  itemThree: string;
+
+  itemFour: string;
+
+  itemFive: string;
+
+  itemSix: string;
+
+  price: string;
+
+  description: string;
+}
+
+export class SurprisePackageOrderDto {
+  @IsNotEmpty()
+  packageOrderName: string;
+
+  bronzePackage?: bronzePackageDto;
+
+  // silverPackage?: silverPackageObject;
+
+  // goldPackage?: goldPackageObject;
+
+  // diamondPackage?: diamondPackageObject;
+
+  // file: Express.Multer.File;
+  addInfo: string;
+
+  deliveryDate: string;
 }

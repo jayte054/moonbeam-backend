@@ -55,19 +55,19 @@ export enum DesignCovering {
 }
 
 export enum ChopProductType {
-  chops = "chops",
-  pastries = "pastries"
+  chops = 'chops',
+  pastries = 'pastries',
 }
 
 export enum ChopPackageType {
-  samosa = "samosa",
-  springroll = "springroll",
-  samosa_spingroll = "samosa_spingroll",
-  puff = "puff",
-  pepperedMeat = "pepperedMeat",
-  puff_pepperedMeat = "puff_pepperedMeat",
-  samosa_pepperedMeat = "samosa_pepperedMeat",
-  springroll_pepperedMeat = "springroll_pepperedMeat", 
+  samosa = 'samosa',
+  springroll = 'springroll',
+  samosa_spingroll = 'samosa_spingroll',
+  puff = 'puff',
+  pepperedMeat = 'pepperedMeat',
+  puff_pepperedMeat = 'puff_pepperedMeat',
+  samosa_pepperedMeat = 'samosa_pepperedMeat',
+  springroll_pepperedMeat = 'springroll_pepperedMeat',
 }
 
 export enum NumberOfPacks {
@@ -77,27 +77,49 @@ export enum NumberOfPacks {
   four = '4',
   five = '5',
   six = '6',
-  seven = "7",
-  eight = "8",
-  nine = "9",
-  ten_fifteen = "10 - 15",
-  fifteen_twenty = "15-20",
-  twenty_thity = "20-30",
-  thirty_fourty = "30-40"
+  seven = '7',
+  eight = '8',
+  nine = '9',
+  ten_fifteen = '10 - 15',
+  fifteen_twenty = '15-20',
+  twenty_thity = '20-30',
+  thirty_fourty = '30-40',
 }
 
-export enum PastryPackageType{
-  meatPie = "meatPie",
-  donuts = "donuts",
-  cinamonRolls = "cinamonRolls",
-  pancakes = "pancakes",
-  corndogs = "corndogs",
-  waffels = "waffels",
-  meatPie_donuts = "meatPie_donuts",
-  pancakes_corndogs_waffels = "pancakes_corndogs_waffels"
+export enum PastryPackageType {
+  meatPie = 'meatPie',
+  donuts = 'donuts',
+  cinamonRolls = 'cinamonRolls',
+  pancakes = 'pancakes',
+  corndogs = 'corndogs',
+  waffels = 'waffels',
+  meatPie_donuts = 'meatPie_donuts',
+  pancakes_corndogs_waffels = 'pancakes_corndogs_waffels',
 }
 
-export enum Covering{
-  true= "true",
-  false= "false"
+export enum Covering {
+  true = 'true',
+  false = 'false',
+}
+
+export enum BronzePackage {
+  packageName = 'packageName',
+
+  itemOne = 'itemOne',
+
+  itemTwo = 'itemTwo',
+
+  itemThree = 'itemThree',
+
+  itemFour = 'itemFour',
+
+  itemFive = 'itemFive',
+
+  itemSix = 'itemSix',
+
+  price = 'price',
+
+  description = 'description',
+
+  imageUrl = 'imageUrl',
 }

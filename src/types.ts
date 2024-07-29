@@ -1,3 +1,5 @@
+import { OrderStatus } from './productOrders/ProductOrderEnum/productOrderEnum';
+
 export type bronzePackageObject = {
   itemOne: string;
   itemTwo: string;
@@ -5,6 +7,7 @@ export type bronzePackageObject = {
   itemFour: string;
   itemFive: string;
   itemSix: string;
+  description: string;
 };
 
 export type silverPackageObject = {
@@ -44,4 +47,26 @@ export type diamondPackageObject = {
   itemTen: string;
   itemEleven: string;
   itemTwelve: string;
+};
+
+export type bronzePackageOrderType = {
+  packageId: string;
+  packageName: string;
+  packageOrderName: string;
+  bronzePackage: {
+    itemOne: string;
+    itemTwo: string;
+    itemThree: string;
+    itemFour: string;
+    itemFive: string;
+    itemSix: string;
+    description: string;
+  };
+  imageUrl: string;
+  price: string;
+  orderDate: string;
+  deliveryDate: string;
+  status: OrderStatus;
+  addInfo: string;
+  userId: string;
 };
