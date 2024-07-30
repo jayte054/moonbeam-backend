@@ -8,13 +8,22 @@ import {
   UpdateOrderDto,
   GenericChopsOrderDto,
   SurprisePackageOrderDto,
+  UpdateGenericChopsOrderDto,
+  UpdateSurprisePackageOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ProductRepository } from '../productOrderRepository/productOrderRepository';
 import { ChopsOrderRepository } from '../productOrderRepository/chopsOrderRepository';
 import { ChopsOrderType } from '../productOrderRepository/chopsOrderRepository';
 import { SurprisePackageOrderRepository } from '../productOrderRepository/surprisePackageOrderRepository';
-import { bronzePackageOrderType } from 'src/types';
+import {
+  bronzePackageOrderType,
+  diamondPackageOrderType,
+  goldPackageOrderType,
+  silverPackageOrderType,
+} from 'src/types';
+import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
+import { SurprisePackageOrderEntity } from '../productOrderEntity/surprisePackageOrderEntity';
 
 @Injectable()
 export class ProductService {
@@ -71,6 +80,36 @@ export class ProductService {
     );
   }
 
+  async silverPackageOrder(
+    surprisePackageOrderDto: SurprisePackageOrderDto,
+    user: AuthEntity,
+  ): Promise<silverPackageOrderType> {
+    return await this.surprisePackageOrderRepository.silverPackageOrder(
+      surprisePackageOrderDto,
+      user,
+    );
+  }
+
+  async goldPackageOrder(
+    surprisePackageOrderDto: SurprisePackageOrderDto,
+    user: AuthEntity,
+  ): Promise<goldPackageOrderType> {
+    return await this.surprisePackageOrderRepository.goldPackageOrder(
+      surprisePackageOrderDto,
+      user,
+    );
+  }
+
+  async diamondPackageOrder(
+    surprisePackageOrderDto: SurprisePackageOrderDto,
+    user: AuthEntity,
+  ): Promise<diamondPackageOrderType> {
+    return await this.surprisePackageOrderRepository.diamondPackageOrder(
+      surprisePackageOrderDto,
+      user,
+    );
+  }
+
   async getOrders(user: AuthEntity): Promise<ProductOrderEntity[]> {
     return await this.productRepository.getOrders(user);
   }
@@ -80,6 +119,59 @@ export class ProductService {
     user: AuthEntity,
   ): Promise<ProductOrderEntity> {
     return this.productRepository.getOrderWithId(id, user);
+  }
+
+  async getChopsOrders(user: AuthEntity): Promise<ChopsOrderEntity[]> {
+    return await this.chopsOrderRepository.getChopsOrders(user);
+  }
+
+  async getChopOrderWithId(
+    id: string,
+    user: AuthEntity,
+  ): Promise<ChopsOrderEntity> {
+    return await this.chopsOrderRepository.getChopOrderWithId(id, user);
+  }
+
+  async updateChopOrders(
+    id: string,
+    user: AuthEntity,
+    updateGenericChopsOrderDto: UpdateGenericChopsOrderDto,
+  ): Promise<ChopsOrderEntity> {
+    return await this.chopsOrderRepository.updateChopOrders(
+      id,
+      user,
+      updateGenericChopsOrderDto,
+    );
+  }
+
+  async getSurprisePackageOrders(
+    user: AuthEntity,
+  ): Promise<SurprisePackageOrderEntity[]> {
+    return await this.surprisePackageOrderRepository.getSurprisePackageOrders(
+      user,
+    );
+  }
+
+  async getSurprisePackageOrderWithId(
+    packageId: string,
+    user: AuthEntity,
+  ): Promise<SurprisePackageOrderEntity> {
+    return await this.surprisePackageOrderRepository.getSurprisePackageOrdersWithId(
+      packageId,
+      user,
+    );
+  }
+
+  async updateSurprisePackageOrder(
+    packageId: string,
+    user: AuthEntity,
+    updateSurprisePackageOrderDto: UpdateSurprisePackageOrderDto,
+  ): Promise<SurprisePackageOrderEntity> {
+    return await this.surprisePackageOrderRepository.updateSurprisePackageOrder(
+      packageId,
+      user,
+      updateSurprisePackageOrderDto,
+    );
   }
 
   async updateOrder(

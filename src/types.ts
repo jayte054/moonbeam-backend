@@ -19,6 +19,7 @@ export type silverPackageObject = {
   itemSix: string;
   itemSeven: string;
   itemEight: string;
+  description: string;
 };
 
 export type goldPackageObject = {
@@ -32,6 +33,7 @@ export type goldPackageObject = {
   itemEight: string;
   itemNine: string;
   itemTen: string;
+  description: string;
 };
 
 export type diamondPackageObject = {
@@ -47,6 +49,7 @@ export type diamondPackageObject = {
   itemTen: string;
   itemEleven: string;
   itemTwelve: string;
+  description: string;
 };
 
 export type bronzePackageOrderType = {
@@ -60,6 +63,84 @@ export type bronzePackageOrderType = {
     itemFour: string;
     itemFive: string;
     itemSix: string;
+    description: string;
+  };
+  imageUrl: string;
+  price: string;
+  orderDate: string;
+  deliveryDate: string;
+  status: OrderStatus;
+  addInfo: string;
+  userId: string;
+};
+
+export type silverPackageOrderType = {
+  packageId: string;
+  packageName: string;
+  packageOrderName: string;
+  silverPackage: {
+    itemOne: string;
+    itemTwo: string;
+    itemThree: string;
+    itemFour: string;
+    itemFive: string;
+    itemSix: string;
+    itemSeven: string;
+    itemEight: string;
+    description: string;
+  };
+  imageUrl: string;
+  price: string;
+  orderDate: string;
+  deliveryDate: string;
+  status: OrderStatus;
+  addInfo: string;
+  userId: string;
+};
+
+export type goldPackageOrderType = {
+  packageId: string;
+  packageName: string;
+  packageOrderName: string;
+  goldPackage: {
+    itemOne: string;
+    itemTwo: string;
+    itemThree: string;
+    itemFour: string;
+    itemFive: string;
+    itemSix: string;
+    itemSeven: string;
+    itemEight: string;
+    itemNine: string;
+    itemTen: string;
+    description: string;
+  };
+  imageUrl: string;
+  price: string;
+  orderDate: string;
+  deliveryDate: string;
+  status: OrderStatus;
+  addInfo: string;
+  userId: string;
+};
+
+export type diamondPackageOrderType = {
+  packageId: string;
+  packageName: string;
+  packageOrderName: string;
+  diamondPackage: {
+    itemOne: string;
+    itemTwo: string;
+    itemThree: string;
+    itemFour: string;
+    itemFive: string;
+    itemSix: string;
+    itemSeven: string;
+    itemEight: string;
+    itemNine: string;
+    itemTen: string;
+    itemEleven: string;
+    itemTwelve: string;
     description: string;
   };
   imageUrl: string;

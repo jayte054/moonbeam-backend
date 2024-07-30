@@ -10,7 +10,7 @@ import {
   CustomProductOrderDto,
   GenericProductOrderDto,
   UpdateOrderDto,
-  GenericChopsOrderDto
+  GenericChopsOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
@@ -19,14 +19,14 @@ import {
   OrderStatus,
   ProductFlavours,
   ProductType,
-  ChopProductType
+  ChopProductType,
 } from '../ProductOrderEnum/productOrderEnum';
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
 import { v4 as uuid } from 'uuid';
 import { MailerService } from 'src/mailerModule/mailerService';
 import { fetchDesignRate, fetchRate } from '../productUtility';
-import {CloudinaryUrlDto} from '../../cloudinary/coundinaryDto/cloudinaryUrlDto'
+import { CloudinaryUrlDto } from '../../cloudinary/coundinaryDto/cloudinaryUrlDto';
 
 @Injectable()
 export class ProductRepository extends Repository<ProductOrderEntity> {
@@ -54,7 +54,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       designCovering,
       layers,
       inches,
-      type
+      type,
     } = customProductOrderDto;
 
     const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
@@ -85,8 +85,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     // Set rate based on the selected product flavor
     if (flavorRateMap.hasOwnProperty(productFlavour)) {
       rate = Number(newRate[0][flavorRateMap[productFlavour]]);
-      console.log("nnn",flavorRateMap[productFlavour])
-
+      console.log('nnn', flavorRateMap[productFlavour]);
     }
 
     const designRateMap: { [Key: string]: string } = {
@@ -156,7 +155,6 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     };
   }
 
-
   async genericProductOrder(
     genericProductOrderDto: GenericProductOrderDto,
     user: AuthEntity,
@@ -171,7 +169,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       designCovering,
       layers,
       inches,
-      type
+      type,
     } = genericProductOrderDto;
 
     const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
@@ -204,7 +202,6 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     if (flavorRateMap.hasOwnProperty(productFlavour)) {
       rate = Number(newRate[0][flavorRateMap[productFlavour]]);
       // console.log(chopsRateMap[chopPackageType])
-
     }
 
     const designRateMap: { [Key: string]: string } = {
@@ -244,8 +241,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       year: 'numeric',
     });
     order.user = user;
-    console.log(order)
-    const email = user.email
+    console.log(order);
+    const email = user.email;
     try {
       await order.save();
       await this.mailerService.productOrderMail(email, order);
@@ -281,9 +278,9 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
   async getOrders(user: AuthEntity): Promise<ProductOrderEntity[]> {
     const query = this.createQueryBuilder('orderName');
     query.where('orderName.userId = :userId', { userId: user.id });
-    console.log(user)
+    console.log(user);
     const orders = await query.getMany();
-    console.log(orders)
+    console.log(orders);
     try {
       this.logger.verbose(
         `user with id ${user.id} orders fetched successfully`,
@@ -398,9 +395,9 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.description = description || order.description;
     order.productFlavour = productFlavour || order.productFlavour;
     order.designCovering = designCovering || order.designCovering;
-    order.rate =  rate.toString();
-    order.designRate =  designrate.toString();
-    order.price =  rate * order.layers * order.inches * designrate;
+    order.rate = rate.toString();
+    order.designRate = designrate.toString();
+    order.price = rate * order.layers * order.inches * designrate;
 
     try {
       await order.save();

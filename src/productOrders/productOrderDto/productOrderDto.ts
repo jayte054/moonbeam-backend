@@ -133,6 +133,32 @@ export class GenericChopsOrderDto {
   covering?: Covering;
 }
 
+export class UpdateGenericChopsOrderDto {
+  orderTitle?: string;
+
+  deliveryDate?: string;
+
+  file?: Express.Multer.File;
+
+  description?: string;
+
+  type: ChopProductType; //change to ChopProductType to cover pastry options and chops option
+
+  chopPackageType?: ChopPackageType;
+
+  customChopPackage?: string;
+
+  numberOfPacks?: NumberOfPacks;
+
+  customNumberOfPacks?: string;
+
+  pastryPackageType?: PastryPackageType;
+
+  customPastryPackage?: string;
+
+  covering?: Covering;
+}
+
 export class bronzePackageDto {
   packageName: string;
 
@@ -153,20 +179,103 @@ export class bronzePackageDto {
   description: string;
 }
 
+export class silverPackageDto {
+  packageName: string;
+
+  itemOne: string;
+
+  itemTwo: string;
+
+  itemThree: string;
+
+  itemFour: string;
+
+  itemFive: string;
+
+  itemSix: string;
+
+  itemSeven: string;
+
+  itemEight: string;
+
+  price: string;
+
+  description: string;
+}
+
+export class goldPackageDto {
+  packageName: string;
+
+  itemOne: string;
+
+  itemTwo: string;
+
+  itemThree: string;
+
+  itemFour: string;
+
+  itemFive: string;
+
+  itemSix: string;
+
+  itemSeven: string;
+
+  itemEight: string;
+
+  itemNine: string;
+
+  itemTen: string;
+
+  price: string;
+
+  description: string;
+}
+
+export class diamondPackageDto {
+  packageName: string;
+
+  itemOne: string;
+
+  itemTwo: string;
+
+  itemThree: string;
+
+  itemFour: string;
+
+  itemFive: string;
+
+  itemSix: string;
+
+  itemSeven: string;
+
+  itemEight: string;
+
+  itemNine: string;
+
+  itemTen: string;
+
+  itemEleven: string;
+
+  itemTwelve: string;
+
+  price: string;
+
+  description: string;
+}
+
 export class SurprisePackageOrderDto {
   @IsNotEmpty()
   packageOrderName: string;
 
-  bronzePackage?: bronzePackageDto;
-
-  // silverPackage?: silverPackageObject;
-
-  // goldPackage?: goldPackageObject;
-
-  // diamondPackage?: diamondPackageObject;
-
-  // file: Express.Multer.File;
   addInfo: string;
 
   deliveryDate: string;
+}
+
+export class UpdateSurprisePackageOrderDto {
+  packageOrderName?: string;
+
+  addInfo?: string;
+
+  deliveryDate?: string;
 }

@@ -199,8 +199,6 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
       saidPackage.imageUrl = newImage.secure_url;
     }
 
-    const cloudinaryUrl = await this.cloudinaryService.uploadImage(req.file);
-
     saidPackage.packageName = packageName;
     saidPackage.itemOne = itemOne;
     saidPackage.itemTwo = itemTwo;

@@ -342,6 +342,52 @@ export class MailerService {
     }
   }
 
+  async updateChopsOrderMail(
+    email: string,
+    order: ChopsOrderEntity,
+  ): Promise<void> {
+    const name = order.orderTitle;
+    const packageType = order.chopPackageType || order.customChopPackage;
+    const packs = order.numberOfPacks || order.customNumberOfPacks;
+    const price = order.price;
+    const status = order.status;
+    const description = order.description;
+    const deliveryDate = order.deliveryDate;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.logger.error(`Invalid email format: ${email}`);
+      throw new BadRequestException(`Invalid email format: ${email}`);
+    }
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+             <p> Order Name: ${name}</p>
+             <p> Package: ${packageType}</p>
+             <p> Packs: ${packs}</p>
+             <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${description}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully made.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`User ${email} product order mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
+    }
+  }
+
   async bronzePackageOrderMail(
     email: string,
     packageOrder: SurprisePackageOrderEntity,
@@ -382,6 +428,331 @@ export class MailerService {
                          <p> ${content[3]} </p>
                          <p> ${content[4]} </p>
                          <p> ${content[5]} </p>
+            
+             <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${description}</p>
+             <p> Additional Information: ${addInfo}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully made.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`User ${email} product order mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
+    }
+  }
+
+  async silverPackageOrderMail(
+    email: string,
+    packageOrder: SurprisePackageOrderEntity,
+  ): Promise<void> {
+    const name = packageOrder.packageOrderName;
+    const packageType = packageOrder.packageName;
+    const content = [
+      packageOrder.silverPackage.itemOne,
+      packageOrder.silverPackage.itemTwo,
+      packageOrder.silverPackage.itemThree,
+      packageOrder.silverPackage.itemFour,
+      packageOrder.silverPackage.itemFive,
+      packageOrder.silverPackage.itemSix,
+      packageOrder.silverPackage.itemSeven,
+      packageOrder.silverPackage.itemEight,
+    ];
+    const price = packageOrder.price;
+    const status = packageOrder.status;
+    const description = packageOrder.silverPackage.description;
+    const addInfo = packageOrder.addInfo;
+    const deliveryDate = packageOrder.deliveryDate;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.logger.error(`Invalid email format: ${email}`);
+      throw new BadRequestException(`Invalid email format: ${email}`);
+    }
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+             <p> Order Name: ${name}</p>
+             <p> Package: ${packageType}</p>
+             <p> Content: ${content[0]}  </p>
+                         <p> ${content[1]} </p>
+                         <p> ${content[2]} </p>
+                         <p> ${content[3]} </p>
+                         <p> ${content[4]} </p>
+                         <p> ${content[5]} </p>
+                         <p> ${content[6]} </p>
+                         <p> ${content[7]} </p>
+            
+             <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${description}</p>
+             <p> Additional Information: ${addInfo}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully made.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`User ${email} product order mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
+    }
+  }
+
+  async goldPackageOrderMail(
+    email: string,
+    packageOrder: SurprisePackageOrderEntity,
+  ): Promise<void> {
+    const name = packageOrder.packageOrderName;
+    const packageType = packageOrder.packageName;
+    const content = [
+      packageOrder.goldPackage.itemOne,
+      packageOrder.goldPackage.itemTwo,
+      packageOrder.goldPackage.itemThree,
+      packageOrder.goldPackage.itemFour,
+      packageOrder.goldPackage.itemFive,
+      packageOrder.goldPackage.itemSix,
+      packageOrder.goldPackage.itemSeven,
+      packageOrder.goldPackage.itemEight,
+      packageOrder.goldPackage.itemNine,
+      packageOrder.goldPackage.itemTen,
+    ];
+    const price = packageOrder.price;
+    const status = packageOrder.status;
+    const description = packageOrder.goldPackage.description;
+    const addInfo = packageOrder.addInfo;
+    const deliveryDate = packageOrder.deliveryDate;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.logger.error(`Invalid email format: ${email}`);
+      throw new BadRequestException(`Invalid email format: ${email}`);
+    }
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+             <p> Order Name: ${name}</p>
+             <p> Package: ${packageType}</p>
+             <p> Content: ${content[0]}  </p>
+                         <p> ${content[1]} </p>
+                         <p> ${content[2]} </p>
+                         <p> ${content[3]} </p>
+                         <p> ${content[4]} </p>
+                         <p> ${content[5]} </p>
+                         <p> ${content[6]} </p>
+                         <p> ${content[7]} </p>
+                         <p> ${content[8]} </p>
+                         <p> ${content[9]} </p>
+            
+             <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${description}</p>
+             <p> Additional Information: ${addInfo}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully made.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`User ${email} product order mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
+    }
+  }
+
+  async diamondPackageOrderMail(
+    email: string,
+    packageOrder: SurprisePackageOrderEntity,
+  ): Promise<void> {
+    const name = packageOrder.packageOrderName;
+    const packageType = packageOrder.packageName;
+    const content = [
+      packageOrder.diamondPackage.itemOne,
+      packageOrder.diamondPackage.itemTwo,
+      packageOrder.diamondPackage.itemThree,
+      packageOrder.diamondPackage.itemFour,
+      packageOrder.diamondPackage.itemFive,
+      packageOrder.diamondPackage.itemSix,
+      packageOrder.diamondPackage.itemSeven,
+      packageOrder.diamondPackage.itemEight,
+      packageOrder.diamondPackage.itemNine,
+      packageOrder.diamondPackage.itemTen,
+      packageOrder.diamondPackage.itemEleven,
+      packageOrder.diamondPackage.itemTwelve,
+    ];
+    const price = packageOrder.price;
+    const status = packageOrder.status;
+    const description = packageOrder.diamondPackage.description;
+    const addInfo = packageOrder.addInfo;
+    const deliveryDate = packageOrder.deliveryDate;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.logger.error(`Invalid email format: ${email}`);
+      throw new BadRequestException(`Invalid email format: ${email}`);
+    }
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+             <p> Order Name: ${name}</p>
+             <p> Package: ${packageType}</p>
+             <p> Content: ${content[0]}  </p>
+                         <p> ${content[1]} </p>
+                         <p> ${content[2]} </p>
+                         <p> ${content[3]} </p>
+                         <p> ${content[4]} </p>
+                         <p> ${content[5]} </p>
+                         <p> ${content[6]} </p>
+                         <p> ${content[7]} </p>
+                         <p> ${content[8]} </p>
+                         <p> ${content[9]} </p>
+                         <p> ${content[10]} </p>
+                         <p> ${content[11]} </p>
+            
+             <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${description}</p>
+             <p> Additional Information: ${addInfo}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully made.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`User ${email} product order mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
+    }
+  }
+
+  async updatePackageOrderMail(
+    email: string,
+    packageOrder: SurprisePackageOrderEntity,
+  ): Promise<void> {
+    const name = packageOrder.packageOrderName;
+    const packageType = packageOrder.packageName;
+    let content;
+    if (packageType === 'Bronze') {
+      content = [
+        packageOrder.bronzePackage.itemOne,
+        packageOrder.bronzePackage.itemTwo,
+        packageOrder.bronzePackage.itemThree,
+        packageOrder.bronzePackage.itemFour,
+        packageOrder.bronzePackage.itemFive,
+        packageOrder.bronzePackage.itemSix,
+      ];
+    } else if (packageType === 'Silver') {
+      content = [
+        packageOrder.silverPackage.itemOne,
+        packageOrder.silverPackage.itemTwo,
+        packageOrder.silverPackage.itemThree,
+        packageOrder.silverPackage.itemFour,
+        packageOrder.silverPackage.itemFive,
+        packageOrder.silverPackage.itemSix,
+        packageOrder.silverPackage.itemSeven,
+        packageOrder.silverPackage.itemEight,
+      ];
+    } else if (packageType === 'Gold') {
+      content = [
+        packageOrder.goldPackage.itemOne,
+        packageOrder.goldPackage.itemTwo,
+        packageOrder.goldPackage.itemThree,
+        packageOrder.goldPackage.itemFour,
+        packageOrder.goldPackage.itemFive,
+        packageOrder.goldPackage.itemSix,
+        packageOrder.goldPackage.itemSeven,
+        packageOrder.goldPackage.itemEight,
+        packageOrder.goldPackage.itemNine,
+        packageOrder.goldPackage.itemTen,
+      ];
+    } else if (packageType === 'diamond') {
+      [
+        packageOrder.diamondPackage.itemOne,
+        packageOrder.diamondPackage.itemTwo,
+        packageOrder.diamondPackage.itemThree,
+        packageOrder.diamondPackage.itemFour,
+        packageOrder.diamondPackage.itemFive,
+        packageOrder.diamondPackage.itemSix,
+        packageOrder.diamondPackage.itemSeven,
+        packageOrder.diamondPackage.itemEight,
+        packageOrder.diamondPackage.itemNine,
+        packageOrder.diamondPackage.itemTen,
+        packageOrder.diamondPackage.itemEleven,
+        packageOrder.diamondPackage.itemTwelve,
+      ];
+    }
+    const price = packageOrder.price;
+    const status = packageOrder.status;
+    let description;
+    if (packageType === 'Bronze') {
+      description = packageOrder.bronzePackage.description;
+    } else if (packageType === 'Silver') {
+      description = packageOrder.silverPackage.description;
+    } else if (packageType === 'Gold') {
+      description = packageOrder.goldPackage.description;
+    } else if (packageType === 'Diamond') {
+      description = packageOrder.diamondPackage.description;
+    }
+    const addInfo = packageOrder.addInfo;
+    const deliveryDate = packageOrder.deliveryDate;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.logger.error(`Invalid email format: ${email}`);
+      throw new BadRequestException(`Invalid email format: ${email}`);
+    }
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+             <p> Order Name: ${name}</p>
+             <p> Package: ${packageType}</p>
+             <p> Content: ${content[0]}  </p>
+                         <p> ${content[1]} </p>
+                         <p> ${content[2]} </p>
+                         <p> ${content[3]} </p>
+                         <p> ${content[4]} </p>
+                         <p> ${content[5]} </p>
+                         <p> ${content[6]} </p>
+                         <p> ${content[7] ? content[7] : ''} </p>
+                         <p> ${content[8] ? content[8] : ''} </p>
+                         <p> ${content[9] ? content[9] : ''} </p>
+                         <p> ${content[10] ? content[10] : ''} </p>
+                         <p> ${content[11] ? content[11] : ''} </p>
             
              <p> Price: ${price}</p>
              <p> Status: ${status}</p>

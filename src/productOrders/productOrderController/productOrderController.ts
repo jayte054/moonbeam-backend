@@ -24,11 +24,21 @@ import {
   UpdateOrderDto,
   GenericChopsOrderDto,
   SurprisePackageOrderDto,
+  UpdateGenericChopsOrderDto,
+  UpdateSurprisePackageOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductService } from '../productOrderService/productOrderService';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ChopsOrderType } from '../productOrderRepository/chopsOrderRepository';
-import { bronzePackageOrderType } from 'src/types';
+import {
+  bronzePackageOrderType,
+  diamondPackageOrderType,
+  goldPackageOrderType,
+  silverPackageOrderType,
+} from 'src/types';
+import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
+import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
+import { SurprisePackageOrderEntity } from '../productOrderEntity/surprisePackageOrderEntity';
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -100,9 +110,60 @@ export class ProductController {
     );
   }
 
+  @Post('/silverPackageOrder')
+  @UsePipes(ValidationPipe)
+  async silverPackageOrder(
+    @GetUser() user: AuthEntity,
+    @Body() surprisePackageOrderDto: SurprisePackageOrderDto,
+  ): Promise<silverPackageOrderType> {
+    return await this.productService.silverPackageOrder(
+      surprisePackageOrderDto,
+      user,
+    );
+  }
+
+  @Post('/goldPackageOrder')
+  @UsePipes(ValidationPipe)
+  async goldPackageOrder(
+    @GetUser() user: AuthEntity,
+    @Body() surprisePackageOrderDto: SurprisePackageOrderDto,
+  ): Promise<goldPackageOrderType> {
+    return await this.productService.goldPackageOrder(
+      surprisePackageOrderDto,
+      user,
+    );
+  }
+
+  @Post('/diamondPackageOrder')
+  @UsePipes(ValidationPipe)
+  async diamondPackageOrder(
+    @GetUser() user: AuthEntity,
+    @Body() surprisePackageOrderDto: SurprisePackageOrderDto,
+  ): Promise<diamondPackageOrderType> {
+    return await this.productService.diamondPackageOrder(
+      surprisePackageOrderDto,
+      user,
+    );
+  }
+
   @Get('/getOrders')
   async getOrders(@GetUser() user: AuthEntity): Promise<ProductOrderEntity[]> {
     return await this.productService.getOrders(user);
+  }
+
+  @Get('/getChopsOrder')
+  async getChopsOrder(
+    @GetUser() user: AuthEntity,
+  ): Promise<ChopsOrderEntity[] | any> {
+    console.log('chops');
+    return await this.productService.getChopsOrders(user);
+  }
+
+  @Get('/getSurprisePackageOrders')
+  async getSurprisePackageOrder(
+    @GetUser() user: AuthEntity,
+  ): Promise<SurprisePackageOrderEntity[]> {
+    return await this.productService.getSurprisePackageOrders(user);
   }
 
   @Get('/:id')
@@ -111,6 +172,51 @@ export class ProductController {
     @GetUser() user: AuthEntity,
   ): Promise<ProductOrderEntity> {
     return this.productService.getOrderWithId(id, user);
+  }
+
+  @Get('/getChopOrder/:id')
+  async getChopOrderWithId(
+    @Param('id') id: string,
+    @GetUser() user: AuthEntity,
+  ): Promise<ChopsOrderEntity> {
+    return await this.productService.getChopOrderWithId(id, user);
+  }
+
+  @Patch('/updateChopOrder/:id')
+  async updateChopOrder(
+    @Param('id') id: string,
+    @GetUser() user: AuthEntity,
+    @Body() updateGenericChopsOrderDto: UpdateGenericChopsOrderDto,
+  ): Promise<ChopsOrderEntity> {
+    return await this.productService.updateChopOrders(
+      id,
+      user,
+      updateGenericChopsOrderDto,
+    );
+  }
+
+  @Get('/getSurprisePackageOrderWithId/:packageId')
+  async getSurprisePackageOrderWithId(
+    @Param('packageId') packageId: string,
+    @GetUser() user: AuthEntity,
+  ): Promise<SurprisePackageOrderEntity> {
+    return await this.productService.getSurprisePackageOrderWithId(
+      packageId,
+      user,
+    );
+  }
+
+  @Patch('/updateSurprisePacakgeOrder/:packageId')
+  async updateSurprisePackageOrder(
+    @Param('packageId') packageId: string,
+    @GetUser() user: AuthEntity,
+    @Body() updateSurprisePackageOrderDto: UpdateSurprisePackageOrderDto,
+  ): Promise<SurprisePackageOrderEntity> {
+    return await this.productService.updateSurprisePackageOrder(
+      packageId,
+      user,
+      updateSurprisePackageOrderDto,
+    );
   }
 
   @Patch('/:id/update')

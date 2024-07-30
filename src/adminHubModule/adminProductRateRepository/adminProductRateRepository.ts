@@ -55,7 +55,7 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       corndogsRate,
       waffelsRate,
       meatpie_donutsRate,
-      pancakes_corndogs_waffelsRate
+      pancakes_corndogs_waffelsRate,
     } = adminHubDto;
 
     const rate = new ProductRateEntity();
@@ -121,22 +121,22 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       coffeeCakeRate: rate.coffeeCakeRate,
       coconutCakeRate: rate.coconutCakeRate,
       blueberryCakeRate: rate.blueberryCakeRate,
-      samosaRate : rate.samosaRate,
-      springRollRate : rate.springRollRate,
-      samosa_springrollRate : rate.samosa_springrollRate,
-      puffRate : rate.puffRate,
-      pepperedMeatRate : rate.pepperedMeatRate,
-      puff_pepperedMeatRate : rate.puff_pepperedMeatRate,
-      samosa_pepperedMeatRate : rate.samosa_pepperedMeatRate,
-      springroll_pepperedMeatRate : rate.springroll_pepperedMeatRate,
-      meatPieRate : rate.meatPieRate,
-      donutsRate : rate.donutsRate,
-      cinamonRollsRate : rate.cinamonRollsRate,
-      pancakesRate : rate.pancakesRate,
-      corndogsRate : rate.corndogsRate,
-      waffelsRate : rate.waffelsRate,
-      meatpie_donutsRate : rate.meatpie_donutsRate,
-      pancakes_corndogs_waffelsRate : rate.pancakes_corndogs_waffelsRate,
+      samosaRate: rate.samosaRate,
+      springRollRate: rate.springRollRate,
+      samosa_springrollRate: rate.samosa_springrollRate,
+      puffRate: rate.puffRate,
+      pepperedMeatRate: rate.pepperedMeatRate,
+      puff_pepperedMeatRate: rate.puff_pepperedMeatRate,
+      samosa_pepperedMeatRate: rate.samosa_pepperedMeatRate,
+      springroll_pepperedMeatRate: rate.springroll_pepperedMeatRate,
+      meatPieRate: rate.meatPieRate,
+      donutsRate: rate.donutsRate,
+      cinamonRollsRate: rate.cinamonRollsRate,
+      pancakesRate: rate.pancakesRate,
+      corndogsRate: rate.corndogsRate,
+      waffelsRate: rate.waffelsRate,
+      meatpie_donutsRate: rate.meatpie_donutsRate,
+      pancakes_corndogs_waffelsRate: rate.pancakes_corndogs_waffelsRate,
       adminId: rate.adminId,
     };
   };
@@ -218,7 +218,7 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
       corndogsRate,
       waffelsRate,
       meatpie_donutsRate,
-      pancakes_corndogs_waffelsRate
+      pancakes_corndogs_waffelsRate,
     } = updateAdminHubDto;
 
     const rates = await this.getProductRateWithId(rateId, admin);
