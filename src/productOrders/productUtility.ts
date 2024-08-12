@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { ProductDesignRateEntity } from 'src/adminHubModule/ProductDesignRateEntity/ProductDesignRateEntity';
+import { BudgetCakeRateEntity } from 'src/adminHubModule/productRateEntity/budgetCakeRateEntity';
 import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
 import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
 import { FindOneOptions } from 'typeorm';
@@ -43,6 +44,35 @@ export const fetchRate = async () => {
     waffelsRate: rate.waffelsRate,
     meatpie_donutsRate: rate.meatpie_donutsRate,
     pancakes_corndogs_waffelsRate: rate.pancakes_corndogs_waffelsRate,
+  }));
+  return productRates;
+};
+
+export const fetchBudgetCakeRate = async () => {
+  console.log('rate');
+  const options: FindOneOptions<BudgetCakeRateEntity> = {};
+
+  const rates: any = await BudgetCakeRateEntity.find(options);
+
+  if (rates.length === 0) {
+    throw new NotFoundException(' rate not found ');
+  }
+
+  const productRates = rates.map((rate) => ({
+    chocolateCakeRate: rate.chocolateCakeRate,
+    strawberryCakeRate: rate.strawberryCakeRate,
+    vanillaCakeRate: rate.vanillaCakeRate,
+    redvelvetCakeRate: rate.redvelvetCakeRate,
+    carrotCakeRate: rate.carrotCakeRate,
+    cheeseCakeRate: rate.cheeseCakeRate,
+    bananaCakeRate: rate.bananaCakeRate,
+    appleCakeRate: rate.appleCakeRate,
+    lemonCakeRate: rate.lemonCakeRate,
+    coffeeCakeRate: rate.coffeeCakeRate,
+    coconutCakeRate: rate.coconutCakeRate,
+    blueberryCakeRate: rate.blueberryCakeRate,
+    foilCakeRate: rate.foilCakeRate,
+    cakeParfaitRate: rate.cakeParfaitRate,
   }));
   return productRates;
 };

@@ -12,7 +12,8 @@ import { SurprisePackageEntity } from './surprisePackageEntity/surprisePackageEn
 import { AdminProductRepository } from './adminProductRepository/adminProductRepository';
 import { AdminProductDesignRateRepository } from './adminProductDesignRateRepository/adminProductDesignRateRepository';
 import { BareAdminHubController } from './adminHubController/bareAdminHubcontroller';
-import {SurprisePackageRepository} from './adminSurprisePackageRepository/adminSurprisePackageRepository'
+import { SurprisePackageRepository } from './adminSurprisePackageRepository/adminSurprisePackageRepository';
+import { AdminBudgetCakeRateRepository } from './adminProductRateRepository/adminBudgetCakeRateRepository copy';
 
 @Module({
   imports: [
@@ -23,12 +24,14 @@ import {SurprisePackageRepository} from './adminSurprisePackageRepository/adminS
       ProductEntity,
       SurprisePackageEntity,
       ProductRepository,
+      AdminBudgetCakeRateRepository,
     ]),
   ],
   providers: [
     AdminProductRateRepository,
     AdminProductRepository,
     AdminProductDesignRateRepository,
+    AdminBudgetCakeRateRepository,
     SurprisePackageRepository,
     AdminHubService,
   ],

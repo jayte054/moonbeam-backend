@@ -111,9 +111,7 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
     }
   };
 
-  getSurprisePackages = async (
-    admin: AdminAuthEntity,
-  ): Promise<SurprisePackageEntity[]> => {
+  getSurprisePackages = async (): Promise<SurprisePackageEntity[]> => {
     const options: FindOneOptions<SurprisePackageEntity> = {};
 
     const packages = await this.find(options);
@@ -121,7 +119,7 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
       this.logger.error('packages not found');
       throw new NotFoundException('packages not found');
     } else {
-      this.logger.verbose(`packages fetched successfully by admin ${admin.id}`);
+      this.logger.verbose(`packages fetched successfully `);
       return packages;
     }
   };

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
 import {
+  AdminBudgetHubDto,
   AdminHubDto,
   ProductDesignRateDto,
   UpdateDesignRateDto,
@@ -16,12 +17,16 @@ import { AdminProductDesignRateRepository } from '../adminProductDesignRateRepos
 import { ProductEntity } from '../productEntity/productEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
-import {SurprisePackageEntity} from '../surprisePackageEntity/surprisePackageEntity'
+import { SurprisePackageEntity } from '../surprisePackageEntity/surprisePackageEntity';
 import { fetchProfiles } from '../adminHubUtils/adminHubUtils';
-import {SurprisePackageRepository} from "../adminSurprisePackageRepository/adminSurprisePackageRepository";
-import {SurprisePackageDto, UpdateSurprisePackageDto} from "../adminHubDto/adminHubDto"
-import {SurprisePackageObject} from "../types";
-
+import { SurprisePackageRepository } from '../adminSurprisePackageRepository/adminSurprisePackageRepository';
+import {
+  SurprisePackageDto,
+  UpdateSurprisePackageDto,
+} from '../adminHubDto/adminHubDto';
+import { SurprisePackageObject } from '../types';
+import { AdminBudgetCakeRateRepository } from '../adminProductRateRepository/adminBudgetCakeRateRepository copy';
+import { BudgetCakeRateEntity } from '../productRateEntity/budgetCakeRateEntity';
 
 @Injectable()
 export class AdminHubService {
@@ -31,10 +36,12 @@ export class AdminHubService {
     @InjectRepository(AdminProductRepository)
     @InjectRepository(AdminProductDesignRateRepository)
     @InjectRepository(SurprisePackageRepository)
+    @InjectRepository(AdminBudgetCakeRateRepository)
     private adminProductRateRepository: AdminProductRateRepository,
     private adminProductRepository: AdminProductRepository,
     private adminProductDesignRateRepository: AdminProductDesignRateRepository,
     private surprisePackageRepository: SurprisePackageRepository,
+    private adminBudgetCakeRateRepository: AdminBudgetCakeRateRepository,
   ) {}
 
   productRate = async (
@@ -47,10 +54,30 @@ export class AdminHubService {
     );
   };
 
+  adminBudgetCakeRate = async (
+    admin: AdminAuthEntity,
+    adminBudgetHubDto: AdminBudgetHubDto,
+  ): Promise<BudgetCakeRateEntity | any> => {
+    return await this.adminBudgetCakeRateRepository.adminBudgetCakeRate(
+      admin,
+      adminBudgetHubDto,
+    );
+  };
+
   getProductRates = async (
     admin: AdminAuthEntity,
   ): Promise<ProductRateEntity[]> => {
     return await this.adminProductRateRepository.getProductRates(admin);
+  };
+
+  getBudgetCakeRates = async (
+    admin: AdminAuthEntity,
+  ): Promise<BudgetCakeRateEntity[]> => {
+    return await this.adminBudgetCakeRateRepository.getBudgetCakeRates(admin);
+  };
+
+  getCakeVariantRates = async () => {
+    return await this.adminBudgetCakeRateRepository.getCakeVariantRates();
   };
 
   getProductRateWithId = async (
@@ -69,6 +96,18 @@ export class AdminHubService {
     updateProductRate: UpdateProductRateDto,
   ): Promise<ProductRateEntity | any> => {
     return await this.adminProductRateRepository.updateProductRate(
+      rateId,
+      admin,
+      updateProductRate,
+    );
+  };
+
+  updateBudgetCakeRate = async (
+    rateId: string,
+    admin: AdminAuthEntity,
+    updateProductRate: UpdateProductRateDto,
+  ): Promise<BudgetCakeRateEntity | any> => {
+    return await this.adminBudgetCakeRateRepository.updateBudgetCakeRate(
       rateId,
       admin,
       updateProductRate,
@@ -173,47 +212,43 @@ export class AdminHubService {
     }
   };
 
-  surprisePackage = async(
+  surprisePackage = async (
     admin: AdminAuthEntity,
     surprisePackageDto: SurprisePackageDto,
-    req: Request | any
+    req: Request | any,
   ): Promise<SurprisePackageObject | any> => {
     return await this.surprisePackageRepository.surprisePackage(
       admin,
       surprisePackageDto,
-      req
-    )
-  }
+      req,
+    );
+  };
 
-  getSurprisePackages = async(
-    admin: AdminAuthEntity
-  ): Promise<SurprisePackageEntity[]> => {
-    return await this.surprisePackageRepository.getSurprisePackages(
-      admin
-    )
-  }
+  getSurprisePackages = async (): Promise<SurprisePackageEntity[]> => {
+    return await this.surprisePackageRepository.getSurprisePackages();
+  };
 
-  getPackageWithId = async(
+  getPackageWithId = async (
     packageId: string,
-    admin: AdminAuthEntity
+    admin: AdminAuthEntity,
   ): Promise<SurprisePackageEntity> => {
     return await this.surprisePackageRepository.getPackageWithId(
       packageId,
-      admin
+      admin,
     );
-  }
+  };
 
-  updateSurprisePackage = async(
+  updateSurprisePackage = async (
     admin: AdminAuthEntity,
     updateSurprisePackageDto: UpdateSurprisePackageDto,
     packageId: string,
-    req: Request
+    req: Request,
   ): Promise<SurprisePackageObject> => {
     return await this.surprisePackageRepository.updateSurprisePackage(
       admin,
       updateSurprisePackageDto,
       packageId,
-      req
-    )
-  }
+      req,
+    );
+  };
 }

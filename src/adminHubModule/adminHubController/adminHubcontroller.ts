@@ -18,6 +18,7 @@ import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity'
 import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 // import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 import {
+  AdminBudgetHubDto,
   AdminHubDto,
   ProductDesignRateDto,
   UpdateDesignRateDto,
@@ -35,6 +36,7 @@ import {
 } from '../adminHubDto/adminHubDto';
 import { SurprisePackageObject } from '../types';
 import { SurprisePackageEntity } from '../surprisePackageEntity/surprisePackageEntity';
+import { BudgetCakeRateEntity } from '../productRateEntity/budgetCakeRateEntity';
 
 @Controller('adminHub')
 @UseGuards(AuthGuard())
@@ -50,11 +52,30 @@ export class AdminHubController {
     return await this.adminHubService.productRate(admin, adminHubDto);
   }
 
+  @Post('/setBudgetCakeRate')
+  @UsePipes(ValidationPipe)
+  async adminBudgetCakeRate(
+    @GetUser() admin: AdminAuthEntity,
+    @Body() adminBudgetHubDto: AdminBudgetHubDto,
+  ): Promise<BudgetCakeRateEntity | any> {
+    return await this.adminHubService.adminBudgetCakeRate(
+      admin,
+      adminBudgetHubDto,
+    );
+  }
+
   @Get('/getProductRates')
   async getProductRates(
     @GetUser() admin: AdminAuthEntity,
   ): Promise<ProductRateEntity[]> {
     return this.adminHubService.getProductRates(admin);
+  }
+
+  @Get('/getProductRates')
+  async getBudgetCakeRates(
+    @GetUser() admin: AdminAuthEntity,
+  ): Promise<BudgetCakeRateEntity[]> {
+    return this.adminHubService.getBudgetCakeRates(admin);
   }
 
   @Get('/getProductRateWithId/:rateId')
@@ -74,6 +95,20 @@ export class AdminHubController {
     @Body() updateProductRate: UpdateProductRateDto,
   ): Promise<ProductRateEntity | any> {
     return await this.adminHubService.updateProductRate(
+      rateId,
+      admin,
+      updateProductRate,
+    );
+  }
+
+  @Patch('updateBudgetCakeRate/:rateId')
+  @UsePipes(ValidationPipe)
+  async updateBudgetCakeRate(
+    @Param('rateId') rateId: string,
+    @GetUser() admin: AdminAuthEntity,
+    @Body() updateProductRate: UpdateProductRateDto,
+  ): Promise<BudgetCakeRateEntity | any> {
+    return await this.adminHubService.updateBudgetCakeRate(
       rateId,
       admin,
       updateProductRate,
@@ -189,13 +224,6 @@ export class AdminHubController {
       surprisePackageDto,
       req,
     );
-  }
-
-  @Get('/getSurprisePackages')
-  async getSurprisePackages(
-    @GetUser() admin: AdminAuthEntity,
-  ): Promise<SurprisePackageEntity[]> {
-    return await this.adminHubService.getSurprisePackages(admin);
   }
 
   @Get('/getSurprisePackageWithId/:id')

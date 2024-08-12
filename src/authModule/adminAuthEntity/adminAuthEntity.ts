@@ -57,10 +57,15 @@ export class AdminAuthEntity extends BaseEntity {
   chocolateCakeRate: ProductRateEntity;
 
   @OneToMany(
-  () => SurprisePackageEntity, 
-  (packageId) => packageId.admin, 
-  {eager: true}
+    () => ProductRateEntity,
+    (strawberryCakeRate) => strawberryCakeRate.admin,
+    { eager: true },
   )
+  strawberryCakeRate: ProductRateEntity;
+
+  @OneToMany(() => SurprisePackageEntity, (packageId) => packageId.admin, {
+    eager: true,
+  })
   packageId: SurprisePackageEntity;
 
   @OneToMany(

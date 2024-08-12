@@ -12,6 +12,9 @@ import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/product
 import { ChopsOrderEntity } from 'src/productOrders/productOrderEntity/chopsOrderEntity';
 import { ProfileEntity } from 'src/profile/profileEntity/profileEntity';
 import { SurprisePackageOrderEntity } from 'src/productOrders/productOrderEntity/surprisePackageOrderEntity';
+import { BudgetCakeRateEntity } from 'src/adminHubModule/productRateEntity/budgetCakeRateEntity';
+import { BudgetCakeOrderEntity } from 'src/productOrders/productOrderEntity/budgetCakeOrderEntity';
+import { CakeVariantEntity } from 'src/productOrders/productOrderEntity/cakeVariantEntity';
 
 const dbConfig: any | unknown = config.get('db');
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -34,6 +37,9 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     ChopsOrderEntity,
     SurprisePackageEntity,
     SurprisePackageOrderEntity,
+    BudgetCakeRateEntity,
+    BudgetCakeOrderEntity,
+    CakeVariantEntity,
   ],
   synchronize: process.env.TypeORM_SYNC || dbConfig.synchronize,
   migrations: ['dist/migrations/*.js'], // Specify your migration directory,

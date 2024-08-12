@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class ProductRateEntity extends BaseEntity {
+export class BudgetCakeRateEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   rateId: string;
 
@@ -49,54 +49,12 @@ export class ProductRateEntity extends BaseEntity {
   blueberryCakeRate?: string;
 
   @Column()
-  samosaRate?: string;
+  foilCakeRate?: string;
 
   @Column()
-  springRollRate?: string;
+  cakeParfaitRate?: string;
 
-  @Column()
-  samosa_springrollRate?: string;
-
-  @Column()
-  puffRate?: string;
-
-  @Column()
-  pepperedMeatRate?: string;
-
-  @Column()
-  puff_pepperedMeatRate?: string;
-
-  @Column()
-  samosa_pepperedMeatRate?: string;
-
-  @Column()
-  springroll_pepperedMeatRate?: string;
-
-  @Column()
-  meatPieRate?: string;
-
-  @Column()
-  donutsRate?: string;
-
-  @Column()
-  cinamonRollsRate?: string;
-
-  @Column()
-  pancakesRate?: string;
-
-  @Column()
-  corndogsRate?: string;
-
-  @Column()
-  waffelsRate?: string;
-
-  @Column()
-  meatpie_donutsRate?: string;
-
-  @Column()
-  pancakes_corndogs_waffelsRate?: string;
-
-  @ManyToOne(() => AdminAuthEntity, (admin) => admin.chocolateCakeRate, {
+  @ManyToOne(() => AdminAuthEntity, (admin) => admin.strawberryCakeRate, {
     eager: false,
   })
   admin: AdminAuthEntity;

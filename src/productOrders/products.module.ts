@@ -12,6 +12,8 @@ import { ProductService } from './productOrderService/productOrderService';
 import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
 import { SurprisePackageOrderRepository } from './productOrderRepository/surprisePackageOrderRepository';
 import { SurprisePackageOrderEntity } from './productOrderEntity/surprisePackageOrderEntity';
+import { BudgetCakeOrderEntity } from './productOrderEntity/budgetCakeOrderEntity';
+import { BudgetCakeOrderRepository } from './productOrderRepository/budgetCakeOrderRepository';
 
 @Module({
   imports: [
@@ -24,12 +26,14 @@ import { SurprisePackageOrderEntity } from './productOrderEntity/surprisePackage
       ProductRepository,
       SurprisePackageEntity,
       SurprisePackageOrderEntity,
+      BudgetCakeOrderEntity,
     ]),
   ],
   providers: [
     ProductRepository,
     ChopsOrderRepository,
     SurprisePackageOrderRepository,
+    BudgetCakeOrderRepository,
     ProductService,
   ],
   controllers: [ProductController],

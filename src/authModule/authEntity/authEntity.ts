@@ -11,6 +11,8 @@ import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordRe
 import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/productOrderEntity';
 import { ChopsOrderEntity } from 'src/productOrders/productOrderEntity/chopsOrderEntity';
 import { SurprisePackageOrderEntity } from 'src/productOrders/productOrderEntity/surprisePackageOrderEntity';
+import { BudgetCakeOrderEntity } from 'src/productOrders/productOrderEntity/budgetCakeOrderEntity';
+import { CakeVariantEntity } from 'src/productOrders/productOrderEntity/cakeVariantEntity';
 
 @Entity()
 @Unique(['email'])
@@ -49,6 +51,11 @@ export class AuthEntity extends BaseEntity {
   })
   orderName: ProductOrderEntity;
 
+  @OneToMany(() => BudgetCakeOrderEntity, (budgetCakeId) => budgetCakeId.user, {
+    eager: true,
+  })
+  budgetCakeId: BudgetCakeOrderEntity;
+
   @OneToMany(() => ChopsOrderEntity, (orderTitle) => orderTitle.user, {
     eager: true,
   })
@@ -62,6 +69,11 @@ export class AuthEntity extends BaseEntity {
     },
   )
   packageName: SurprisePackageOrderEntity;
+
+  @OneToMany(() => CakeVariantEntity, (variantId) => variantId.user, {
+    eager: true,
+  })
+  variantId: CakeVariantEntity;
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);

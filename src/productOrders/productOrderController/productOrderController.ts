@@ -39,6 +39,7 @@ import {
 import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
 import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
 import { SurprisePackageOrderEntity } from '../productOrderEntity/surprisePackageOrderEntity';
+import { BudgetCakeOrderEntity } from '../productOrderEntity/budgetCakeOrderEntity';
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -76,6 +77,24 @@ export class ProductController {
     console.log('wahala');
 
     return await this.productService.genericProductOrder(
+      genericProductOrderDto,
+      user,
+      req,
+    );
+  }
+
+  @Post('/budgetCakeOrder')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(ValidationPipe)
+  async budgetCakeOrder(
+    @GetUser() user: AuthEntity,
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req: Request | any,
+    @Body() genericProductOrderDto?: GenericProductOrderDto,
+  ): Promise<BudgetCakeOrderEntity | any> {
+    console.log('wahala');
+
+    return await this.productService.budgetCakeOrder(
       genericProductOrderDto,
       user,
       req,

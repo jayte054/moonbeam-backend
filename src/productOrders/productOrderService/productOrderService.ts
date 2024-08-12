@@ -24,6 +24,8 @@ import {
 } from 'src/types';
 import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
 import { SurprisePackageOrderEntity } from '../productOrderEntity/surprisePackageOrderEntity';
+import { BudgetCakeOrderRepository } from '../productOrderRepository/budgetCakeOrderRepository';
+import { BudgetCakeOrderEntity } from '../productOrderEntity/budgetCakeOrderEntity';
 
 @Injectable()
 export class ProductService {
@@ -32,6 +34,7 @@ export class ProductService {
     private productRepository: ProductRepository,
     private chopsOrderRepository: ChopsOrderRepository,
     private surprisePackageOrderRepository: SurprisePackageOrderRepository,
+    private budgetCakeOrderRepository: BudgetCakeOrderRepository,
   ) {}
 
   async createCustomProductOrder(
@@ -52,6 +55,18 @@ export class ProductService {
     req: Request,
   ): Promise<ProductOrderEntity | any> {
     return await this.productRepository.genericProductOrder(
+      genericProductOrderDto,
+      user,
+      req,
+    );
+  }
+
+  async budgetCakeOrder(
+    genericProductOrderDto: GenericProductOrderDto,
+    user: AuthEntity,
+    req: Request,
+  ): Promise<BudgetCakeOrderEntity | any> {
+    return await this.budgetCakeOrderRepository.budgetCakeOrder(
       genericProductOrderDto,
       user,
       req,
