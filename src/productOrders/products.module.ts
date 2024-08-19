@@ -14,6 +14,12 @@ import { SurprisePackageOrderRepository } from './productOrderRepository/surpris
 import { SurprisePackageOrderEntity } from './productOrderEntity/surprisePackageOrderEntity';
 import { BudgetCakeOrderEntity } from './productOrderEntity/budgetCakeOrderEntity';
 import { BudgetCakeOrderRepository } from './productOrderRepository/budgetCakeOrderRepository';
+import { CustomOrderEntity } from './productOrderEntity/customProductOrderEntity';
+import { CustomCakeOrderRepository } from './productOrderRepository/CustomOrderRepository';
+import { CustomPackageOrderEntity } from './productOrderEntity/customPacakgeOrderEntity';
+import { CustomPackageOrderRepository } from './productOrderRepository/customPackageOrderRepository';
+import { CustomChopsOrderEntity } from './productOrderEntity/customChopsEntity';
+import { CustomChopsRepository } from './productOrderRepository/customChopsOrderRepository';
 
 @Module({
   imports: [
@@ -27,6 +33,9 @@ import { BudgetCakeOrderRepository } from './productOrderRepository/budgetCakeOr
       SurprisePackageEntity,
       SurprisePackageOrderEntity,
       BudgetCakeOrderEntity,
+      CustomOrderEntity,
+      CustomPackageOrderEntity,
+      CustomChopsOrderEntity,
     ]),
   ],
   providers: [
@@ -34,6 +43,9 @@ import { BudgetCakeOrderRepository } from './productOrderRepository/budgetCakeOr
     ChopsOrderRepository,
     SurprisePackageOrderRepository,
     BudgetCakeOrderRepository,
+    CustomCakeOrderRepository,
+    CustomPackageOrderRepository,
+    CustomChopsRepository,
     ProductService,
   ],
   controllers: [ProductController],

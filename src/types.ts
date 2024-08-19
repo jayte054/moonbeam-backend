@@ -151,3 +151,18 @@ export type diamondPackageOrderType = {
   addInfo: string;
   userId: string;
 };
+
+export type customPackageOrderType = { 
+  orderName: string;
+  item: string[]; 
+  deliveryDate: string;  
+  addInfo: string;
+}
+
+export type chopsOrderType = {
+  orderName: string;
+  chopType: string;
+  numberOfPacks: string;
+  deliveryDate: string;
+  description: string;
+}

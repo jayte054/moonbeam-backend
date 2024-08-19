@@ -13,6 +13,8 @@ import { ChopsOrderEntity } from 'src/productOrders/productOrderEntity/chopsOrde
 import { SurprisePackageOrderEntity } from 'src/productOrders/productOrderEntity/surprisePackageOrderEntity';
 import { BudgetCakeOrderEntity } from 'src/productOrders/productOrderEntity/budgetCakeOrderEntity';
 import { CakeVariantEntity } from 'src/productOrders/productOrderEntity/cakeVariantEntity';
+import { CustomOrderEntity } from 'src/productOrders/productOrderEntity/customProductOrderEntity';
+import { CustomChopsOrderEntity } from 'src/productOrders/productOrderEntity/customChopsEntity';
 
 @Entity()
 @Unique(['email'])
@@ -50,6 +52,21 @@ export class AuthEntity extends BaseEntity {
     eager: true,
   })
   orderName: ProductOrderEntity;
+
+  @OneToMany(() => CustomOrderEntity, (customCakeId) => customCakeId.user, {
+    eager: true,
+  })
+  customCakeId: CustomOrderEntity;
+
+  @OneToMany(() => CustomOrderEntity, (customCakeId) => customCakeId.user, {
+    eager: true,
+  })
+  customPackageId: CustomOrderEntity;
+
+  @OneToMany(() => CustomChopsOrderEntity, (chopsId) => chopsId.user, {
+    eager: true,
+  })
+  chopsId: CustomChopsOrderEntity;
 
   @OneToMany(() => BudgetCakeOrderEntity, (budgetCakeId) => budgetCakeId.user, {
     eager: true,

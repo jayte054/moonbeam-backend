@@ -279,3 +279,63 @@ export class UpdateSurprisePackageOrderDto {
 
   deliveryDate?: string;
 }
+
+export class CustomPackageOrderDto {
+  @IsNotEmpty()
+  @IsString()
+  orderName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  item: string;
+
+  @IsNotEmpty()
+  @IsString()
+  deliveryDate: string;
+
+  @IsNotEmpty()
+  @IsString()
+  addInfo: string;
+
+  @IsString()
+  status: OrderStatus;
+}
+
+export class UpdateCustomPackageOrderDto {
+  orderName?: string;
+  item?: string;
+  deliveryDate?: string;
+  addInfo?: string;
+  status?: OrderStatus;
+}
+
+export class CreateChopsOrderDto {
+  @IsString()
+  @IsNotEmpty()
+  orderName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  chopType: string;
+
+  @IsString()
+  @IsNotEmpty()
+  numberOfPacks: string;
+
+  @IsString()
+  @IsNotEmpty()
+  deliveryDate: string;
+
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+}
+
+export class UpdateCustomChopOrderDto {
+  orderName?: string;
+  chopType?: string;
+  numberOfPacks?: string;
+  deliveryDate?: string;
+  description?: string;
+  status: OrderStatus;
+}
