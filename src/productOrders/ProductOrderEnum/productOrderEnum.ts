@@ -5,6 +5,7 @@ export enum ProductType {
   Anniversary = 'Anniversary',
   Chops_Pastries = 'Chops / Pastries',
   Surprise_Package = 'surprise package',
+  Cake_Variant = 'cake variant'
 }
 
 export enum ProductInch {

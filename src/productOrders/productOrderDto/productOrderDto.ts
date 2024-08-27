@@ -339,3 +339,27 @@ export class UpdateCustomChopOrderDto {
   description?: string;
   status: OrderStatus;
 }
+
+export class CartDto {
+  @IsString()
+  @IsNotEmpty()
+  itemName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  price: string;
+
+  @IsString()
+  @IsNotEmpty()
+  imageUrl: string;
+
+  @IsString()
+  @IsNotEmpty()
+  itemType: string;
+
+  quantity?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  productOrderId: string;
+}

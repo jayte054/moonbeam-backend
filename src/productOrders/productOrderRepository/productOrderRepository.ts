@@ -11,6 +11,7 @@ import {
   GenericProductOrderDto,
   UpdateOrderDto,
   GenericChopsOrderDto,
+  CartDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
@@ -27,6 +28,9 @@ import { v4 as uuid } from 'uuid';
 import { MailerService } from 'src/mailerModule/mailerService';
 import { fetchDesignRate, fetchRate } from '../productUtility';
 import { CloudinaryUrlDto } from '../../cloudinary/coundinaryDto/cloudinaryUrlDto';
+import { ProductService } from '../productOrderService/productOrderService';
+import { CartRepository } from './cartRepository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProductRepository extends Repository<ProductOrderEntity> {
@@ -35,6 +39,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     private dataSource: DataSource,
     private cloudinaryService: CloudinaryService,
     private readonly mailerService: MailerService,
+    @InjectRepository(CartRepository)
+    private cartRepository: CartRepository
   ) {
     super(ProductOrderEntity, dataSource.createEntityManager());
   }
@@ -163,7 +169,6 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     const {
       orderName,
       deliveryDate,
-      // imageUrl,
       description,
       productFlavour,
       designCovering,
@@ -243,8 +248,24 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.user = user;
     console.log(order);
     const email = user.email;
+
+    const cartDto: CartDto = {
+      itemName: '',
+      price: '',
+      imageUrl: '',
+      productOrderId: '',
+      itemType: ''
+    };
+
+    cartDto["itemName"] = order.orderName;
+    cartDto["price"] = order.price;
+    cartDto['imageUrl'] = order.imageUrl;
+    cartDto['productOrderId'] = order.id;
+    cartDto['itemType'] = order.type;
+
     try {
       await order.save();
+      await this.cartRepository.addToCart(user, cartDto)
       await this.mailerService.productOrderMail(email, order);
       this.logger.verbose(
         `user ${user} has successfully placed an order ${order.id}`,
@@ -279,18 +300,20 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     const query = this.createQueryBuilder('orderName');
     query.where('orderName.userId = :userId', { userId: user.id });
     console.log(user);
-    const orders = await query.getMany();
-    console.log(orders);
+    
     try {
+      const orders = await query.getMany();
+      console.log(orders);
       this.logger.verbose(
         `user with id ${user.id} orders fetched successfully`,
       );
+    return orders;
+
     } catch (error) {
       this.logger.error(`orders for user ${user.id} not found`);
       throw new NotFoundException(`orders for user ${user.id} not found`);
     }
 
-    return orders;
   }
 
   async getOrderWithId(

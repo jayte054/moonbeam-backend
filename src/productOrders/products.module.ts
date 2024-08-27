@@ -20,6 +20,8 @@ import { CustomPackageOrderEntity } from './productOrderEntity/customPacakgeOrde
 import { CustomPackageOrderRepository } from './productOrderRepository/customPackageOrderRepository';
 import { CustomChopsOrderEntity } from './productOrderEntity/customChopsEntity';
 import { CustomChopsRepository } from './productOrderRepository/customChopsOrderRepository';
+import { CartEntity } from './productOrderEntity/cartEntity';
+import { CartRepository } from './productOrderRepository/cartRepository';
 
 @Module({
   imports: [
@@ -36,6 +38,7 @@ import { CustomChopsRepository } from './productOrderRepository/customChopsOrder
       CustomOrderEntity,
       CustomPackageOrderEntity,
       CustomChopsOrderEntity,
+      CartEntity
     ]),
   ],
   providers: [
@@ -46,6 +49,7 @@ import { CustomChopsRepository } from './productOrderRepository/customChopsOrder
     CustomCakeOrderRepository,
     CustomPackageOrderRepository,
     CustomChopsRepository,
+    CartRepository,
     ProductService,
   ],
   controllers: [ProductController],

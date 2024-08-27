@@ -14,6 +14,7 @@ import {
   UpdateCustomPackageOrderDto,
   CreateChopsOrderDto,
   UpdateCustomChopOrderDto,
+  CartDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ProductRepository } from '../productOrderRepository/productOrderRepository';
@@ -22,6 +23,7 @@ import { ChopsOrderType } from '../productOrderRepository/chopsOrderRepository';
 import { SurprisePackageOrderRepository } from '../productOrderRepository/surprisePackageOrderRepository';
 import {
   bronzePackageOrderType,
+  CartObject,
   chopsOrderType,
   diamondPackageOrderType,
   goldPackageOrderType,
@@ -38,6 +40,8 @@ import { customPackageOrderType } from 'src/types';
 import { CustomPackageOrderEntity } from '../productOrderEntity/customPacakgeOrderEntity';
 import { CustomChopsRepository } from '../productOrderRepository/customChopsOrderRepository';
 import { CustomChopsOrderEntity } from '../productOrderEntity/customChopsEntity';
+import { CartRepository } from '../productOrderRepository/cartRepository';
+import { CartEntity } from '../productOrderEntity/cartEntity';
 
 @Injectable()
 export class ProductService {
@@ -49,6 +53,7 @@ export class ProductService {
     @InjectRepository(CustomCakeOrderRepository)
     @InjectRepository(CustomPackageOrderRepository)
     @InjectRepository(CustomChopsRepository)
+    @InjectRepository(CartRepository)
     private productRepository: ProductRepository,
     private chopsOrderRepository: ChopsOrderRepository,
     private surprisePackageOrderRepository: SurprisePackageOrderRepository,
@@ -56,6 +61,7 @@ export class ProductService {
     private customCakeOrderRepository: CustomCakeOrderRepository,
     private customPackageOrderRepository: CustomPackageOrderRepository,
     private customChopsRepository: CustomChopsRepository,
+    private cartRepository: CartRepository
   ) {}
 
   async createCustomProductOrder(
@@ -160,6 +166,10 @@ export class ProductService {
     );
   }
 
+  async addToCart(user: AuthEntity, cartDto: CartDto): Promise<CartObject> {
+    return await this.cartRepository.addToCart(user, cartDto)
+  }
+
   async getOrders(user: AuthEntity): Promise<ProductOrderEntity[]> {
     return await this.productRepository.getOrders(user);
   }
@@ -206,6 +216,10 @@ export class ProductService {
     user: AuthEntity,
   ): Promise<ChopsOrderEntity> {
     return await this.chopsOrderRepository.getChopOrderWithId(id, user);
+  }
+
+  async fetchCartItems(user:AuthEntity): Promise<CartEntity[]> {
+    return await this.cartRepository.fetchCartItems(user)
   }
 
   async updateChopOrders(

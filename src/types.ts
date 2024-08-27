@@ -166,3 +166,12 @@ export type chopsOrderType = {
   deliveryDate: string;
   description: string;
 }
+
+export type CartObject = {
+  itemName: string;
+  price:string;
+  imageUrl:string;
+  quantity: string;
+  productOrderId: string;
+  userId: string
+}

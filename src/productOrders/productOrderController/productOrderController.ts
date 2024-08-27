@@ -49,6 +49,7 @@ import { BudgetCakeOrderEntity } from '../productOrderEntity/budgetCakeOrderEnti
 import { CustomOrderEntity } from '../productOrderEntity/customProductOrderEntity';
 import { CustomPackageOrderEntity } from '../productOrderEntity/customPacakgeOrderEntity';
 import { CustomChopsOrderEntity } from '../productOrderEntity/customChopsEntity';
+import { CartEntity } from '../productOrderEntity/cartEntity';
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -221,6 +222,13 @@ export class ProductController {
     @GetUser() user: AuthEntity,
   ): Promise<SurprisePackageOrderEntity[]> {
     return await this.productService.getSurprisePackageOrders(user);
+  }
+
+  @Get('/fetchCartItems')
+  async fetchCartItems(
+    @GetUser() user: AuthEntity
+  ): Promise<CartEntity[]> {
+    return await this.productService.fetchCartItems(user)
   }
 
   @Get('/:id')

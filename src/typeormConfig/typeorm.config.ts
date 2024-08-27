@@ -18,6 +18,7 @@ import { CakeVariantEntity } from 'src/productOrders/productOrderEntity/cakeVari
 import { CustomOrderEntity } from 'src/productOrders/productOrderEntity/customProductOrderEntity';
 import { CustomPackageOrderEntity } from 'src/productOrders/productOrderEntity/customPacakgeOrderEntity';
 import { CustomChopsOrderEntity } from 'src/productOrders/productOrderEntity/customChopsEntity';
+import { CartEntity } from 'src/productOrders/productOrderEntity/cartEntity';
 
 const dbConfig: any | unknown = config.get('db');
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -46,6 +47,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     CustomOrderEntity,
     CustomPackageOrderEntity,
     CustomChopsOrderEntity,
+    CartEntity,
   ],
   synchronize: process.env.TypeORM_SYNC || dbConfig.synchronize,
   migrations: ['dist/migrations/*.js'], // Specify your migration directory,
