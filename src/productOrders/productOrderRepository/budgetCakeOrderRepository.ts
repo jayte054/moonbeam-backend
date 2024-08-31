@@ -11,6 +11,7 @@ import {
   GenericProductOrderDto,
   UpdateOrderDto,
   GenericChopsOrderDto,
+  CartDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
@@ -28,6 +29,8 @@ import { MailerService } from 'src/mailerModule/mailerService';
 import { fetchDesignRate, fetchRate } from '../productUtility';
 import { CloudinaryUrlDto } from '../../cloudinary/coundinaryDto/cloudinaryUrlDto';
 import { BudgetCakeOrderEntity } from '../productOrderEntity/budgetCakeOrderEntity';
+import { CartRepository } from './cartRepository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity> {
@@ -36,6 +39,8 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
     private dataSource: DataSource,
     private cloudinaryService: CloudinaryService,
     private readonly mailerService: MailerService,
+    @InjectRepository(CartRepository)
+    private cartRepository: CartRepository,
   ) {
     super(BudgetCakeOrderEntity, dataSource.createEntityManager());
   }
@@ -125,9 +130,24 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
     order.user = user;
     console.log(order);
     const email = user.email;
+
+    const cartDto: CartDto = {
+      itemName: '',
+      price: '',
+      imageUrl: '',
+      productOrderId: '',
+      itemType: '',
+    };
+
+    cartDto['itemName'] = order.orderName;
+    cartDto['price'] = order.price;
+    cartDto['imageUrl'] = order.imageUrl;
+    cartDto['productOrderId'] = order.budgetCakeId;
+    cartDto['itemType'] = order.type;
     try {
       await order.save();
       await this.mailerService.budgetCakeOrderMail(email, order);
+      await this.cartRepository.addToCart(user, cartDto);
       this.logger.verbose(
         `user ${user} has successfully placed an order ${order.budgetCakeId}`,
       );
