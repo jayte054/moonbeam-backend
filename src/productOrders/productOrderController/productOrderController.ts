@@ -150,6 +150,7 @@ export class ProductController {
     @GetUser() user: AuthEntity,
     @Body() surprisePackageOrderDto: SurprisePackageOrderDto,
   ): Promise<bronzePackageOrderType> {
+    console.log("bronze")
     return await this.productService.bronzePackageOrder(
       surprisePackageOrderDto,
       user,

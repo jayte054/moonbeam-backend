@@ -8,6 +8,7 @@ import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import { SurprisePackageOrderEntity } from '../productOrderEntity/surprisePackageOrderEntity';
 import { MailerService } from 'src/mailerModule/mailerService';
 import {
+  CartDto,
   SurprisePackageOrderDto,
   UpdateSurprisePackageOrderDto,
 } from '../productOrderDto/productOrderDto';
@@ -20,6 +21,8 @@ import {
   goldPackageOrderType,
   silverPackageOrderType,
 } from 'src/types';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CartRepository } from './cartRepository';
 
 @Injectable()
 export class SurprisePackageOrderRepository extends Repository<SurprisePackageOrderEntity> {
@@ -27,6 +30,8 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
   constructor(
     private dataSource: DataSource,
     private mailerService: MailerService,
+    @InjectRepository(CartRepository)
+    private cartRepository: CartRepository,
   ) {
     super(SurprisePackageOrderEntity, dataSource.createEntityManager());
   }
@@ -69,9 +74,26 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       year: 'numeric',
     });
     packageOrder.user = user;
+
+    const cartDto: CartDto = {
+      itemName: '',
+      price: '',
+      imageUrl: '',
+      productOrderId: '',
+      itemType: '',
+    };
+
     try {
       await packageOrder.save();
+
+      cartDto['itemName'] = packageOrder.packageOrderName;
+      cartDto['price'] = packageOrder.price;
+      cartDto['imageUrl'] = packageOrder.imageUrl;
+      cartDto['productOrderId'] = packageOrder.packageId;
+      cartDto['itemType'] = "bronzePackage";
+
       await this.mailerService.bronzePackageOrderMail(user.email, packageOrder);
+      await this.cartRepository.addToCart(user, cartDto);
       this.logger.verbose(`
         user with id ${user.id} has successfully placed with order ${packageOrder.packageOrderName}
         `);
@@ -146,9 +168,23 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
     });
     packageOrder.user = user;
 
+     const cartDto: CartDto = {
+       itemName: '',
+       price: '',
+       imageUrl: '',
+       productOrderId: '',
+       itemType: '',
+     };
+
     try {
       await packageOrder.save();
+       cartDto['itemName'] = packageOrder.packageOrderName;
+       cartDto['price'] = packageOrder.price;
+       cartDto['imageUrl'] = packageOrder.imageUrl;
+       cartDto['productOrderId'] = packageOrder.packageId;
+       cartDto['itemType'] = 'silverPackage';
       await this.mailerService.silverPackageOrderMail(user.email, packageOrder);
+      await this.cartRepository.addToCart(user, cartDto);
       this.logger.verbose(`
         user with id ${user.id} has successfully placed with order ${packageOrder.packageOrderName}
         `);
@@ -225,9 +261,23 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
     });
     packageOrder.user = user;
 
+     const cartDto: CartDto = {
+       itemName: '',
+       price: '',
+       imageUrl: '',
+       productOrderId: '',
+       itemType: '',
+     };
+
     try {
       await packageOrder.save();
+      cartDto['itemName'] = packageOrder.packageOrderName;
+      cartDto['price'] = packageOrder.price;
+      cartDto['imageUrl'] = packageOrder.imageUrl;
+      cartDto['productOrderId'] = packageOrder.packageId;
+      cartDto['itemType'] = 'goldPackage';
       await this.mailerService.goldPackageOrderMail(user.email, packageOrder);
+      await this.cartRepository.addToCart(user, cartDto);
       this.logger.verbose(`
         user with id ${user.id} has successfully placed with order ${packageOrder.packageOrderName}
         `);
@@ -309,12 +359,26 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
     });
     packageOrder.user = user;
 
+     const cartDto: CartDto = {
+       itemName: '',
+       price: '',
+       imageUrl: '',
+       productOrderId: '',
+       itemType: '',
+     };
+
     try {
       await packageOrder.save();
+      cartDto['itemName'] = packageOrder.packageOrderName;
+      cartDto['price'] = packageOrder.price;
+      cartDto['imageUrl'] = packageOrder.imageUrl;
+      cartDto['productOrderId'] = packageOrder.packageId;
+      cartDto['itemType'] = 'silverPackage';
       await this.mailerService.diamondPackageOrderMail(
         user.email,
         packageOrder,
       );
+      await this.cartRepository.addToCart(user, cartDto);
       this.logger.verbose(`
         user with id ${user.id} has successfully placed with order ${packageOrder.packageOrderName}
         `);
