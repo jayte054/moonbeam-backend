@@ -124,3 +124,8 @@ export enum BronzePackage {
 
   imageUrl = 'imageUrl',
 }
+
+export enum VariantType {
+  foilCake = "foilCake",
+  cakeParfait = "cakeParfait"
+}

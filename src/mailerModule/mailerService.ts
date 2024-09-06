@@ -21,6 +21,7 @@ import { BudgetCakeOrderEntity } from 'src/productOrders/productOrderEntity/budg
 import { CustomOrderEntity } from 'src/productOrders/productOrderEntity/customProductOrderEntity';
 import { CustomPackageOrderEntity } from 'src/productOrders/productOrderEntity/customPacakgeOrderEntity';
 import { CustomChopsOrderEntity } from 'src/productOrders/productOrderEntity/customChopsEntity';
+import { CakeVariantEntity } from 'src/productOrders/productOrderEntity/cakeVariantEntity';
 
 @Injectable()
 export class MailerService {
@@ -295,6 +296,98 @@ export class MailerService {
     try {
       await this.transporter.sendMail(mailOptions);
       this.logger.verbose(`User ${email} product order mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
+    }
+  }
+
+  async foilCakeOrderMail(
+    email: string,
+    foilCakeOrder: CakeVariantEntity,
+  ): Promise<void> {
+    const name = foilCakeOrder.orderName;
+    const quantity = foilCakeOrder.quantity;
+    const price = foilCakeOrder.price;
+    const status = foilCakeOrder.status;
+    const description = foilCakeOrder.description;
+    const deliveryDate = foilCakeOrder.deliveryDate;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.logger.error(`Invalid email format: ${email}`);
+      throw new BadRequestException(`Invalid email format: ${email}`);
+    }
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+             <p> Order Name: ${name}</p>
+             <p> Inches: ${quantity}</p>
+             <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${description}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully placed.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(
+        `User ${email} foilCake order mail sent successfully`,
+      );
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
+    }
+  }
+
+  async cakeParfaitOrderMail(
+    email: string,
+    foilCakeOrder: CakeVariantEntity,
+  ): Promise<void> {
+    const name = foilCakeOrder.orderName;
+    const quantity = foilCakeOrder.quantity;
+    const price = foilCakeOrder.price;
+    const status = foilCakeOrder.status;
+    const description = foilCakeOrder.description;
+    const deliveryDate = foilCakeOrder.deliveryDate;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.logger.error(`Invalid email format: ${email}`);
+      throw new BadRequestException(`Invalid email format: ${email}`);
+    }
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+             <p> Order Name: ${name}</p>
+             <p> Inches: ${quantity}</p>
+             <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${description}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully placed.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(
+        `User ${email} foilCake order mail sent successfully`,
+      );
     } catch (error) {
       this.logger.error(`User ${email} invalid email address`);
       throw new InternalServerErrorException(

@@ -349,9 +349,8 @@ export class CartDto {
   @IsNotEmpty()
   price: string;
 
-  @IsString()
-  @IsNotEmpty()
-  imageUrl: string;
+  
+  imageUrl?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -362,4 +361,22 @@ export class CartDto {
   @IsString()
   @IsNotEmpty()
   productOrderId: string;
+}
+
+export class FoilCakeDto {
+  @IsString()
+  @IsNotEmpty()
+  orderName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  quantity: string;
+
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
+  @IsString()
+  @IsNotEmpty()
+  deliveryDate: string;
 }

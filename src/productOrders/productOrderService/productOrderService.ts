@@ -15,6 +15,7 @@ import {
   CreateChopsOrderDto,
   UpdateCustomChopOrderDto,
   CartDto,
+  FoilCakeDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ProductRepository } from '../productOrderRepository/productOrderRepository';
@@ -26,6 +27,7 @@ import {
   CartObject,
   chopsOrderType,
   diamondPackageOrderType,
+  FoilCakeObject,
   goldPackageOrderType,
   silverPackageOrderType,
 } from 'src/types';
@@ -42,6 +44,8 @@ import { CustomChopsRepository } from '../productOrderRepository/customChopsOrde
 import { CustomChopsOrderEntity } from '../productOrderEntity/customChopsEntity';
 import { CartRepository } from '../productOrderRepository/cartRepository';
 import { CartEntity } from '../productOrderEntity/cartEntity';
+import { CakeVariantRepository } from '../productOrderRepository/cakeVariantRepository';
+import { CakeVariantEntity } from '../productOrderEntity/cakeVariantEntity';
 
 @Injectable()
 export class ProductService {
@@ -53,6 +57,7 @@ export class ProductService {
     @InjectRepository(CustomCakeOrderRepository)
     @InjectRepository(CustomPackageOrderRepository)
     @InjectRepository(CustomChopsRepository)
+    @InjectRepository(CakeVariantRepository)
     @InjectRepository(CartRepository)
     private productRepository: ProductRepository,
     private chopsOrderRepository: ChopsOrderRepository,
@@ -61,7 +66,8 @@ export class ProductService {
     private customCakeOrderRepository: CustomCakeOrderRepository,
     private customPackageOrderRepository: CustomPackageOrderRepository,
     private customChopsRepository: CustomChopsRepository,
-    private cartRepository: CartRepository
+    private cakeVariantRepository: CakeVariantRepository,
+    private cartRepository: CartRepository,
   ) {}
 
   async createCustomProductOrder(
@@ -86,8 +92,14 @@ export class ProductService {
     );
   }
 
-  async customChopsOrder(createChopsOrderDto: CreateChopsOrderDto, user: AuthEntity): Promise<chopsOrderType> {
-    return await this.customChopsRepository.customChopsOrder(createChopsOrderDto, user);
+  async customChopsOrder(
+    createChopsOrderDto: CreateChopsOrderDto,
+    user: AuthEntity,
+  ): Promise<chopsOrderType> {
+    return await this.customChopsRepository.customChopsOrder(
+      createChopsOrderDto,
+      user,
+    );
   }
 
   async genericProductOrder(
@@ -166,8 +178,22 @@ export class ProductService {
     );
   }
 
+  async foilCakeOrder(
+    foilCakeDto: FoilCakeDto,
+    user: AuthEntity,
+  ): Promise<FoilCakeObject> {
+    return await this.cakeVariantRepository.foilCakeOrder(foilCakeDto, user);
+  }
+
+  async cakeParfaitOrder(
+    foilCakeDto: FoilCakeDto,
+    user: AuthEntity,
+  ): Promise<FoilCakeObject> {
+    return await this.cakeVariantRepository.cakeParfaitOrder(foilCakeDto, user);
+  }
+
   async addToCart(user: AuthEntity, cartDto: CartDto): Promise<CartObject> {
-    return await this.cartRepository.addToCart(user, cartDto)
+    return await this.cartRepository.addToCart(user, cartDto);
   }
 
   async getOrders(user: AuthEntity): Promise<ProductOrderEntity[]> {
@@ -181,8 +207,10 @@ export class ProductService {
     return this.productRepository.getOrderWithId(id, user);
   }
 
-  async getCustomChopsOrder(user: AuthEntity): Promise<CustomChopsOrderEntity[]> {
-    return await this.customChopsRepository.getCustomChopsOrder(user)
+  async getCustomChopsOrder(
+    user: AuthEntity,
+  ): Promise<CustomChopsOrderEntity[]> {
+    return await this.customChopsRepository.getCustomChopsOrder(user);
   }
 
   async getCustomPackageOrder(
@@ -191,20 +219,40 @@ export class ProductService {
     return await this.customPackageOrderRepository.getCustomPackageOrder(user);
   }
 
-  async getCustomChopsOrderWithId(chopsId: string, user:AuthEntity): Promise<CustomChopsOrderEntity> {
-    return await this.customChopsRepository.getCustomChopOrderWithId(chopsId, user);
+  async getCustomChopsOrderWithId(
+    chopsId: string,
+    user: AuthEntity,
+  ): Promise<CustomChopsOrderEntity> {
+    return await this.customChopsRepository.getCustomChopOrderWithId(
+      chopsId,
+      user,
+    );
   }
 
-  async getCustomPackageOrderWithId(customPackageId: string, user: AuthEntity): Promise<CustomPackageOrderEntity> {
-    return await this.customPackageOrderRepository.getCustomPackageOrderWithId(customPackageId, user);
+  async getCustomPackageOrderWithId(
+    customPackageId: string,
+    user: AuthEntity,
+  ): Promise<CustomPackageOrderEntity> {
+    return await this.customPackageOrderRepository.getCustomPackageOrderWithId(
+      customPackageId,
+      user,
+    );
+  }
+
+  async getCakeVaraintOrders (user: AuthEntity): Promise<CakeVariantEntity[]> {
+    return await this.cakeVariantRepository.getCakeVariantOrders(user)
   }
 
   async updateCustomPackageOrder(
     customPackageId: string,
     user: AuthEntity,
-    updateCustomPackageOrderDto: UpdateCustomPackageOrderDto
+    updateCustomPackageOrderDto: UpdateCustomPackageOrderDto,
   ): Promise<CustomPackageOrderEntity> {
-    return await this.customPackageOrderRepository.updateCustomPackageOrder(customPackageId, user, updateCustomPackageOrderDto);
+    return await this.customPackageOrderRepository.updateCustomPackageOrder(
+      customPackageId,
+      user,
+      updateCustomPackageOrderDto,
+    );
   }
 
   async getChopsOrders(user: AuthEntity): Promise<ChopsOrderEntity[]> {
@@ -218,8 +266,8 @@ export class ProductService {
     return await this.chopsOrderRepository.getChopOrderWithId(id, user);
   }
 
-  async fetchCartItems(user:AuthEntity): Promise<CartEntity[]> {
-    return await this.cartRepository.fetchCartItems(user)
+  async fetchCartItems(user: AuthEntity): Promise<CartEntity[]> {
+    return await this.cartRepository.fetchCartItems(user);
   }
 
   async updateChopOrders(
@@ -234,12 +282,16 @@ export class ProductService {
     );
   }
 
-  async updateCustomChopsOrder(updateCustomChopsOrder: UpdateCustomChopOrderDto, user: AuthEntity, chopsId: string): Promise<CustomChopsOrderEntity> {
+  async updateCustomChopsOrder(
+    updateCustomChopsOrder: UpdateCustomChopOrderDto,
+    user: AuthEntity,
+    chopsId: string,
+  ): Promise<CustomChopsOrderEntity> {
     return await this.customChopsRepository.updateCustomChopOrder(
       updateCustomChopsOrder,
       user,
-      chopsId
-    )
+      chopsId,
+    );
   }
 
   async getSurprisePackageOrders(

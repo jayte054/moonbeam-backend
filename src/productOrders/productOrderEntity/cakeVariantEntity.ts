@@ -6,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { OrderStatus, VariantType } from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class CakeVariantEntity extends BaseEntity {
@@ -19,10 +20,22 @@ export class CakeVariantEntity extends BaseEntity {
   quantity: string;
 
   @Column()
+  type: VariantType;
+
+  @Column()
   description: string;
 
+  @Column()
+  price: string;
+
+  @Column()
+  status: OrderStatus
+
+  @Column()
+  orderDate: string;
+
   @Column({ default: new Date() })
-  date: string;
+  deliveryDate: string;
 
   @ManyToOne(() => AuthEntity, (user) => user.variantId, { eager: false })
   user: AuthEntity;

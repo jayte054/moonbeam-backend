@@ -16,8 +16,8 @@ export class CartEntity extends BaseEntity {
   @Column()
   price: string;
 
-  @Column()
-  imageUrl: string;
+  @Column({nullable: true})
+  imageUrl?: string;
 
   @Column({nullable: true})
   quantity?: string;

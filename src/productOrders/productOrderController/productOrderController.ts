@@ -30,6 +30,7 @@ import {
   UpdateCustomPackageOrderDto,
   CreateChopsOrderDto,
   UpdateCustomChopOrderDto,
+  FoilCakeDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductService } from '../productOrderService/productOrderService';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
@@ -39,6 +40,7 @@ import {
   chopsOrderType,
   customPackageOrderType,
   diamondPackageOrderType,
+  FoilCakeObject,
   goldPackageOrderType,
   silverPackageOrderType,
 } from 'src/types';
@@ -50,6 +52,7 @@ import { CustomOrderEntity } from '../productOrderEntity/customProductOrderEntit
 import { CustomPackageOrderEntity } from '../productOrderEntity/customPacakgeOrderEntity';
 import { CustomChopsOrderEntity } from '../productOrderEntity/customChopsEntity';
 import { CartEntity } from '../productOrderEntity/cartEntity';
+import { CakeVariantEntity } from '../productOrderEntity/cakeVariantEntity';
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -79,15 +82,22 @@ export class ProductController {
     @GetUser() user: AuthEntity,
     @Body() customPackageOrderDto: CustomPackageOrderDto,
   ): Promise<customPackageOrderType> {
-    return await this.productService.customPackageOrder(customPackageOrderDto, user);
+    return await this.productService.customPackageOrder(
+      customPackageOrderDto,
+      user,
+    );
   }
 
   @Post('/postCustomChopsOrder')
   @UsePipes(ValidationPipe)
   async customChopsOrder(
-    @Body() createChopsOrderDto: CreateChopsOrderDto, 
-    @GetUser() user: AuthEntity): Promise<chopsOrderType> {
-    return await this.productService.customChopsOrder(createChopsOrderDto, user);
+    @Body() createChopsOrderDto: CreateChopsOrderDto,
+    @GetUser() user: AuthEntity,
+  ): Promise<chopsOrderType> {
+    return await this.productService.customChopsOrder(
+      createChopsOrderDto,
+      user,
+    );
   }
 
   //the title of the file on postman has to be descrbed as file
@@ -150,7 +160,7 @@ export class ProductController {
     @GetUser() user: AuthEntity,
     @Body() surprisePackageOrderDto: SurprisePackageOrderDto,
   ): Promise<bronzePackageOrderType> {
-    console.log("bronze")
+    console.log('bronze');
     return await this.productService.bronzePackageOrder(
       surprisePackageOrderDto,
       user,
@@ -193,21 +203,41 @@ export class ProductController {
     );
   }
 
+  @Post('/foilCakeOrder')
+  @UsePipes(ValidationPipe)
+  async foilCakeOrder(
+    @GetUser() user: AuthEntity,
+    @Body() foilCakeDto: FoilCakeDto,
+  ): Promise<FoilCakeObject> {
+    return await this.productService.foilCakeOrder(foilCakeDto, user);
+  }
+
+  @Post('/cakeParfaitOrder')
+  @UsePipes(ValidationPipe)
+  async cakeParfaitOrder(
+    @GetUser() user: AuthEntity,
+    @Body() foilCakeDto: FoilCakeDto,
+  ): Promise<FoilCakeObject> {
+    return await this.productService.cakeParfaitOrder(foilCakeDto, user);
+  }
+
   @Get('/getOrders')
   async getOrders(@GetUser() user: AuthEntity): Promise<ProductOrderEntity[]> {
     return await this.productService.getOrders(user);
   }
 
   @Get('/getCustomPackageOrder')
-  async getCustomPackageOrder(@GetUser() user: AuthEntity): Promise<CustomPackageOrderEntity[]> {
+  async getCustomPackageOrder(
+    @GetUser() user: AuthEntity,
+  ): Promise<CustomPackageOrderEntity[]> {
     return await this.productService.getCustomPackageOrder(user);
   }
 
   @Get('/getCustomChopsOrder')
   async getCustomChopsOrder(
-    @GetUser() user: AuthEntity
-  ): Promise<CustomChopsOrderEntity[]>{
-    return await this.productService.getCustomChopsOrder(user)
+    @GetUser() user: AuthEntity,
+  ): Promise<CustomChopsOrderEntity[]> {
+    return await this.productService.getCustomChopsOrder(user);
   }
 
   @Get('/getChopsOrder')
@@ -226,10 +256,13 @@ export class ProductController {
   }
 
   @Get('/fetchCartItems')
-  async fetchCartItems(
-    @GetUser() user: AuthEntity
-  ): Promise<CartEntity[]> {
-    return await this.productService.fetchCartItems(user)
+  async fetchCartItems(@GetUser() user: AuthEntity): Promise<CartEntity[]> {
+    return await this.productService.fetchCartItems(user);
+  }
+
+  @Get('/getCakeVariantOrders')
+  async getCakeVariantOrders(@GetUser() user: AuthEntity): Promise<CakeVariantEntity[]> {
+    return await this.productService.getCakeVaraintOrders(user);
   }
 
   @Get('/:id')
@@ -242,11 +275,14 @@ export class ProductController {
 
   @Get('/getCustomPackageWithId/:customPackageId')
   async getCustomPackagewithId(
-    @Param('customPackageId') customPackageId: string, 
-    @GetUser() user: AuthEntity
-    ): Promise<CustomPackageOrderEntity> {
-      return await this.productService.getCustomPackageOrderWithId(customPackageId, user);
-    }
+    @Param('customPackageId') customPackageId: string,
+    @GetUser() user: AuthEntity,
+  ): Promise<CustomPackageOrderEntity> {
+    return await this.productService.getCustomPackageOrderWithId(
+      customPackageId,
+      user,
+    );
+  }
 
   @Get('/getChopOrder/:id')
   async getChopOrderWithId(
@@ -259,21 +295,22 @@ export class ProductController {
   @Get('/getCustomChopsOrderWithId/:chopsId')
   async getCustomChopsWithId(
     @Param('chopsId') chopsId: string,
-    @GetUser() user: AuthEntity
+    @GetUser() user: AuthEntity,
   ): Promise<CustomChopsOrderEntity> {
     return await this.productService.getCustomChopsOrderWithId(chopsId, user);
   }
 
   @Patch('/updateCustomPackageOrder/:customPackageId')
-  async updateCustomPackageOrder (
-    @Param('customPackageId') customPackageId: string, 
-    @GetUser() user: AuthEntity, 
-    @Body() updateCustomPackageOrderDto: UpdateCustomPackageOrderDto): Promise<CustomPackageOrderEntity> {
+  async updateCustomPackageOrder(
+    @Param('customPackageId') customPackageId: string,
+    @GetUser() user: AuthEntity,
+    @Body() updateCustomPackageOrderDto: UpdateCustomPackageOrderDto,
+  ): Promise<CustomPackageOrderEntity> {
     return await this.productService.updateCustomPackageOrder(
       customPackageId,
       user,
-      updateCustomPackageOrderDto
-    )
+      updateCustomPackageOrderDto,
+    );
   }
 
   @Patch('/updateChopOrder/:id')
@@ -291,7 +328,7 @@ export class ProductController {
 
   @Patch('/updateCustomChopsOrder/:chopsId')
   async updateCustomChops(
-    @Body() updateCustomChopsOrder:UpdateCustomChopOrderDto,
+    @Body() updateCustomChopsOrder: UpdateCustomChopOrderDto,
     @GetUser() user: AuthEntity,
     @Param('chopsId') chopsId: string,
   ): Promise<CustomChopsOrderEntity> {
@@ -299,7 +336,7 @@ export class ProductController {
       updateCustomChopsOrder,
       user,
       chopsId,
-    )
+    );
   }
 
   @Get('/getSurprisePackageOrderWithId/:packageId')
