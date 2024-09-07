@@ -40,7 +40,7 @@ import {
   chopsOrderType,
   customPackageOrderType,
   diamondPackageOrderType,
-  FoilCakeObject,
+  VariantCakeObject,
   goldPackageOrderType,
   silverPackageOrderType,
 } from 'src/types';
@@ -208,7 +208,7 @@ export class ProductController {
   async foilCakeOrder(
     @GetUser() user: AuthEntity,
     @Body() foilCakeDto: FoilCakeDto,
-  ): Promise<FoilCakeObject> {
+  ): Promise<VariantCakeObject> {
     return await this.productService.foilCakeOrder(foilCakeDto, user);
   }
 
@@ -217,7 +217,7 @@ export class ProductController {
   async cakeParfaitOrder(
     @GetUser() user: AuthEntity,
     @Body() foilCakeDto: FoilCakeDto,
-  ): Promise<FoilCakeObject> {
+  ): Promise<VariantCakeObject> {
     return await this.productService.cakeParfaitOrder(foilCakeDto, user);
   }
 
@@ -261,7 +261,9 @@ export class ProductController {
   }
 
   @Get('/getCakeVariantOrders')
-  async getCakeVariantOrders(@GetUser() user: AuthEntity): Promise<CakeVariantEntity[]> {
+  async getCakeVariantOrders(
+    @GetUser() user: AuthEntity,
+  ): Promise<CakeVariantEntity[]> {
     return await this.productService.getCakeVaraintOrders(user);
   }
 

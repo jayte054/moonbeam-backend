@@ -26,7 +26,7 @@ export class CustomPackageOrderRepository extends Repository<CustomPackageOrderE
 
     const order = new CustomPackageOrderEntity();
     order.orderName = orderName;
-    order.item = [item];
+    order.item = item;
     order.deliveryDate = deliveryDate;
     order.addInfo = addInfo;
     order.orderDate = new Date().toLocaleDateString('en-US', {

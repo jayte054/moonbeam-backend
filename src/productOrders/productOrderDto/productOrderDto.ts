@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsDateString,
   IsNotEmpty,
   IsString,
@@ -286,8 +287,8 @@ export class CustomPackageOrderDto {
   orderName: string;
 
   @IsNotEmpty()
-  @IsString()
-  item: string;
+  @IsArray()
+  item: string[];
 
   @IsNotEmpty()
   @IsString()
@@ -297,8 +298,8 @@ export class CustomPackageOrderDto {
   @IsString()
   addInfo: string;
 
-  @IsString()
-  status: OrderStatus;
+  // @IsString()
+  // status: OrderStatus;
 }
 
 export class UpdateCustomPackageOrderDto {
@@ -371,6 +372,8 @@ export class FoilCakeDto {
   @IsString()
   @IsNotEmpty()
   quantity: string;
+
+  productFlavour?: ProductFlavours;
 
   @IsString()
   @IsNotEmpty()

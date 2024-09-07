@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { OrderStatus, VariantType } from '../ProductOrderEnum/productOrderEnum';
+import { OrderStatus, ProductFlavours, VariantType } from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class CakeVariantEntity extends BaseEntity {
@@ -21,6 +21,9 @@ export class CakeVariantEntity extends BaseEntity {
 
   @Column()
   type: VariantType;
+
+  @Column({nullable: true})
+  productFlavour?: ProductFlavours;
 
   @Column()
   description: string;

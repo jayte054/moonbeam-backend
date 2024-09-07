@@ -3,12 +3,12 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { AuthEntity } from "src/authModule/authEntity/authEntity";
 import { CloudinaryService } from "src/cloudinary/cloudinaryService/cloudinaryService";
 import { MailerService } from "src/mailerModule/mailerService";
-import { FoilCakeObject } from "src/types";
+import { VariantCakeObject } from 'src/types';
 import { DataSource, FindOneOptions, Repository } from "typeorm";
 import {v4 as uuid} from "uuid";
 import { CartDto, FoilCakeDto } from "../productOrderDto/productOrderDto";
 import { CakeVariantEntity } from "../productOrderEntity/cakeVariantEntity";
-import { OrderStatus, VariantType } from "../ProductOrderEnum/productOrderEnum";
+import { OrderStatus, ProductFlavours, VariantType } from "../ProductOrderEnum/productOrderEnum";
 import { fetchBudgetCakeRate, fetchRate } from "../productUtility";
 import { CartRepository } from "./cartRepository";
 
@@ -28,8 +28,9 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
   async foilCakeOrder(
     foilCakeDto: FoilCakeDto,
     user: AuthEntity,
-  ): Promise<FoilCakeObject> {
-    const { orderName, quantity, description, deliveryDate } = foilCakeDto;
+  ): Promise<VariantCakeObject> {
+    const { orderName, quantity, description, deliveryDate, productFlavour } =
+      foilCakeDto;
 
     const foilCakeOrder = new CakeVariantEntity();
 
@@ -42,6 +43,7 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
     foilCakeOrder.quantity = quantity;
     foilCakeOrder.type = VariantType.foilCake;
     foilCakeOrder.description = description;
+    foilCakeOrder.productFlavour = productFlavour;
 
     const price = Number(quantity) * foilCakeRate;
 
@@ -81,6 +83,7 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
       orderName: foilCakeOrder.orderName,
       type: foilCakeOrder.type,
       quantity: foilCakeOrder.quantity,
+      productFlaovur: foilCakeOrder.productFlavour,
       price: foilCakeOrder.price,
       description: foilCakeOrder.description,
       deliveryDate: foilCakeOrder.deliveryDate,
@@ -91,7 +94,7 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
   async cakeParfaitOrder(
     foilCakeDto: FoilCakeDto,
     user: AuthEntity,
-  ): Promise<FoilCakeObject> {
+  ): Promise<VariantCakeObject> {
     const { orderName, quantity, description, deliveryDate } = foilCakeDto;
 
     const parfaitOrder = new CakeVariantEntity();
@@ -151,24 +154,26 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
     };
   }
 
-  async getCakeVariantOrders (user: AuthEntity): Promise<CakeVariantEntity[]> {
+  async getCakeVariantOrders(user: AuthEntity): Promise<CakeVariantEntity[]> {
     const query = this.createQueryBuilder('orderName');
-    query.where('orderName.userId = :userId', { userId: user.id })
-        
-    try{
-        const orders = await query.getMany()
+    query.where('orderName.userId = :userId', { userId: user.id });
 
-         if (!orders) {
-           this.logger.error('Chops Orders not found');
-           throw new NotFoundException('Chops Orders not found');
-         }
-         
-        this.logger.verbose(`cake variants for user ${user.id} fetched successfully`)
-        return orders;
-    } catch(error) {
-        console.log(error)
-        this.logger.error(`error fetching variant cakes for user ${user.id}`)
-        throw new InternalServerErrorException(`error fetching cakes`)
+    try {
+      const orders = await query.getMany();
+
+      if (!orders) {
+        this.logger.error('Chops Orders not found');
+        throw new NotFoundException('Chops Orders not found');
+      }
+
+      this.logger.verbose(
+        `cake variants for user ${user.id} fetched successfully`,
+      );
+      return orders;
+    } catch (error) {
+      console.log(error);
+      this.logger.error(`error fetching variant cakes for user ${user.id}`);
+      throw new InternalServerErrorException(`error fetching cakes`);
     }
   }
 }

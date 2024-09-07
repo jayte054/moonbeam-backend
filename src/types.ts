@@ -1,4 +1,4 @@
-import { OrderStatus, VariantType } from './productOrders/ProductOrderEnum/productOrderEnum';
+import { OrderStatus, ProductFlavours, VariantType } from './productOrders/ProductOrderEnum/productOrderEnum';
 
 export type bronzePackageObject = {
   itemOne: string;
@@ -176,10 +176,11 @@ export type CartObject = {
   userId: string
 }
 
-export type FoilCakeObject = {
+export type VariantCakeObject = {
   variantId: string;
   orderName: string;
   type: VariantType;
+  productFlaovur?: ProductFlavours;
   price: string;
   quantity: string;
   description: string;
