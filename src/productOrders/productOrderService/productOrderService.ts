@@ -361,4 +361,8 @@ export class ProductService {
   async deleteOrder(id: string, user: AuthEntity): Promise<string> {
     return await this.productRepository.deleteOrder(id, user);
   }
+
+  async deleteCartItem(user: AuthEntity, itemId: string): Promise<string> {
+    return await this.cartRepository.deleteCartItem(user, itemId)
+  }
 }

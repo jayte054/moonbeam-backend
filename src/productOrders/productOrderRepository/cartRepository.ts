@@ -63,4 +63,22 @@ export class CartRepository extends Repository<CartEntity> {
             }
         }
 
+        deleteCartItem = async (user: AuthEntity, itemId: string) : Promise<string> => {
+            try{
+                const item = await this.delete({
+                    itemId,
+                    userId: user.id
+                })
+
+                if(!item) {
+                    this.logger.debug(`cart with id ${itemId} not found`)
+                    throw new NotFoundException(`cart with id ${itemId} not found`)
+                }
+                return (`cart item with id ${itemId} successfully deleted`)
+            }catch (error) {
+                this.logger.error(`failed to delete item with id ${itemId}`)
+                throw new InternalServerErrorException("failed to delete item")
+            }
+        }
+
 }

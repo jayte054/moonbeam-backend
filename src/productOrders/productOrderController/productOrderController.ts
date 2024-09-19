@@ -406,4 +406,12 @@ export class ProductController {
   ): Promise<string> {
     return await this.productService.deleteOrder(id, user);
   }
+
+  @Delete(`/deleteCartItem/:itemId`)
+  async deleteCartItem(
+    @Param('itemId') itemId: string,
+    @GetUser() user: AuthEntity,
+  ): Promise<string> {
+    return await this.productService.deleteCartItem(user, itemId);
+  }
 }

@@ -43,7 +43,7 @@ export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
       await order.save();
       await this.mailerService.customChopsOrderMail(user.email, order)
       this.logger.verbose(
-        `custom order with id ${order.chopsId} has been successfully created `,
+        `custom order request with id ${order.chopsId} has been successfully created `,
       );
       return {
         orderName: order.orderName,
