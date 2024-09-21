@@ -187,3 +187,16 @@ export type VariantCakeObject = {
   deliveryDate: string;
   userId: string;
 };
+
+export interface DeliveryAddressObject {
+  deliveryAddressId: string
+  firstName: string;
+  lastName: string;
+  phoneNumber: number;
+  additionalPhoneNumber?: number;
+  deliveryAddress: string; 
+  region: string;  
+  city: string;
+  defaultAddress: boolean;
+  userId: string;
+}

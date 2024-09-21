@@ -74,6 +74,7 @@ export class CartRepository extends Repository<CartEntity> {
                     this.logger.debug(`cart with id ${itemId} not found`)
                     throw new NotFoundException(`cart with id ${itemId} not found`)
                 }
+                this.logger.verbose(`item with id ${itemId} successfully deleted`)
                 return (`cart item with id ${itemId} successfully deleted`)
             }catch (error) {
                 this.logger.error(`failed to delete item with id ${itemId}`)

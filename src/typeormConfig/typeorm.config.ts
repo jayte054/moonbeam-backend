@@ -19,6 +19,7 @@ import { CustomOrderEntity } from 'src/productOrders/productOrderEntity/customPr
 import { CustomPackageOrderEntity } from 'src/productOrders/productOrderEntity/customPacakgeOrderEntity';
 import { CustomChopsOrderEntity } from 'src/productOrders/productOrderEntity/customChopsEntity';
 import { CartEntity } from 'src/productOrders/productOrderEntity/cartEntity';
+import { DeliveryAddressEntity } from 'src/deliveryModule/deliveryEntity/deliveryAddressEntity';
 
 const dbConfig: any | unknown = config.get('db');
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -48,6 +49,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     CustomPackageOrderEntity,
     CustomChopsOrderEntity,
     CartEntity,
+    DeliveryAddressEntity,
   ],
   synchronize: process.env.TypeORM_SYNC || dbConfig.synchronize,
   migrations: ['dist/migrations/*.js'], // Specify your migration directory,

@@ -16,6 +16,7 @@ import { CakeVariantEntity } from 'src/productOrders/productOrderEntity/cakeVari
 import { CustomOrderEntity } from 'src/productOrders/productOrderEntity/customProductOrderEntity';
 import { CustomChopsOrderEntity } from 'src/productOrders/productOrderEntity/customChopsEntity';
 import { CartEntity } from 'src/productOrders/productOrderEntity/cartEntity';
+import { DeliveryAddressEntity } from 'src/deliveryModule/deliveryEntity/deliveryAddressEntity';
 
 @Entity()
 @Unique(['email'])
@@ -95,6 +96,9 @@ export class AuthEntity extends BaseEntity {
 
   @OneToMany(() => CartEntity, (itemId) => itemId.user, {eager: true})
   itemId: CartEntity;
+
+  @OneToMany(() => DeliveryAddressEntity, (deliveryAddressId) => deliveryAddressId.user, {eager: true})
+  deliveryAddressId: DeliveryAddressEntity;
   
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);

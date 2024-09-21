@@ -8,6 +8,8 @@ import { CloudinaryModule } from './cloudinary/cloudinaryModule';
 import { ConfigModule } from '@nestjs/config';
 import { AdminHubModule } from './adminHubModule/adminHubModule';
 import { ProfileModule } from './profile/profileModule';
+import { DeliveryModule } from './deliveryModule/deliveryModule';
+
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { ProfileModule } from './profile/profileModule';
     ConfigModule.forRoot({ isGlobal: true }),
     AdminHubModule,
     ProfileModule,
+    DeliveryModule,
   ],
 })
 export class AppModule {}
