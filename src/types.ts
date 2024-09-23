@@ -192,8 +192,8 @@ export interface DeliveryAddressObject {
   deliveryAddressId: string
   firstName: string;
   lastName: string;
-  phoneNumber: number;
-  additionalPhoneNumber?: number;
+  phoneNumber: string;
+  additionalPhoneNumber?: string;
   deliveryAddress: string; 
   region: string;  
   city: string;

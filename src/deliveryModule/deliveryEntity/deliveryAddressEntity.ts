@@ -13,10 +13,10 @@ export class DeliveryAddressEntity extends BaseEntity {
     lastName: string;
 
     @Column()
-    phoneNumber: number;
+    phoneNumber: string;
 
     @Column({nullable: true})
-    additionalPhoneNumber?: number;
+    additionalPhoneNumber?: string;
 
     @Column()
     deliveryAddress: string;

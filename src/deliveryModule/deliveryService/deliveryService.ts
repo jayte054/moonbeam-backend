@@ -29,4 +29,12 @@ export class DeliveryService {
         return await this.deliveryAddressRepository.defaultAddress(user, deliveryAddressId)
     }
 
+    getDefaultAddress = async(user: AuthEntity) : Promise<DeliveryAddressEntity> => {
+        return await this.deliveryAddressRepository.getDefaultAddress(user)
+    }
+
+    deleteDeliveryAddress = async(user: AuthEntity, deliveryAddressId: string): Promise<string> => {
+        return await this.deliveryAddressRepository.deleteAddress(user, deliveryAddressId);
+    }
+
 }

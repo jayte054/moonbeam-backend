@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthEntity } from "src/authModule/authEntity/authEntity";
 import { GetUser } from "src/authModule/getUserDecorator/getUserDecorator";
@@ -28,6 +28,11 @@ export class DeliveryController {
         return await this.deliveryService.getAddresses(user)
     }
 
+    @Get("/getDefaultAddress")
+    async getDefaultAddress(@GetUser() user: AuthEntity): Promise<DeliveryAddressEntity> {
+        return await this.deliveryService.getDefaultAddress(user)
+    }
+
     @Patch("/updateAddress/:deliveryAddressId")
     @UsePipes(ValidationPipe)
     async updateAddress(
@@ -52,5 +57,13 @@ export class DeliveryController {
             user,
             deliveryAddressId
         )
+    }
+
+    @Delete("/deleteAddress/:deliveryAddressId")
+    async deleteDeliveryAddress(
+        @GetUser() user: AuthEntity,
+        @Param("deliveryAddressId") deliveryAddressId: string
+    ): Promise<string> {
+        return await this.deliveryService.deleteDeliveryAddress(user, deliveryAddressId)
     }
 }

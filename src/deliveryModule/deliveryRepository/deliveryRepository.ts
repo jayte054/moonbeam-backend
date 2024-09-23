@@ -176,4 +176,44 @@ export class DeliveryAddressRepository extends Repository<DeliveryAddressEntity>
         }
     }
 
+    getDefaultAddress = async (user: AuthEntity): Promise<DeliveryAddressEntity> => {
+       
+         try {
+             const address = await this.findOne({
+               where: {
+                 defaultAddress: true,
+                 userId: user.id,
+               },
+             });
+
+             if (!address) {
+               throw new NotFoundException('default address not found');
+             }
+            this.logger.verbose(`default address for user ${user.id} successfully fetched`)
+            return address
+         }  catch (error) {
+            this.logger.error("address with default status not found")
+            throw new InternalServerErrorException("address not found")
+         } 
+    } 
+
+    deleteAddress = async (user: AuthEntity, deliveryAddressId: string): Promise<string> => {
+        try {
+             await this.delete({
+                deliveryAddressId,
+                userId: user.id
+            })
+            
+            if (!deliveryAddressId){
+                this.logger.debug(`address with id ${deliveryAddressId} does not exist`)
+            }
+
+            this.logger.verbose(`delivery address with id ${deliveryAddressId} successfully deleted`)
+            return (`address with id ${deliveryAddressId} successfully deleted by user ${user.id}`)
+        } catch (error) {
+            this.logger.error("failed to delete address with id", deliveryAddressId)
+            throw new InternalServerErrorException("failed to delete address")
+        }
+    }
+
 }
