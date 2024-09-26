@@ -1,4 +1,4 @@
-import { IsDateString, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsString, MaxLength } from 'class-validator';
 import { ProductType } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
 import { Covering } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
 
@@ -317,4 +317,39 @@ export class UpdateSurprisePackageDto {
   price?: string;
 
   description?: string;
+}
+
+export class AdminStudioDetailsDto {
+  @IsString()
+  @IsNotEmpty()
+  studioAddress: string;
+
+  @IsString()
+  @IsNotEmpty()
+  LGA: string;
+
+  @IsString()
+  @IsNotEmpty()
+  state: string;
+
+  @IsString()
+  @IsNotEmpty()
+  phoneNumber: string;
+
+  @IsString()
+  @IsNotEmpty()
+  deliveryBaseFee: string;
+
+  @IsString()
+  @IsNotEmpty()
+  deliveryPricePerKm: string;
+}
+
+export class UpdateStudioDetailsDto {
+  studioAddress?: string;
+  LGA?: string;
+  state?: string;
+  phoneNumber?: string;
+  deliveryBaseFee?: string;
+  deliveryPricePerKm?: string;
 }

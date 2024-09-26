@@ -11,6 +11,7 @@ import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordRe
 import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
 import { ProductEntity } from 'src/adminHubModule/productEntity/productEntity';
 import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
+import { AdminStudioEntity } from 'src/adminHubModule/adminStudioDetailsEntity/adminStudioDetailsEntity';
 
 @Entity()
 @Unique(['email'])
@@ -75,6 +76,9 @@ export class AdminAuthEntity extends BaseEntity {
   )
   butterCreamRate: ProductRateEntity;
 
+  @OneToMany(() => AdminStudioEntity, (studioDetailsId) =>studioDetailsId.admin, {eager: true})
+  studioDetailsId: AdminStudioEntity;
+  
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
     try {

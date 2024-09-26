@@ -20,10 +20,12 @@ import { GetUser } from 'src/authModule/getUserDecorator/getUserDecorator';
 import {
   AdminBudgetHubDto,
   AdminHubDto,
+  AdminStudioDetailsDto,
   ProductDesignRateDto,
   UpdateDesignRateDto,
   UpdateProductDto,
   UpdateProductRateDto,
+  UpdateStudioDetailsDto,
   UploadProductDto,
 } from '../adminHubDto/adminHubDto';
 import { AdminHubService } from '../adminHubService/adminHubService';
@@ -34,9 +36,10 @@ import {
   SurprisePackageDto,
   UpdateSurprisePackageDto,
 } from '../adminHubDto/adminHubDto';
-import { SurprisePackageObject } from '../types';
+import { StudioObject, SurprisePackageObject } from '../types';
 import { SurprisePackageEntity } from '../surprisePackageEntity/surprisePackageEntity';
 import { BudgetCakeRateEntity } from '../productRateEntity/budgetCakeRateEntity';
+import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
 
 @Controller('adminHub')
 @UseGuards(AuthGuard())
@@ -250,5 +253,31 @@ export class AdminHubController {
       packageId,
       req,
     );
+  }
+
+  @Post('/createStudioDetails')
+  @UsePipes(ValidationPipe)
+  async createStudioDetails(
+    @GetUser() admin: AdminAuthEntity,
+    @Body() adminStudioDetailsDto: AdminStudioDetailsDto
+  ) : Promise<StudioObject> {
+    return await this.adminHubService.createStudioDetails(
+      admin,
+      adminStudioDetailsDto
+    )
+  }
+
+  @Patch('updateStudioDetails/:studioId')
+  @UsePipes(ValidationPipe)
+  async updateStudioDetails(
+    @GetUser() admin: AdminAuthEntity,
+    @Param('studioId') studioId: string,
+    @Body() updateStudioDetailsDto: UpdateStudioDetailsDto
+  ): Promise<AdminStudioEntity> {
+    return this.adminHubService.updateStudioDetails(
+      admin,
+      studioId,
+      updateStudioDetailsDto
+    )
   }
 }

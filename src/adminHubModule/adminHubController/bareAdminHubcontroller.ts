@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { AdminHubService } from '../adminHubService/adminHubService';
+import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
 import { ProductEntity } from '../productEntity/productEntity';
 import { SurprisePackageEntity } from '../surprisePackageEntity/surprisePackageEntity';
 
@@ -20,5 +21,19 @@ export class BareAdminHubController {
   @Get('/getCakeVariantsRates')
   async getCakeVariants() {
     return await this.adminHubService.getCakeVariantRates();
+  }
+
+  @Get('/getStudios')
+  async getStudios (): Promise<AdminStudioEntity[]> {
+    return await this.adminHubService.getStudios()
+  }
+
+  @Get('/getStudioWithId/:studioId')
+  async getStudioWithId(
+    @Param('studioId') studioId: string
+  ): Promise<AdminStudioEntity> {
+    return await this.adminHubService.getStudioWithId(
+      studioId
+    )
   }
 }

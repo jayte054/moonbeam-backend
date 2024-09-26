@@ -111,7 +111,7 @@ export class AdminProductRepository extends Repository<ProductEntity> {
       this.logger.verbose(`product with id ${productId} fetched successfully`);
       return productWithId;
     } catch (error) {
-      await this.logger.error(
+       this.logger.error(
         `product with id ${productId} fetched unsuccessfully`,
       );
       throw new NotFoundException('product not found');

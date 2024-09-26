@@ -14,6 +14,8 @@ import { AdminProductDesignRateRepository } from './adminProductDesignRateReposi
 import { BareAdminHubController } from './adminHubController/bareAdminHubcontroller';
 import { SurprisePackageRepository } from './adminSurprisePackageRepository/adminSurprisePackageRepository';
 import { AdminBudgetCakeRateRepository } from './adminProductRateRepository/adminBudgetCakeRateRepository copy';
+import { AdminStudioEntity } from './adminStudioDetailsEntity/adminStudioDetailsEntity';
+import { AdminStudioDetailsRepository } from './adminStudioRepository/adminStudioRepository';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { AdminBudgetCakeRateRepository } from './adminProductRateRepository/admi
       ProductRateEntity,
       ProductEntity,
       SurprisePackageEntity,
+      AdminStudioEntity,
       ProductRepository,
       AdminBudgetCakeRateRepository,
     ]),
@@ -33,6 +36,7 @@ import { AdminBudgetCakeRateRepository } from './adminProductRateRepository/admi
     AdminProductDesignRateRepository,
     AdminBudgetCakeRateRepository,
     SurprisePackageRepository,
+    AdminStudioDetailsRepository,
     AdminHubService,
   ],
   controllers: [AdminHubController, BareAdminHubController],

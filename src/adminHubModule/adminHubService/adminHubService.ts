@@ -5,10 +5,12 @@ import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity'
 import {
   AdminBudgetHubDto,
   AdminHubDto,
+  AdminStudioDetailsDto,
   ProductDesignRateDto,
   UpdateDesignRateDto,
   UpdateProductDto,
   UpdateProductRateDto,
+  UpdateStudioDetailsDto,
   UploadProductDto,
 } from '../adminHubDto/adminHubDto';
 import { AdminProductRateRepository } from '../adminProductRateRepository/adminProductRateRepository';
@@ -24,9 +26,12 @@ import {
   SurprisePackageDto,
   UpdateSurprisePackageDto,
 } from '../adminHubDto/adminHubDto';
-import { SurprisePackageObject } from '../types';
+import { StudioObject, SurprisePackageObject } from '../types';
 import { AdminBudgetCakeRateRepository } from '../adminProductRateRepository/adminBudgetCakeRateRepository copy';
 import { BudgetCakeRateEntity } from '../productRateEntity/budgetCakeRateEntity';
+import { AdminStudioDetailsRepository } from '../adminStudioRepository/adminStudioRepository';
+import { async } from 'rxjs';
+import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
 
 @Injectable()
 export class AdminHubService {
@@ -37,11 +42,13 @@ export class AdminHubService {
     @InjectRepository(AdminProductDesignRateRepository)
     @InjectRepository(SurprisePackageRepository)
     @InjectRepository(AdminBudgetCakeRateRepository)
+    @InjectRepository(AdminStudioDetailsRepository)
     private adminProductRateRepository: AdminProductRateRepository,
     private adminProductRepository: AdminProductRepository,
     private adminProductDesignRateRepository: AdminProductDesignRateRepository,
     private surprisePackageRepository: SurprisePackageRepository,
     private adminBudgetCakeRateRepository: AdminBudgetCakeRateRepository,
+    private adminStudioDetailsRepository: AdminStudioDetailsRepository,
   ) {}
 
   productRate = async (
@@ -251,4 +258,34 @@ export class AdminHubService {
       req,
     );
   };
+
+  createStudioDetails = async (
+    admin: AdminAuthEntity,
+    adminStudioDetailsDto: AdminStudioDetailsDto,
+  ): Promise<StudioObject> => {
+    return this.adminStudioDetailsRepository.createStudioDetails(
+      admin,
+      adminStudioDetailsDto,
+    );
+  };
+
+  getStudios = async (): Promise<AdminStudioEntity[]> => {
+    return await this.adminStudioDetailsRepository.getStudios();
+  };
+
+  getStudioWithId = async (studioId: string): Promise<AdminStudioEntity> => {
+    return await this.adminStudioDetailsRepository.getStudioWithId(studioId);
+  };
+
+  updateStudioDetails = async (
+    admin: AdminAuthEntity,
+    studioId: string,
+    updateStudioDetailsDto: UpdateStudioDetailsDto
+    ): Promise<AdminStudioEntity> => {
+      return this.adminStudioDetailsRepository.updateStudioDetails(
+        admin,
+        studioId,
+        updateStudioDetailsDto
+      )
+    }
 }
