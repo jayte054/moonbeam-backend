@@ -7,6 +7,9 @@ export class AdminStudioEntity extends BaseEntity {
     studioId: string;
 
     @Column()
+    studioTitle: string;
+
+    @Column()
     studioAddress: string;
 
     @Column()
@@ -23,6 +26,9 @@ export class AdminStudioEntity extends BaseEntity {
 
     @Column()
     deliveryPricePerKm: string;
+
+    @Column()
+    defaultStudioAddress: boolean;
 
     @ManyToOne(() => AdminAuthEntity, (admin) => admin.id, {eager: false})
     admin: AdminAuthEntity;

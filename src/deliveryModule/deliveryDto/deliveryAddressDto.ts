@@ -42,3 +42,41 @@ export class UpdateAddressDto {
   city?: string;
   defaultAddress?: boolean;
 }
+
+export class DefaultAddressDto {
+    @IsString()
+  @IsNotEmpty()
+  studioTitle: string;
+
+    @IsString()
+  @IsNotEmpty()
+  studioAddress: string;
+
+    @IsString()
+  @IsNotEmpty()
+  LGA: string;
+
+    @IsString()
+  @IsNotEmpty()
+  state: string;
+
+    @IsString()
+  @IsNotEmpty()
+  phoneNumber: string;
+
+    @IsString()
+  @IsNotEmpty()
+  deliveryBaseFee: string;
+
+    @IsString()
+  @IsNotEmpty()
+  deliveryPricePerKm: string;
+
+    @IsString()
+  @IsNotEmpty()
+  defaultStudioAddress: boolean;
+
+    @IsString()
+  @IsNotEmpty()
+  userId: string;
+}

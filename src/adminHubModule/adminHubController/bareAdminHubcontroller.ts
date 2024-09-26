@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Patch, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AdminHubService } from '../adminHubService/adminHubService';
 import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
 import { ProductEntity } from '../productEntity/productEntity';
@@ -35,5 +35,11 @@ export class BareAdminHubController {
     return await this.adminHubService.getStudioWithId(
       studioId
     )
+  }
+
+  @Patch('/defaultStudioAddress/:studioId')
+  @UsePipes(ValidationPipe)
+  async defautStudioAddress(studioId: string): Promise<AdminStudioEntity> {
+    return await this.adminHubService.defaultStudioAddress(studioId)
   }
 }

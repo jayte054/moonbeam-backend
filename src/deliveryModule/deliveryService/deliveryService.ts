@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AuthEntity } from "src/authModule/authEntity/authEntity";
 import { DeliveryAddressObject } from "src/types";
+import { DefaultStudioEntity } from "../defaultStudioAddressEntity/defaultStudioAddressEntity";
+import { DefaultStudioRepository } from "../defaultStudioRepository/defaultStudioRepository";
 import { DeliveryAddressDto, UpdateAddressDto } from "../deliveryDto/deliveryAddressDto";
 import { DeliveryAddressEntity } from "../deliveryEntity/deliveryAddressEntity";
 import { DeliveryAddressRepository } from "../deliveryRepository/deliveryRepository";
@@ -10,11 +12,17 @@ import { DeliveryAddressRepository } from "../deliveryRepository/deliveryReposit
 export class DeliveryService {
     constructor(
         @InjectRepository(DeliveryAddressRepository)
-        private deliveryAddressRepository: DeliveryAddressRepository
+        @InjectRepository(DefaultStudioRepository)
+        private deliveryAddressRepository: DeliveryAddressRepository,
+        private defaultStudioRepository: DefaultStudioRepository
     ) {}
 
     createDeliveryAddress = async (user: AuthEntity, deliveryAddressDto: DeliveryAddressDto): Promise<DeliveryAddressObject> => {
         return await this.deliveryAddressRepository.createDeliveryAddress(user, deliveryAddressDto)
+    }
+
+    setStudioAddress= async (user: AuthEntity): Promise<DefaultStudioEntity[]> => {
+        return await this.defaultStudioRepository.setStudioAddresses(user)
     }
 
     getAddresses = async(user: AuthEntity): Promise<DeliveryAddressEntity[]> => {
@@ -29,8 +37,16 @@ export class DeliveryService {
         return await this.deliveryAddressRepository.defaultAddress(user, deliveryAddressId)
     }
 
+    defaultStudioAddress= async (user: AuthEntity, studioId: string): Promise<DefaultStudioEntity> => {
+        return await this.defaultStudioRepository.defaultStudioAddress(user, studioId)
+    }
+
     getDefaultAddress = async(user: AuthEntity) : Promise<DeliveryAddressEntity> => {
         return await this.deliveryAddressRepository.getDefaultAddress(user)
+    }
+
+    getDefaultStudioAddress = async(user: AuthEntity): Promise<DefaultStudioEntity> => {
+        return await this.defaultStudioRepository.getDefaultStudioAddress(user)
     }
 
     deleteDeliveryAddress = async(user: AuthEntity, deliveryAddressId: string): Promise<string> => {

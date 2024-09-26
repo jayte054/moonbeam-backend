@@ -322,6 +322,10 @@ export class UpdateSurprisePackageDto {
 export class AdminStudioDetailsDto {
   @IsString()
   @IsNotEmpty()
+  studioTitle: string;
+
+  @IsString()
+  @IsNotEmpty()
   studioAddress: string;
 
   @IsString()
@@ -343,13 +347,19 @@ export class AdminStudioDetailsDto {
   @IsString()
   @IsNotEmpty()
   deliveryPricePerKm: string;
+
+  @IsString()
+  @IsNotEmpty()
+  defaultStudioAddress: boolean;
 }
 
 export class UpdateStudioDetailsDto {
+  studioTitle?: string;
   studioAddress?: string;
   LGA?: string;
   state?: string;
   phoneNumber?: string;
   deliveryBaseFee?: string;
   deliveryPricePerKm?: string;
+  defaultStudioAddress?: boolean;
 }

@@ -26,34 +26,40 @@ export class AdminStudioDetailsRepository extends Repository<AdminStudioEntity> 
         }
 
         const {
+            studioTitle,
             studioAddress, 
             LGA, 
             state, 
             phoneNumber, 
             deliveryBaseFee, 
-            deliveryPricePerKm
+            deliveryPricePerKm,
+            defaultStudioAddress,
         } = adminStudioDetailsDto;
 
         const studio= new AdminStudioEntity()
 
+        studio.studioTitle = studioTitle;
         studio.studioAddress = studioAddress;
         studio.LGA = LGA;
         studio.state = state;
         studio.phoneNumber = phoneNumber;
         studio.deliveryBaseFee = deliveryBaseFee;
         studio.deliveryPricePerKm = deliveryPricePerKm;
+        studio.defaultStudioAddress = defaultStudioAddress;
         studio.admin = admin
 
         try {
             await studio.save()
             this.logger.verbose(`studio with id ${studio.studioId} has bee successfully created`)
             return {
+              studioTitle: studio.studioTitle,
               studioAddress: studio.studioAddress,
               LGA: studio.LGA,
               state: studio.state,
               phoneNumber: studio.phoneNumber,
               deliveryBaseFee: studio.deliveryBaseFee,
               deliveryPricePerKm:studio.deliveryPricePerKm,
+              defaultStudioAddress: studio.defaultStudioAddress,
               adminId: admin.id,
             };
         } catch (error) {
@@ -104,12 +110,14 @@ export class AdminStudioDetailsRepository extends Repository<AdminStudioEntity> 
                 throw new InternalServerErrorException("user is not an admin")
             }
             const {
+                studioTitle,
                 studioAddress, 
                 LGA, 
                 state, 
                 phoneNumber, 
                 deliveryBaseFee, 
-                deliveryPricePerKm
+                deliveryPricePerKm,
+                defaultStudioAddress,
             } = updateStudioDetailsDto;
 
             const studio = await this.getStudioWithId(studioId)
@@ -124,12 +132,14 @@ export class AdminStudioDetailsRepository extends Repository<AdminStudioEntity> 
                 throw new InternalServerErrorException(" Wrong Admin")
             }
 
+            studio.studioTitle = studioTitle;
             studio.studioAddress = studioAddress;
             studio.LGA = LGA;
             studio.state = state;
             studio.phoneNumber = phoneNumber;
             studio.deliveryBaseFee = deliveryBaseFee;
             studio.deliveryPricePerKm = deliveryPricePerKm;
+            studio.defaultStudioAddress = defaultStudioAddress;
 
             try {
                 await studio.save()
@@ -139,5 +149,36 @@ export class AdminStudioDetailsRepository extends Repository<AdminStudioEntity> 
                 this.logger.error("error updating studio")
                 throw new InternalServerErrorException("error updating studio")
             }
+    }
+
+    defaultStudioAddress = async (studioId: string): Promise<AdminStudioEntity> => {
+        const defaultAddress = await this.findOne({
+            where: {
+                defaultStudioAddress: true,
+            }
+        })
+
+        if (defaultAddress) {
+            defaultAddress.defaultStudioAddress = false;
+            await defaultAddress.save()
+        }
+
+        const newDefault = await this.getStudioWithId(studioId)
+
+        if(!newDefault) {
+            this.logger.error(`new default address not found`)
+            throw new InternalServerErrorException(`New default address not found`)
+        }
+
+        newDefault.defaultStudioAddress= true;
+
+        try {
+            await newDefault.save()
+            this.logger.verbose(`new default studio address successfully updated`)
+            return newDefault;
+        } catch (error) {
+            this.logger.error(`failed to update default address`)
+            throw new InternalServerErrorException("failed to update new studio default address")
+        }
     }
 }

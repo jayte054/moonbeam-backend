@@ -288,4 +288,8 @@ export class AdminHubService {
         updateStudioDetailsDto
       )
     }
+
+    defaultStudioAddress = async (studioId: string): Promise<AdminStudioEntity> => {
+      return await this.adminStudioDetailsRepository.defaultStudioAddress(studioId)
+    }
 }

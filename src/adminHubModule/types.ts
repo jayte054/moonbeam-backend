@@ -20,11 +20,13 @@ export interface SurprisePackageObject{
 }
 
 export interface StudioObject {
+  studioTitle: string;
   studioAddress: string;
   LGA: string;
   state: string;
   phoneNumber: string;
   deliveryBaseFee: string;
   deliveryPricePerKm: string;
+  defaultStudioAddress: boolean;
   adminId: string;
 }
