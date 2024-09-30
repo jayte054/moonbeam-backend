@@ -14,7 +14,7 @@ export class CartRepository extends Repository<CartEntity> {
     ){super(CartEntity, dataSource.createEntityManager())}
 
      addToCart = async (user: AuthEntity, cartDto: CartDto): Promise<CartObject> => {
-        const {itemName, price, imageUrl, quantity, productOrderId, itemType} = cartDto;
+        const {itemName, price, imageUrl, quantity, productOrderId, itemType, deliveryDate} = cartDto;
 
         const cartItem = new CartEntity()
         cartItem.itemName = itemName;
@@ -23,6 +23,7 @@ export class CartRepository extends Repository<CartEntity> {
         cartItem.quantity = quantity || "1";
         cartItem.productOrderId = productOrderId;
         cartItem.itemType = itemType;
+        cartItem.deliveryDate = deliveryDate;
         cartItem.user = user;
 
         try{
@@ -34,6 +35,7 @@ export class CartRepository extends Repository<CartEntity> {
                 imageUrl: cartItem.imageUrl,
                 quantity: cartItem.quantity,
                 productOrderId: cartItem.productOrderId,
+                deliveryDate: cartItem.deliveryDate,
                 userId: cartItem.user.id
             }
         } catch (error) {

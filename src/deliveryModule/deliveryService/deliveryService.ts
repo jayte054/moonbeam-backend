@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { async } from "rxjs";
 import { AuthEntity } from "src/authModule/authEntity/authEntity";
 import { DeliveryAddressObject } from "src/types";
 import { DefaultStudioEntity } from "../defaultStudioAddressEntity/defaultStudioAddressEntity";
@@ -27,6 +28,10 @@ export class DeliveryService {
 
     getAddresses = async(user: AuthEntity): Promise<DeliveryAddressEntity[]> => {
         return await this.deliveryAddressRepository.getAddresses(user)
+    }
+
+    getStudioAddresses = async(user:AuthEntity): Promise<DefaultStudioEntity[]> => {
+        return await this.defaultStudioRepository.getStudioAddresses(user)
     }
 
     updateAddress = async (user: AuthEntity, updateAddressDto: UpdateAddressDto, deliveryAddressId: string): Promise<DeliveryAddressEntity> => {

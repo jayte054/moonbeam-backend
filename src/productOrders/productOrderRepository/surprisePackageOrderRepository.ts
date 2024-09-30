@@ -81,6 +81,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       imageUrl: '',
       productOrderId: '',
       itemType: '',
+      deliveryDate: ''
     };
 
     try {
@@ -91,6 +92,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       cartDto['imageUrl'] = packageOrder.imageUrl;
       cartDto['productOrderId'] = packageOrder.packageId;
       cartDto['itemType'] = "bronzePackage";
+      cartDto['deliveryDate'] = packageOrder.deliveryDate;
 
       await this.mailerService.bronzePackageOrderMail(user.email, packageOrder);
       await this.cartRepository.addToCart(user, cartDto);
@@ -174,15 +176,19 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
        imageUrl: '',
        productOrderId: '',
        itemType: '',
+       deliveryDate: ''
      };
 
     try {
       await packageOrder.save();
+
        cartDto['itemName'] = packageOrder.packageOrderName;
        cartDto['price'] = packageOrder.price;
        cartDto['imageUrl'] = packageOrder.imageUrl;
        cartDto['productOrderId'] = packageOrder.packageId;
        cartDto['itemType'] = 'silverPackage';
+       cartDto['deliveryDate'] = packageOrder.deliveryDate;
+
       await this.mailerService.silverPackageOrderMail(user.email, packageOrder);
       await this.cartRepository.addToCart(user, cartDto);
       this.logger.verbose(`
@@ -267,15 +273,19 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
        imageUrl: '',
        productOrderId: '',
        itemType: '',
+       deliveryDate: '',
      };
 
     try {
       await packageOrder.save();
+
       cartDto['itemName'] = packageOrder.packageOrderName;
       cartDto['price'] = packageOrder.price;
       cartDto['imageUrl'] = packageOrder.imageUrl;
       cartDto['productOrderId'] = packageOrder.packageId;
       cartDto['itemType'] = 'goldPackage';
+      cartDto['deliveryDate'] = packageOrder.deliveryDate;
+
       await this.mailerService.goldPackageOrderMail(user.email, packageOrder);
       await this.cartRepository.addToCart(user, cartDto);
       this.logger.verbose(`
@@ -365,15 +375,19 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
        imageUrl: '',
        productOrderId: '',
        itemType: '',
+       deliveryDate: '',
      };
 
     try {
       await packageOrder.save();
+
       cartDto['itemName'] = packageOrder.packageOrderName;
       cartDto['price'] = packageOrder.price;
       cartDto['imageUrl'] = packageOrder.imageUrl;
       cartDto['productOrderId'] = packageOrder.packageId;
       cartDto['itemType'] = 'silverPackage';
+      cartDto['deliveryDate'] = packageOrder.deliveryDate;
+
       await this.mailerService.diamondPackageOrderMail(
         user.email,
         packageOrder,

@@ -350,7 +350,6 @@ export class CartDto {
   @IsNotEmpty()
   price: string;
 
-  
   imageUrl?: string;
 
   @IsString()
@@ -358,6 +357,10 @@ export class CartDto {
   itemType: string;
 
   quantity?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  deliveryDate: string;
 
   @IsString()
   @IsNotEmpty()

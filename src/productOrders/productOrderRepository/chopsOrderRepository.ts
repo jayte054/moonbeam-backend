@@ -12,6 +12,7 @@ import {
   UpdateOrderDto,
   GenericChopsOrderDto,
   UpdateGenericChopsOrderDto,
+  CartDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
@@ -32,6 +33,8 @@ import { MailerService } from 'src/mailerModule/mailerService';
 import { fetchDesignRate, fetchRate } from '../productUtility';
 import { CloudinaryUrlDto } from '../../cloudinary/coundinaryDto/cloudinaryUrlDto';
 import { UpdateSurprisePackageDto } from 'src/adminHubModule/adminHubDto/adminHubDto';
+import { CartRepository } from './cartRepository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 export type ChopsOrderType = {
   id: string;
@@ -59,6 +62,8 @@ export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
     private dataSource: DataSource,
     private cloudinaryService: CloudinaryService,
     private readonly mailerService: MailerService,
+    @InjectRepository(CartRepository)
+    private cartRepository: CartRepository,
   ) {
     super(ChopsOrderEntity, dataSource.createEntityManager());
   }
@@ -172,9 +177,28 @@ export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
     console.log(order);
     const email = user.email;
 
+    const cartDto: CartDto = {
+      productOrderId: '',
+      itemName: '',
+      price: '',
+      imageUrl: '',
+      itemType: '',
+      quantity: '',
+      deliveryDate: '',
+    };
+
+    cartDto['itemName'] = order.orderTitle;
+    cartDto['price'] = order.price;
+    cartDto['imageUrl'] = order.imageUrl;
+    cartDto['itemType'] = order.type;
+    cartDto['quantity'] = order.numberOfPacks;
+    cartDto['deliveryDate'] = order.deliveryDate;
+    cartDto['productOrderId'] = order.id;
+
     try {
       await order.save();
       await this.mailerService.chopsOrderMail(email, order);
+      await this.cartRepository.addToCart(user, cartDto)
       this.logger.verbose(
         `user ${user} has successfully placed an order ${order.id}`,
       );

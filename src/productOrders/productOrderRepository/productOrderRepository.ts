@@ -254,7 +254,8 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       price: '',
       imageUrl: '',
       productOrderId: '',
-      itemType: ''
+      itemType: '',
+      deliveryDate: '',
     };
 
     cartDto["itemName"] = order.orderName;
@@ -262,6 +263,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     cartDto['imageUrl'] = order.imageUrl;
     cartDto['productOrderId'] = order.id;
     cartDto['itemType'] = order.type;
+    cartDto['deliveryDate'] = order.deliveryDate
 
     try {
       await order.save();

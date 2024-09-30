@@ -65,6 +65,7 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
       quantity: foilCakeOrder.quantity,
       productOrderId: foilCakeOrder.variantId,
       itemType: foilCakeOrder.type,
+      deliveryDate: foilCakeOrder.deliveryDate
     };
 
     try {
@@ -129,6 +130,7 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
       quantity: parfaitOrder.quantity,
       productOrderId: parfaitOrder.variantId,
       itemType: parfaitOrder.type,
+      deliveryDate: parfaitOrder.deliveryDate
     };
 
     try {

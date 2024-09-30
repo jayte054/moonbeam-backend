@@ -23,6 +23,9 @@ export class CartEntity extends BaseEntity {
   quantity?: string;
 
   @Column()
+  deliveryDate: string;
+
+  @Column()
   productOrderId: string;
 
   @ManyToOne(() => AuthEntity, (user) => user.itemId, { eager: false })

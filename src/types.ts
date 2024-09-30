@@ -1,3 +1,4 @@
+import { AuthEntity } from './authModule/authEntity/authEntity';
 import { OrderStatus, ProductFlavours, VariantType } from './productOrders/ProductOrderEnum/productOrderEnum';
 
 export type bronzePackageObject = {
@@ -173,6 +174,7 @@ export type CartObject = {
   imageUrl:string;
   quantity: string;
   productOrderId: string;
+  deliveryDate: string;
   userId: string
 }
 
@@ -198,5 +200,29 @@ export interface DeliveryAddressObject {
   region: string;  
   city: string;
   defaultAddress: boolean;
+  userId: string;
+}
+
+export interface DefaultStudioAddressObject {
+  studioId: string;
+
+  studioTitle: string;
+
+  studioAddress: string;
+
+  LGA: string;
+
+  state: string;
+
+  phoneNumber: string;
+
+  deliveryBaseFee: string;
+
+  deliveryPricePerKm: string;
+
+  defaultStudioAddress: boolean;
+
+  user: AuthEntity;
+
   userId: string;
 }

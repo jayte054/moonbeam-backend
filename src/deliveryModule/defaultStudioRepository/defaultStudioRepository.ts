@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
 import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
 import { AuthEntity } from "src/authModule/authEntity/authEntity";
+import { DefaultStudioAddressObject } from "src/types";
 import { DataSource, Repository } from "typeorm";
 import { DefaultStudioEntity } from "../defaultStudioAddressEntity/defaultStudioAddressEntity";
 import { DefaultAddressDto } from "../deliveryDto/deliveryAddressDto";
@@ -20,15 +21,43 @@ export class DefaultStudioRepository extends Repository<DefaultStudioEntity> {
       this.logger.error('user not authorised');
       throw new InternalServerErrorException('user not Authorized');
     }
+    const addressArray: DefaultStudioEntity[] | any = [];
 
+     const removeDuplicateAddresses = (addresses: DefaultStudioEntity[]) => {
+       const uniqueAddresses = addresses.filter(
+         (address, index, self) =>
+           index ===
+           self.findIndex(
+             (a) =>
+               a.studioAddress === address.studioAddress &&
+               a.studioTitle === address.studioTitle,
+           ),
+       );
+       console.log("unique", uniqueAddresses)
+       return uniqueAddresses;
+     };
+
+   
     try {
-      const addresses = await fetchStudioAddresses();
-      if (!addresses) {
-        this.logger.error('addresses not found');
-        throw new NotFoundException(' addresses not found');
-      }
+      const savedAddresses: DefaultStudioEntity[] =
+        await this.getStudioAddresses(user);
+      const newAddresses = await fetchStudioAddresses();
+        addressArray.push(...newAddresses, ...savedAddresses);
+
+        const addresses = removeDuplicateAddresses(addressArray);
+
+        if (addresses.length === 0) {
+            this.logger.error('addresses not found');
+            throw new NotFoundException(' addresses not found');
+            }
+
+            await DefaultStudioEntity.delete({
+              user: { id: user.id },
+            });
+
+
       const studioAddresses: DefaultStudioEntity[] = await Promise.all(
-        addresses.map(async (address) => {
+        addresses.map(async (address: DefaultStudioAddressObject) => {
           const newAddress = new DefaultStudioEntity();
           newAddress.studioTitle = address.studioTitle;
           newAddress.studioAddress = address.studioAddress;
@@ -52,6 +81,26 @@ export class DefaultStudioRepository extends Repository<DefaultStudioEntity> {
       throw new InternalServerErrorException('failed to set studios');
     }
   };
+
+   getStudioAddresses = async (user: AuthEntity): Promise<DefaultStudioEntity[]> => {
+    const query = this.createQueryBuilder('studioAddress')
+    query.where('studioAddress.userId = :userId', {userId : user.id})
+
+    try{
+        const addresses = await query.getMany()
+        if(!addresses) {
+            this.logger.debug('no address stored yet')
+                throw new NotFoundException("no address found")
+        }
+        console.log(addresses)
+            this.logger.verbose(`succesfully fetched address from user ${user.id}`)
+            return addresses
+        } catch (error) {
+            this.logger.error(`error fetching addresses for user ${user.id}`)
+            throw new InternalServerErrorException("error fetching addresses")
+        }
+    }
+  
 
   getStudioAddressWithId = async (
     user: AuthEntity,
@@ -94,6 +143,8 @@ export class DefaultStudioRepository extends Repository<DefaultStudioEntity> {
     }
 
     const newDefault = await this.getStudioAddressWithId(user, studioId);
+    
+    console.log(newDefault)
 
     if (!newDefault) {
       this.logger.error(`new default address not found`);
@@ -104,6 +155,7 @@ export class DefaultStudioRepository extends Repository<DefaultStudioEntity> {
 
     try {
       await newDefault.save();
+      console.log(newDefault)
       this.logger.verbose(`successflly updated default address`);
       return newDefault;
     } catch (error) {
@@ -125,7 +177,7 @@ export class DefaultStudioRepository extends Repository<DefaultStudioEntity> {
           userId: user.id,
         },
       });
-
+      console.log(address)
 
       if (!address) {
         throw new NotFoundException('default address not found');
@@ -133,6 +185,7 @@ export class DefaultStudioRepository extends Repository<DefaultStudioEntity> {
       this.logger.verbose(
         `default address for user ${user.id} successfully fetched`,
       );
+      console.log(address)
       return address;
     } catch (error) {
       this.logger.error('address with default status not found');

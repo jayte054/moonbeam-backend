@@ -39,6 +39,13 @@ export class DeliveryController {
     return await this.deliveryService.getAddresses(user);
   }
 
+  @Get('/getStudioAddresses')
+  async getStudioAddresses(
+    @GetUser() user: AuthEntity,
+  ): Promise<DefaultStudioEntity[]> {
+    return await this.deliveryService.getStudioAddresses(user);
+  }
+
   @Get('/getDefaultStudioAddress')
   async getDefaultStudioAddress(
     @GetUser() user: AuthEntity,

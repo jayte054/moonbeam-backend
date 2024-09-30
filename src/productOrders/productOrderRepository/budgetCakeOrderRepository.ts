@@ -137,6 +137,7 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
       imageUrl: '',
       productOrderId: '',
       itemType: '',
+      deliveryDate: ''
     };
 
     cartDto['itemName'] = order.orderName;
@@ -144,6 +145,7 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
     cartDto['imageUrl'] = order.imageUrl;
     cartDto['productOrderId'] = order.budgetCakeId;
     cartDto['itemType'] = order.type;
+    cartDto['deliveryDate'] = order.deliveryDate;
     try {
       await order.save();
       await this.mailerService.budgetCakeOrderMail(email, order);
