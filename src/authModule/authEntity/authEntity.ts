@@ -18,6 +18,7 @@ import { CustomChopsOrderEntity } from 'src/productOrders/productOrderEntity/cus
 import { CartEntity } from 'src/productOrders/productOrderEntity/cartEntity';
 import { DeliveryAddressEntity } from 'src/deliveryModule/deliveryEntity/deliveryAddressEntity';
 import { DefaultStudioEntity } from 'src/deliveryModule/defaultStudioAddressEntity/defaultStudioAddressEntity';
+import { PaymentEntity } from 'src/paymentModule/paymentEntity/paymentEntity';
 
 @Entity()
 @Unique(['email'])
@@ -103,6 +104,9 @@ export class AuthEntity extends BaseEntity {
 
   @OneToMany(() => DefaultStudioEntity, (studioId) => studioId.user, {eager: true})
   studioId: string;
+
+  @OneToMany(() => PaymentEntity, (paymentId) => paymentId.user, {eager: true})
+  paymentId: string;
   
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);

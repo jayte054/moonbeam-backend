@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AdminHubModule } from './adminHubModule/adminHubModule';
 import { ProfileModule } from './profile/profileModule';
 import { DeliveryModule } from './deliveryModule/deliveryModule';
+import { PaymentModule } from './paymentModule/paymentModule';
 
 
 @Module({
@@ -22,6 +23,7 @@ import { DeliveryModule } from './deliveryModule/deliveryModule';
     AdminHubModule,
     ProfileModule,
     DeliveryModule,
+    PaymentModule
   ],
 })
 export class AppModule {}

@@ -81,7 +81,7 @@ export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
 
     try {
       await order.save();
-        await this.mailerService.customOrderMail(user.email, order);
+      await this.mailerService.customOrderMail(user.email, order);
       this.logger.verbose(
         `user ${user} has successfully requested a custom order ${order.customCakeId}`,
       );

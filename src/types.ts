@@ -226,3 +226,29 @@ export interface DefaultStudioAddressObject {
 
   userId: string;
 }
+
+export interface PaymentObject {
+  paymentId: string;
+  userId: string;
+  amount: string;
+  reference: string;
+  iv: string;
+  status: string;
+  date: string;
+}
+
+export interface verificationDto {
+  reference: string;
+  iv: string;
+  paymentId: string;
+}
+
+export interface ReferenceObject {
+  message: string;
+  redirecturl: string;
+  reference: string;
+  status: string;
+  trans: string;
+  transaction: string;
+  trxref: string;
+}
