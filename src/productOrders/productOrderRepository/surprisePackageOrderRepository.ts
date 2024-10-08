@@ -94,7 +94,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       cartDto['itemType'] = "bronzePackage";
       cartDto['deliveryDate'] = packageOrder.deliveryDate;
 
-      await this.mailerService.bronzePackageOrderMail(user.email, packageOrder);
+      // await this.mailerService.bronzePackageOrderMail(user.email, packageOrder);
       await this.cartRepository.addToCart(user, cartDto);
       this.logger.verbose(`
         user with id ${user.id} has successfully placed with order ${packageOrder.packageOrderName}

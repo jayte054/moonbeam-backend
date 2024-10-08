@@ -22,6 +22,7 @@ import { CustomOrderEntity } from 'src/productOrders/productOrderEntity/customPr
 import { CustomPackageOrderEntity } from 'src/productOrders/productOrderEntity/customPacakgeOrderEntity';
 import { CustomChopsOrderEntity } from 'src/productOrders/productOrderEntity/customChopsEntity';
 import { CakeVariantEntity } from 'src/productOrders/productOrderEntity/cakeVariantEntity';
+import { CartEntity } from 'src/productOrders/productOrderEntity/cartEntity';
 
 @Injectable()
 export class MailerService {
@@ -261,7 +262,7 @@ export class MailerService {
   async productOrderMail(
     email: string,
     order: ProductOrderEntity,
-  ): Promise<void> {
+  ): Promise<any> {
     const name = order.orderName;
     const inches = order.inches;
     const layers = order.layers;
@@ -290,6 +291,49 @@ export class MailerService {
              <p> Description: ${description}</p>
              <p> DeliveryDate: ${deliveryDate} </p>  </br> 
           has been successfully placed.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`User ${email} product order mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
+    }
+  }
+
+  async defaultMail(
+    email: string,
+    cartItem: CartEntity
+  ): Promise<any> {
+    const name = cartItem.itemName;
+    const quantity = cartItem.quantity;
+    const price = cartItem.price;
+    const status = "delivery in progress";
+    const deliveryDate = cartItem.deliveryDate;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.logger.error(`Invalid email format: ${email}`);
+      throw new BadRequestException(`Invalid email format: ${email}`);
+    }
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+           <p> Order Name: ${name}</p>
+             <p> Inches: ${quantity}</p>
+             <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully placed.
+
           We will get back to you shortly`,
     };
 
@@ -574,7 +618,7 @@ export class MailerService {
     }
   }
 
-  async chopsOrderMail(email: string, order: ChopsOrderEntity): Promise<void> {
+  async chopsOrderMail(email: string, order: ChopsOrderEntity): Promise<any> {
     const name = order.orderTitle;
     const packageType = order.chopPackageType || order.customChopPackage;
     const packs = order.numberOfPacks || order.customNumberOfPacks;
@@ -666,7 +710,7 @@ export class MailerService {
   async bronzePackageOrderMail(
     email: string,
     packageOrder: SurprisePackageOrderEntity,
-  ): Promise<void> {
+  ): Promise<any> {
     const name = packageOrder.packageOrderName;
     const packageType = packageOrder.packageName;
     const content = [
@@ -727,7 +771,7 @@ export class MailerService {
   async silverPackageOrderMail(
     email: string,
     packageOrder: SurprisePackageOrderEntity,
-  ): Promise<void> {
+  ): Promise<any> {
     const name = packageOrder.packageOrderName;
     const packageType = packageOrder.packageName;
     const content = [
@@ -792,7 +836,7 @@ export class MailerService {
   async goldPackageOrderMail(
     email: string,
     packageOrder: SurprisePackageOrderEntity,
-  ): Promise<void> {
+  ): Promise<any> {
     const name = packageOrder.packageOrderName;
     const packageType = packageOrder.packageName;
     const content = [

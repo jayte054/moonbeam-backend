@@ -65,13 +65,13 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
       quantity: foilCakeOrder.quantity,
       productOrderId: foilCakeOrder.variantId,
       itemType: foilCakeOrder.type,
-      deliveryDate: foilCakeOrder.deliveryDate
+      deliveryDate: foilCakeOrder.deliveryDate,
     };
 
     try {
       await foilCakeOrder.save();
       await this.cartRepository.addToCart(user, cartDto);
-      await this.mailerService.foilCakeOrderMail(email, foilCakeOrder);
+      // await this.mailerService.foilCakeOrderMail(email, foilCakeOrder);
       this.logger.verbose(`foilCake order with id ${foilCakeOrder.variantId}`);
     } catch (error) {
       console.log(error);
@@ -130,7 +130,7 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
       quantity: parfaitOrder.quantity,
       productOrderId: parfaitOrder.variantId,
       itemType: parfaitOrder.type,
-      deliveryDate: parfaitOrder.deliveryDate
+      deliveryDate: parfaitOrder.deliveryDate,
     };
 
     try {
@@ -176,6 +176,35 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
       console.log(error);
       this.logger.error(`error fetching variant cakes for user ${user.id}`);
       throw new InternalServerErrorException(`error fetching cakes`);
+    }
+  }
+
+  async getOrderWithId(
+    variantId: string,
+    user: AuthEntity,
+  ): Promise<CakeVariantEntity | any> {
+    const orderWithId = await this.findOne({
+      where: {
+        variantId,
+        userId: user.id,
+      },
+    });
+
+    if (!orderWithId) {
+      throw new NotFoundException(`order with id ${variantId} not found`);
+    }
+    try {
+      this.logger.verbose(
+        `user ${user.firstname} successfully fetched order with id ${variantId}`,
+      );
+      return orderWithId;
+    } catch (error) {
+      this.logger.error(
+        `User with ${user.firstname} failed to get order with id ${variantId}`,
+      );
+      throw new InternalServerErrorException(
+        `failed to get order with id ${variantId}`,
+      );
     }
   }
 }
