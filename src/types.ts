@@ -252,3 +252,13 @@ export interface ReferenceObject {
   transaction: string;
   trxref: string;
 }
+
+export interface RequestObject {
+    requestId: string;
+    requestTitle: string;
+    orderType: string;
+    quantity: string;
+    deliveryDate: string;
+    productOrderId: string;
+    userId: string
+}

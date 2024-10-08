@@ -8,6 +8,7 @@ import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 import { DataSource, Repository } from 'typeorm';
 import {
   CustomProductOrderDto,
+  RequestDto,
   UpdateOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
@@ -20,6 +21,8 @@ import { v4 as uuid } from 'uuid';
 import { MailerService } from 'src/mailerModule/mailerService';
 import { CloudinaryUrlDto } from '../../cloudinary/coundinaryDto/cloudinaryUrlDto';
 import { CustomOrderEntity } from '../productOrderEntity/customProductOrderEntity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { RequestRepository } from './requestRepository';
 
 @Injectable()
 export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
@@ -28,6 +31,8 @@ export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
     private dataSource: DataSource,
     private cloudinaryService: CloudinaryService,
     private readonly mailerService: MailerService,
+    @InjectRepository(RequestRepository)
+    private requestRepository: RequestRepository
   ) {
     super(CustomOrderEntity, dataSource.createEntityManager());
   }
@@ -79,8 +84,17 @@ export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
     });
     order.user = user;
 
+    const requestDto: RequestDto = {
+      requestTitle: order.orderName,
+      orderType: order.type,
+      imageUrl: order.imageUrl,
+      deliveryDate: order.deliveryDate,
+      productOrderId: order.customCakeId,
+    };
+
     try {
       await order.save();
+      await this.requestRepository.addRequest(user,requestDto)
       await this.mailerService.customOrderMail(user.email, order);
       this.logger.verbose(
         `user ${user} has successfully requested a custom order ${order.customCakeId}`,

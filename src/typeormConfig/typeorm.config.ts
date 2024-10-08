@@ -23,6 +23,7 @@ import { DeliveryAddressEntity } from 'src/deliveryModule/deliveryEntity/deliver
 import { AdminStudioEntity } from 'src/adminHubModule/adminStudioDetailsEntity/adminStudioDetailsEntity';
 import { DefaultStudioEntity } from 'src/deliveryModule/defaultStudioAddressEntity/defaultStudioAddressEntity';
 import { PaymentEntity } from 'src/paymentModule/paymentEntity/paymentEntity';
+import { RequestEntity } from 'src/productOrders/productOrderEntity/requestEntity';
 
 const dbConfig: any | unknown = config.get('db');
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -55,7 +56,8 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     DeliveryAddressEntity,
     AdminStudioEntity,
     DefaultStudioEntity,
-    PaymentEntity
+    PaymentEntity,
+    RequestEntity
   ],
   synchronize: process.env.TypeORM_SYNC || dbConfig.synchronize,
   migrations: ['dist/migrations/*.js'], // Specify your migration directory,

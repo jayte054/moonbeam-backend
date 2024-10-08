@@ -1,12 +1,14 @@
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 import { AuthEntity } from "src/authModule/authEntity/authEntity";
 import { CloudinaryService } from "src/cloudinary/cloudinaryService/cloudinaryService";
 import { MailerService } from "src/mailerModule/mailerService";
 import { chopsOrderType } from "src/types";
 import { DataSource, Repository } from "typeorm";
-import { CreateChopsOrderDto, UpdateCustomChopOrderDto } from "../productOrderDto/productOrderDto";
+import { CreateChopsOrderDto, RequestDto, UpdateCustomChopOrderDto } from "../productOrderDto/productOrderDto";
 import { CustomChopsOrderEntity } from "../productOrderEntity/customChopsEntity";
 import { OrderStatus } from "../ProductOrderEnum/productOrderEnum";
+import { RequestRepository } from "./requestRepository";
 
 @Injectable()
 export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
@@ -14,6 +16,8 @@ export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
   constructor(
     private dataSource: DataSource,
     private readonly mailerService: MailerService,
+    @InjectRepository(RequestRepository)
+    private requestRepository: RequestRepository
   ) {
     super(CustomChopsOrderEntity, dataSource.createEntityManager());
   }
@@ -41,6 +45,14 @@ export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
 
     try{
       await order.save();
+      const requestDto: RequestDto = {
+        requestTitle: order.orderName,
+        orderType: 'surprise package',
+        quantity: order.numberOfPacks,
+        deliveryDate: order.deliveryDate,
+        productOrderId: order.chopsId,
+      };
+      await this.requestRepository.addRequest(user, requestDto);
       await this.mailerService.customChopsOrderMail(user.email, order)
       this.logger.verbose(
         `custom order request with id ${order.chopsId} has been successfully created `,

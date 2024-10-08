@@ -53,6 +53,7 @@ import { CustomPackageOrderEntity } from '../productOrderEntity/customPacakgeOrd
 import { CustomChopsOrderEntity } from '../productOrderEntity/customChopsEntity';
 import { CartEntity } from '../productOrderEntity/cartEntity';
 import { CakeVariantEntity } from '../productOrderEntity/cakeVariantEntity';
+import { RequestEntity } from '../productOrderEntity/requestEntity';
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -111,7 +112,6 @@ export class ProductController {
     @Request() req: Request | any,
     @Body() genericProductOrderDto?: GenericProductOrderDto,
   ): Promise<ProductOrderEntity | any> {
-    console.log('wahala');
 
     return await this.productService.genericProductOrder(
       genericProductOrderDto,
@@ -258,6 +258,11 @@ export class ProductController {
   @Get('/fetchCartItems')
   async fetchCartItems(@GetUser() user: AuthEntity): Promise<CartEntity[]> {
     return await this.productService.fetchCartItems(user);
+  }
+
+  @Get('fetchRequests')
+  async fetchRequests(@GetUser() user: AuthEntity): Promise<RequestEntity[]> {
+    return await this.productService.fetchRequests(user)
   }
 
   @Get('/getCakeVariantOrders')
@@ -413,5 +418,13 @@ export class ProductController {
     @GetUser() user: AuthEntity,
   ): Promise<string> {
     return await this.productService.deleteCartItem(user, itemId);
+  }
+
+  @Delete('deleteRequest/:requestId')
+  async deleteRequest (
+    @GetUser() user: AuthEntity,
+    @Param("requestId") requestId: string,
+  ): Promise<string> {
+    return await this.productService.deleteRequest(user, requestId)
   }
 }

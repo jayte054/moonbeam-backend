@@ -386,3 +386,25 @@ export class FoilCakeDto {
   @IsNotEmpty()
   deliveryDate: string;
 }
+
+export class RequestDto {
+  @IsString()
+  @IsNotEmpty()
+  requestTitle: string;
+
+  @IsString()
+  @IsNotEmpty()
+  orderType: string;
+
+  quantity?: string;
+
+  imageUrl?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  deliveryDate: string;
+
+  @IsString()
+  @IsNotEmpty()
+  productOrderId: string;
+}

@@ -16,6 +16,7 @@ import {
   UpdateCustomChopOrderDto,
   CartDto,
   FoilCakeDto,
+  RequestDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ProductRepository } from '../productOrderRepository/productOrderRepository';
@@ -30,6 +31,7 @@ import {
   VariantCakeObject,
   goldPackageOrderType,
   silverPackageOrderType,
+  RequestObject,
 } from 'src/types';
 import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
 import { SurprisePackageOrderEntity } from '../productOrderEntity/surprisePackageOrderEntity';
@@ -46,28 +48,32 @@ import { CartRepository } from '../productOrderRepository/cartRepository';
 import { CartEntity } from '../productOrderEntity/cartEntity';
 import { CakeVariantRepository } from '../productOrderRepository/cakeVariantRepository';
 import { CakeVariantEntity } from '../productOrderEntity/cakeVariantEntity';
+import { RequestRepository } from '../productOrderRepository/requestRepository';
+import { RequestEntity } from '../productOrderEntity/requestEntity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(ProductRepository)
-    @InjectRepository(ChopsOrderRepository)
-    @InjectRepository(SurprisePackageOrderRepository)
-    @InjectRepository(BudgetCakeOrderRepository)
-    @InjectRepository(CustomCakeOrderRepository)
-    @InjectRepository(CustomPackageOrderRepository)
-    @InjectRepository(CustomChopsRepository)
-    @InjectRepository(CakeVariantRepository)
-    @InjectRepository(CartRepository)
     private productRepository: ProductRepository,
+    @InjectRepository(ChopsOrderRepository)
     private chopsOrderRepository: ChopsOrderRepository,
+    @InjectRepository(SurprisePackageOrderRepository)
     private surprisePackageOrderRepository: SurprisePackageOrderRepository,
+    @InjectRepository(BudgetCakeOrderRepository)
     private budgetCakeOrderRepository: BudgetCakeOrderRepository,
+    @InjectRepository(CustomCakeOrderRepository)
     private customCakeOrderRepository: CustomCakeOrderRepository,
+    @InjectRepository(CustomPackageOrderRepository)
     private customPackageOrderRepository: CustomPackageOrderRepository,
+    @InjectRepository(CustomChopsRepository)
     private customChopsRepository: CustomChopsRepository,
+    @InjectRepository(CakeVariantRepository)
     private cakeVariantRepository: CakeVariantRepository,
+    @InjectRepository(CartRepository)
     private cartRepository: CartRepository,
+    @InjectRepository(RequestRepository)
+    private requestRepository: RequestRepository,
   ) {}
 
   async createCustomProductOrder(
@@ -196,6 +202,10 @@ export class ProductService {
     return await this.cartRepository.addToCart(user, cartDto);
   }
 
+  async addRequest(user: AuthEntity, requestDto: RequestDto): Promise<RequestObject>  {
+    return await this.requestRepository.addRequest(user, requestDto)
+  }
+
   async getOrders(user: AuthEntity): Promise<ProductOrderEntity[]> {
     return await this.productRepository.getOrders(user);
   }
@@ -268,6 +278,10 @@ export class ProductService {
 
   async fetchCartItems(user: AuthEntity): Promise<CartEntity[]> {
     return await this.cartRepository.fetchCartItems(user);
+  }
+
+  async fetchRequests(user: AuthEntity): Promise<RequestEntity[]> {
+    return await this.requestRepository.fetchRequests(user)
   }
 
   async updateChopOrders(
@@ -363,6 +377,10 @@ export class ProductService {
   }
 
   async deleteCartItem(user: AuthEntity, itemId: string): Promise<string> {
-    return await this.cartRepository.deleteCartItem(user, itemId)
+    return await this.cartRepository.deleteCartItem(user, itemId);
+  }
+
+  async deleteRequest(user: AuthEntity, requestId: string): Promise<string> {
+    return await this.requestRepository.deleteRequests(user, requestId)
   }
 }
