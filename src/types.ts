@@ -264,3 +264,15 @@ export interface RequestObject {
     productOrderId: string;
     userId: string
 }
+
+export interface OrderObject {
+  orderId: string;
+  orderName: string;
+  orderDate: string;
+  imageUrl?: string;
+  quantity: string;
+  content?: string[];
+  deliveryDate: string;
+  productOrderId: string;
+  userId: string;
+}

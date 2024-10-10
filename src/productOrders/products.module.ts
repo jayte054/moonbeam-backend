@@ -26,6 +26,8 @@ import { CakeVariantRepository } from './productOrderRepository/cakeVariantRepos
 import { CakeVariantEntity } from './productOrderEntity/cakeVariantEntity';
 import { RequestEntity } from './productOrderEntity/requestEntity';
 import { RequestRepository } from './productOrderRepository/requestRepository';
+import { OrderEntity } from './productOrderEntity/ordersEntity';
+import { OrderRepository } from './productOrderRepository/ordersRepository';
 
 @Module({
   imports: [
@@ -44,7 +46,8 @@ import { RequestRepository } from './productOrderRepository/requestRepository';
       CustomChopsOrderEntity,
       CakeVariantEntity,
       CartEntity,
-      RequestEntity
+      RequestEntity,
+      OrderEntity
     ]),
   ],
   providers: [
@@ -58,6 +61,7 @@ import { RequestRepository } from './productOrderRepository/requestRepository';
     CakeVariantRepository,
     CartRepository,
     RequestRepository,
+    OrderRepository,
     ProductService,
   ],
   controllers: [ProductController],

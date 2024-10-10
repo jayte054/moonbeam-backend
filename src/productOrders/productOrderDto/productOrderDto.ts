@@ -416,3 +416,29 @@ export class RequestDto {
   @IsNotEmpty()
   productOrderId: string;
 }
+
+export class OrderDto {
+  @IsString()
+  @IsNotEmpty()
+  orderName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  orderDate: string;
+
+  imageUrl?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  quantity: string;
+
+  content?: string[];
+
+  @IsString()
+  @IsNotEmpty()
+  deliveryDate: string;
+
+  @IsString()
+  @IsNotEmpty()
+  productOrderId: string;
+}

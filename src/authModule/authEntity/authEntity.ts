@@ -20,6 +20,7 @@ import { DeliveryAddressEntity } from 'src/deliveryModule/deliveryEntity/deliver
 import { DefaultStudioEntity } from 'src/deliveryModule/defaultStudioAddressEntity/defaultStudioAddressEntity';
 import { PaymentEntity } from 'src/paymentModule/paymentEntity/paymentEntity';
 import { RequestEntity } from 'src/productOrders/productOrderEntity/requestEntity';
+import { OrderEntity } from 'src/productOrders/productOrderEntity/ordersEntity';
 
 @Entity()
 @Unique(['email'])
@@ -111,6 +112,9 @@ export class AuthEntity extends BaseEntity {
 
   @OneToMany(() => RequestEntity, (requestId) => requestId.user, {eager: true})
   requestId: string;
+
+  @OneToMany(() => OrderEntity, (orderId) => orderId.user, {eager: true})
+  orderId: string;
   
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);

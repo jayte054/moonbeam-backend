@@ -54,6 +54,7 @@ import { CustomChopsOrderEntity } from '../productOrderEntity/customChopsEntity'
 import { CartEntity } from '../productOrderEntity/cartEntity';
 import { CakeVariantEntity } from '../productOrderEntity/cakeVariantEntity';
 import { RequestEntity } from '../productOrderEntity/requestEntity';
+import { OrderEntity } from '../productOrderEntity/ordersEntity';
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -260,7 +261,7 @@ export class ProductController {
     return await this.productService.fetchCartItems(user);
   }
 
-  @Get('fetchRequests')
+  @Get('/fetchRequests')
   async fetchRequests(@GetUser() user: AuthEntity): Promise<RequestEntity[]> {
     return await this.productService.fetchRequests(user)
   }
@@ -270,6 +271,13 @@ export class ProductController {
     @GetUser() user: AuthEntity,
   ): Promise<CakeVariantEntity[]> {
     return await this.productService.getCakeVaraintOrders(user);
+  }
+
+  @Get('/fetchOrders')
+  async fetchOrders (
+    @GetUser() user: AuthEntity
+  ): Promise<OrderEntity[]> {
+    return await this.productService.fetchOrders(user)
   }
 
   @Get('/:id')
@@ -305,6 +313,14 @@ export class ProductController {
     @GetUser() user: AuthEntity,
   ): Promise<CustomChopsOrderEntity> {
     return await this.productService.getCustomChopsOrderWithId(chopsId, user);
+  }
+
+  @Get('fetchOrderWithId/:orderId')
+  async fetchOrderWithId (
+    @GetUser() user: AuthEntity,
+    @Param("orderId") orderId: string
+  ): Promise<OrderEntity> {
+    return await this.productService.fetchOrdersWithId(user, orderId)
   }
 
   @Patch('/updateCustomPackageOrder/:customPackageId')
@@ -426,5 +442,13 @@ export class ProductController {
     @Param("requestId") requestId: string,
   ): Promise<string> {
     return await this.productService.deleteRequest(user, requestId)
+  }
+
+  @Delete('deleteOrder/:orderId')
+  async _deleteOrder (
+    @GetUser() user: AuthEntity,
+    @Param("orderId") orderId: string 
+  ): Promise<string> {
+    return await this.productService._deleteOrder(user, orderId)
   }
 }
