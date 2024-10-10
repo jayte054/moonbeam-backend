@@ -46,8 +46,10 @@ export class CustomPackageOrderRepository extends Repository<CustomPackageOrderE
       const requestDto: RequestDto = {
         requestTitle: order.orderName,
         orderType: "surprise package",
+        content: order.item,
         deliveryDate: order.deliveryDate,
         productOrderId: order.customPackageId,
+        status: order.status,
       };
       await this.requestRepository.addRequest(user, requestDto)
       this.logger.verbose(

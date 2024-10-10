@@ -258,7 +258,9 @@ export interface RequestObject {
     requestTitle: string;
     orderType: string;
     quantity: string;
+    content: string | string[];
     deliveryDate: string;
+    status: string;
     productOrderId: string;
     userId: string
 }

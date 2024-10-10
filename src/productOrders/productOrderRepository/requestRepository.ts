@@ -10,7 +10,6 @@ export class RequestRepository extends Repository<RequestEntity> {
         private logger = new Logger
     constructor(
         private dataSource: DataSource
-        // private 
     ){super (RequestEntity, dataSource.createEntityManager())}
 
     addRequest = async (user: AuthEntity, requestDto: RequestDto): Promise<RequestObject> => {
@@ -20,7 +19,9 @@ export class RequestRepository extends Repository<RequestEntity> {
             quantity, 
             imageUrl, 
             deliveryDate, 
-            productOrderId
+            productOrderId, 
+            content,
+            status
         } = requestDto;
 
         const order = new RequestEntity()
@@ -28,9 +29,11 @@ export class RequestRepository extends Repository<RequestEntity> {
         order.requestTitle = requestTitle;
         order.orderType = orderType;
         order. quantity = quantity || "1";
+        order.content = content;
         order.imageUrl = imageUrl;
         order.deliveryDate = deliveryDate;
         order.productOrderId = productOrderId;
+        order.status = status;
         order.user = user;
 
         try {
@@ -40,8 +43,10 @@ export class RequestRepository extends Repository<RequestEntity> {
                 requestId: order.requestId,
                 requestTitle: order.requestTitle,
                 orderType: order. orderType,
+                content: order.content,
                 quantity: order. quantity,
                 deliveryDate: order.deliveryDate,
+                status: order.status,
                 productOrderId: order.productOrderId,
                 userId: user.id
             }

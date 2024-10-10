@@ -48,8 +48,10 @@ export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
       const requestDto: RequestDto = {
         requestTitle: order.orderName,
         orderType: 'surprise package',
+        content: [order.chopType],
         quantity: order.numberOfPacks,
         deliveryDate: order.deliveryDate,
+        status: order.status,
         productOrderId: order.chopsId,
       };
       await this.requestRepository.addRequest(user, requestDto);

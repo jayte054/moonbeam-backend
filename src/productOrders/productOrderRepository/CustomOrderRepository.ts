@@ -87,8 +87,10 @@ export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
     const requestDto: RequestDto = {
       requestTitle: order.orderName,
       orderType: order.type,
+      content: ["custom cake"],
       imageUrl: order.imageUrl,
       deliveryDate: order.deliveryDate,
+      status: order.status,
       productOrderId: order.customCakeId,
     };
 

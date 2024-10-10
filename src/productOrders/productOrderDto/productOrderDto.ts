@@ -396,6 +396,10 @@ export class RequestDto {
   @IsNotEmpty()
   orderType: string;
 
+  @IsString()
+  @IsArray()
+  content: string[];
+
   quantity?: string;
 
   imageUrl?: string;
@@ -403,6 +407,10 @@ export class RequestDto {
   @IsString()
   @IsNotEmpty()
   deliveryDate: string;
+
+  @IsString()
+  @IsNotEmpty()
+  status: string;
 
   @IsString()
   @IsNotEmpty()

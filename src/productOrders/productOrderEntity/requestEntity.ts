@@ -3,30 +3,36 @@ import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "t
 
 @Entity()
 export class RequestEntity extends BaseEntity {
-    @PrimaryGeneratedColumn("uuid")
-    requestId: string;
+  @PrimaryGeneratedColumn('uuid')
+  requestId: string;
 
-    @Column()
-    requestTitle: string;
+  @Column()
+  requestTitle: string;
 
-    @Column()
-    orderType: string;
+  @Column()
+  orderType: string;
 
-    @Column()
-    quantity: string;
+  @Column('text', { array: true })
+  content: string[];
 
-    @Column({nullable: true})
-    imageUrl?: string
+  @Column()
+  quantity: string;
 
-    @Column()
-    deliveryDate: string;
+  @Column({ nullable: true })
+  imageUrl?: string;
 
-    @Column()
-    productOrderId: string;
+  @Column()
+  deliveryDate: string;
 
-    @ManyToOne(() => AuthEntity, (user) => user.requestId, {eager: false})
-    user: AuthEntity;
+  @Column()
+  status: string;
 
-    @Column()
-    userId: string
+  @Column()
+  productOrderId: string;
+
+  @ManyToOne(() => AuthEntity, (user) => user.requestId, { eager: false })
+  user: AuthEntity;
+
+  @Column()
+  userId: string;
 }
