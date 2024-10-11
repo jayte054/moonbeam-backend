@@ -422,10 +422,6 @@ export class OrderDto {
   @IsNotEmpty()
   orderName: string;
 
-  @IsString()
-  @IsNotEmpty()
-  orderDate: string;
-
   imageUrl?: string;
 
   @IsString()
@@ -438,7 +434,5 @@ export class OrderDto {
   @IsNotEmpty()
   deliveryDate: string;
 
-  @IsString()
-  @IsNotEmpty()
-  productOrderId: string;
+ 
 }

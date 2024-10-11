@@ -31,6 +31,7 @@ import {
   CreateChopsOrderDto,
   UpdateCustomChopOrderDto,
   FoilCakeDto,
+  OrderDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductService } from '../productOrderService/productOrderService';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
@@ -43,6 +44,7 @@ import {
   VariantCakeObject,
   goldPackageOrderType,
   silverPackageOrderType,
+  OrderObject,
 } from 'src/types';
 import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
 import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
@@ -113,7 +115,6 @@ export class ProductController {
     @Request() req: Request | any,
     @Body() genericProductOrderDto?: GenericProductOrderDto,
   ): Promise<ProductOrderEntity | any> {
-
     return await this.productService.genericProductOrder(
       genericProductOrderDto,
       user,
@@ -222,6 +223,15 @@ export class ProductController {
     return await this.productService.cakeParfaitOrder(foilCakeDto, user);
   }
 
+  @Post('/createOrder')
+  @UsePipes(ValidationPipe)
+  async createOrder(
+    @GetUser() user: AuthEntity,
+    @Body() orderDto: OrderDto,
+  ): Promise<OrderObject> {
+    return await this.productService.createOrder(user, orderDto);
+  }
+
   @Get('/getOrders')
   async getOrders(@GetUser() user: AuthEntity): Promise<ProductOrderEntity[]> {
     return await this.productService.getOrders(user);
@@ -263,7 +273,7 @@ export class ProductController {
 
   @Get('/fetchRequests')
   async fetchRequests(@GetUser() user: AuthEntity): Promise<RequestEntity[]> {
-    return await this.productService.fetchRequests(user)
+    return await this.productService.fetchRequests(user);
   }
 
   @Get('/getCakeVariantOrders')
@@ -274,10 +284,8 @@ export class ProductController {
   }
 
   @Get('/fetchOrders')
-  async fetchOrders (
-    @GetUser() user: AuthEntity
-  ): Promise<OrderEntity[]> {
-    return await this.productService.fetchOrders(user)
+  async fetchOrders(@GetUser() user: AuthEntity): Promise<OrderEntity[]> {
+    return await this.productService.fetchOrders(user);
   }
 
   @Get('/:id')
@@ -316,11 +324,11 @@ export class ProductController {
   }
 
   @Get('fetchOrderWithId/:orderId')
-  async fetchOrderWithId (
+  async fetchOrderWithId(
     @GetUser() user: AuthEntity,
-    @Param("orderId") orderId: string
+    @Param('orderId') orderId: string,
   ): Promise<OrderEntity> {
-    return await this.productService.fetchOrdersWithId(user, orderId)
+    return await this.productService.fetchOrdersWithId(user, orderId);
   }
 
   @Patch('/updateCustomPackageOrder/:customPackageId')
@@ -437,18 +445,18 @@ export class ProductController {
   }
 
   @Delete('deleteRequest/:requestId')
-  async deleteRequest (
+  async deleteRequest(
     @GetUser() user: AuthEntity,
-    @Param("requestId") requestId: string,
+    @Param('requestId') requestId: string,
   ): Promise<string> {
-    return await this.productService.deleteRequest(user, requestId)
+    return await this.productService.deleteRequest(user, requestId);
   }
 
   @Delete('deleteOrder/:orderId')
-  async _deleteOrder (
+  async _deleteOrder(
     @GetUser() user: AuthEntity,
-    @Param("orderId") orderId: string 
+    @Param('orderId') orderId: string,
   ): Promise<string> {
-    return await this.productService._deleteOrder(user, orderId)
+    return await this.productService._deleteOrder(user, orderId);
   }
 }

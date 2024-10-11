@@ -24,9 +24,6 @@ export class OrderEntity extends BaseEntity {
     @Column()
     deliveryDate: string;
 
-    @Column()
-    productOrderId: string;
-
     @ManyToOne(() => AuthEntity, (user) => user.orderId, {eager: false})
     user: AuthEntity;
 

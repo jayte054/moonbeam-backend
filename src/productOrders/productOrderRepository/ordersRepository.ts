@@ -21,7 +21,6 @@ export class OrderRepository extends Repository<OrderEntity> {
             quantity, 
             content, 
             deliveryDate, 
-            productOrderId
         } = orderDto;
 
         const newOrder = new OrderEntity()
@@ -35,7 +34,8 @@ export class OrderRepository extends Repository<OrderEntity> {
             year: 'numeric',
             });
         newOrder.deliveryDate = deliveryDate;
-        newOrder.productOrderId = productOrderId;
+        newOrder.userId = user.id;
+        console.log(newOrder)
 
         try {
             await newOrder.save()
@@ -48,10 +48,10 @@ export class OrderRepository extends Repository<OrderEntity> {
                 quantity: newOrder.quantity,
                 content: newOrder.content,
                 deliveryDate: newOrder.deliveryDate,
-                productOrderId: newOrder.productOrderId,
                 userId: user.id,
             })
         } catch (error) {
+            console.log(error)
             this.logger.error("failed to complete order")
             throw new InternalServerErrorException("failed to complete order")
         }
@@ -64,6 +64,7 @@ export class OrderRepository extends Repository<OrderEntity> {
         try {
             const orders = await query.getMany()
             if(!orders) {
+                this.logger.debug("no orders found")
                 throw new NotFoundException("no orders found for user", user.id)
             }
             return orders

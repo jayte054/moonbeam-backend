@@ -273,6 +273,5 @@ export interface OrderObject {
   quantity: string;
   content?: string[];
   deliveryDate: string;
-  productOrderId: string;
   userId: string;
 }
