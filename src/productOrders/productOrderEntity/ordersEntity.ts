@@ -18,6 +18,9 @@ export class OrderEntity extends BaseEntity {
     @Column()
     quantity: string;
 
+    @Column()
+    price: string;
+
     @Column('text', {array: true})
     content?: string[];
 

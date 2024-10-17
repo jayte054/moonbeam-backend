@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Patch, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AdminHubService } from '../adminHubService/adminHubService';
 import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
-import { ProductEntity } from '../productEntity/productEntity';
+import { ProductEntity } from '../productGalleryEntity/productGalleryEntity';
 import { SurprisePackageEntity } from '../surprisePackageEntity/surprisePackageEntity';
 
 @Controller('bareAdminHub')

@@ -30,3 +30,19 @@ export interface StudioObject {
   defaultStudioAddress: boolean;
   adminId: string;
 }
+
+export enum productVariant {
+  Cakes = "Cakes",
+  Chops = "Chops"
+}
+
+export interface  rtgProductObject {
+    rtgId: string;
+    rtgName: string;
+    rtgType: productVariant;
+    rtgPrice: string;
+    rtgImageUrl: string;
+    rtgDescription: string;
+    date: string;    
+    adminId: string;
+    }

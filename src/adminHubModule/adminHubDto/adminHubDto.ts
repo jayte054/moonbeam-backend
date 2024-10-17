@@ -1,6 +1,7 @@
 import { IsDateString, IsNotEmpty, IsNumber, IsString, MaxLength } from 'class-validator';
 import { ProductType } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
 import { Covering } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
+import { productVariant } from '../types';
 
 export class AdminHubDto {
   @IsString()
@@ -362,4 +363,32 @@ export class UpdateStudioDetailsDto {
   deliveryBaseFee?: string;
   deliveryPricePerKm?: string;
   defaultStudioAddress?: boolean;
+}
+
+export class UploadRtgProductDto {
+
+  @IsString()
+  @IsNotEmpty()
+  rtgName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  rtgType: productVariant;
+
+  @IsString()
+  @IsNotEmpty()
+  rtgPrice: string;
+
+  @IsString()
+  @IsNotEmpty()
+  rtgDescription: string;
+
+}
+
+export class UpdateRtgProductDto {
+  rtgName?: string;
+  rtgType?: productVariant;
+  rtgPrice?: string;
+  file?: Express.Multer.File;
+  rtgDescription?: string;
 }

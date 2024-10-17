@@ -271,6 +271,7 @@ export interface OrderObject {
   orderDate: string;
   imageUrl?: string;
   quantity: string;
+  price: string;
   content?: string[];
   deliveryDate: string;
   userId: string;

@@ -21,13 +21,15 @@ export class OrderRepository extends Repository<OrderEntity> {
             quantity, 
             content, 
             deliveryDate, 
+            price
         } = orderDto;
 
         const newOrder = new OrderEntity()
         newOrder.orderName = orderName;
-        newOrder.imageUrl = imageUrl,
-        newOrder.quantity = quantity,
-        newOrder.content = content,
+        newOrder.imageUrl = imageUrl;
+        newOrder.quantity = quantity;
+        newOrder.content = content;
+        newOrder.price = price;
         newOrder.orderDate =  new Date().toLocaleDateString('en-US', {
             day: '2-digit',
             month: '2-digit',
@@ -46,6 +48,7 @@ export class OrderRepository extends Repository<OrderEntity> {
                 orderDate: newOrder.orderDate,
                 imageUrl: newOrder.imageUrl,
                 quantity: newOrder.quantity,
+                price: newOrder.price,
                 content: newOrder.content,
                 deliveryDate: newOrder.deliveryDate,
                 userId: user.id,

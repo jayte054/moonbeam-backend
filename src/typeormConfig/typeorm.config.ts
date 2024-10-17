@@ -1,7 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import config from 'config';
 import { ProductDesignRateEntity } from 'src/adminHubModule/ProductDesignRateEntity/ProductDesignRateEntity';
-import { ProductEntity } from 'src/adminHubModule/productEntity/productEntity';
+import { ProductEntity } from 'src/adminHubModule/productGalleryEntity/productGalleryEntity';
 import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
 import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
@@ -25,6 +25,7 @@ import { DefaultStudioEntity } from 'src/deliveryModule/defaultStudioAddressEnti
 import { PaymentEntity } from 'src/paymentModule/paymentEntity/paymentEntity';
 import { RequestEntity } from 'src/productOrders/productOrderEntity/requestEntity';
 import { OrderEntity } from 'src/productOrders/productOrderEntity/ordersEntity';
+import { ReadyToGoProductsEntity } from 'src/adminHubModule/rtgProductsEntity/rtgProductsEntity';
 
 const dbConfig: any | unknown = config.get('db');
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -59,7 +60,8 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     DefaultStudioEntity,
     PaymentEntity,
     RequestEntity,
-    OrderEntity
+    OrderEntity,
+    ReadyToGoProductsEntity,
   ],
   synchronize: process.env.TypeORM_SYNC || dbConfig.synchronize,
   migrations: ['dist/migrations/*.js'], // Specify your migration directory,

@@ -6,16 +6,18 @@ import { ProductRepository } from 'src/productOrders/productOrderRepository/prod
 import { AdminHubController } from './adminHubController/adminHubcontroller';
 import { AdminProductRateRepository } from './adminProductRateRepository/adminProductRateRepository';
 import { AdminHubService } from './adminHubService/adminHubService';
-import { ProductEntity } from './productEntity/productEntity';
+import { ProductEntity } from './productGalleryEntity/productGalleryEntity';
 import { ProductRateEntity } from './productRateEntity/productRateEntity';
 import { SurprisePackageEntity } from './surprisePackageEntity/surprisePackageEntity';
-import { AdminProductRepository } from './adminProductRepository/adminProductRepository';
+import { AdminProductGalleryRepository } from './adminProductGalleryRepository/adminProductGalleryRepository';
 import { AdminProductDesignRateRepository } from './adminProductDesignRateRepository/adminProductDesignRateRepository';
 import { BareAdminHubController } from './adminHubController/bareAdminHubcontroller';
 import { SurprisePackageRepository } from './adminSurprisePackageRepository/adminSurprisePackageRepository';
 import { AdminBudgetCakeRateRepository } from './adminProductRateRepository/adminBudgetCakeRateRepository copy';
 import { AdminStudioEntity } from './adminStudioDetailsEntity/adminStudioDetailsEntity';
 import { AdminStudioDetailsRepository } from './adminStudioRepository/adminStudioRepository';
+import { ReadyToGoProductsEntity } from './rtgProductsEntity/rtgProductsEntity';
+import { ReadyToGoProductsRepository } from './rtgProductsRepository/rtgProductsRepository';
 
 @Module({
   imports: [
@@ -26,17 +28,19 @@ import { AdminStudioDetailsRepository } from './adminStudioRepository/adminStudi
       ProductEntity,
       SurprisePackageEntity,
       AdminStudioEntity,
+      ReadyToGoProductsEntity,
       ProductRepository,
       AdminBudgetCakeRateRepository,
     ]),
   ],
   providers: [
     AdminProductRateRepository,
-    AdminProductRepository,
+    AdminProductGalleryRepository,
     AdminProductDesignRateRepository,
     AdminBudgetCakeRateRepository,
     SurprisePackageRepository,
     AdminStudioDetailsRepository,
+    ReadyToGoProductsRepository,
     AdminHubService,
   ],
   controllers: [AdminHubController, BareAdminHubController],

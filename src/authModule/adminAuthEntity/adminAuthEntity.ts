@@ -9,7 +9,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
 import { ProductRateEntity } from 'src/adminHubModule/productRateEntity/productRateEntity';
-import { ProductEntity } from 'src/adminHubModule/productEntity/productEntity';
+import { ProductEntity } from 'src/adminHubModule/productGalleryEntity/productGalleryEntity';
 import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
 import { AdminStudioEntity } from 'src/adminHubModule/adminStudioDetailsEntity/adminStudioDetailsEntity';
 

@@ -25,21 +25,25 @@ import {
   UpdateDesignRateDto,
   UpdateProductDto,
   UpdateProductRateDto,
+  UpdateRtgProductDto,
   UpdateStudioDetailsDto,
   UploadProductDto,
+  UploadRtgProductDto,
 } from '../adminHubDto/adminHubDto';
 import { AdminHubService } from '../adminHubService/adminHubService';
 import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
-import { ProductEntity } from '../productEntity/productEntity';
+import { ProductEntity } from '../productGalleryEntity/productGalleryEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 import {
   SurprisePackageDto,
   UpdateSurprisePackageDto,
 } from '../adminHubDto/adminHubDto';
-import { StudioObject, SurprisePackageObject } from '../types';
+import { rtgProductObject, StudioObject, SurprisePackageObject } from '../types';
 import { SurprisePackageEntity } from '../surprisePackageEntity/surprisePackageEntity';
 import { BudgetCakeRateEntity } from '../productRateEntity/budgetCakeRateEntity';
 import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
+// import { Request as Req, Request } from 'express';
+import { ReadyToGoProductsEntity } from '../rtgProductsEntity/rtgProductsEntity';
 
 @Controller('adminHub')
 @UseGuards(AuthGuard())
@@ -53,6 +57,22 @@ export class AdminHubController {
     @Body() adminHubDto: AdminHubDto,
   ): Promise<ProductRateEntity | any> {
     return await this.adminHubService.productRate(admin, adminHubDto);
+  }
+
+  @Post('/uploadRtgProduct')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(ValidationPipe)
+  async uploadRtgProduct(
+    @GetUser() admin: AdminAuthEntity,
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req: Request | any,
+    @Body() uploadRtgProductDto: UploadRtgProductDto,
+  ): Promise<rtgProductObject> {
+    return await this.adminHubService.uploadRtgProduct(
+      admin,
+      req,
+      uploadRtgProductDto,
+    );
   }
 
   @Post('/setBudgetCakeRate')
@@ -81,6 +101,20 @@ export class AdminHubController {
     return this.adminHubService.getBudgetCakeRates(admin);
   }
 
+  @Get('/getRtgProductAuth')
+  async getRtgProductsAuth(
+    @GetUser() admin: AdminAuthEntity,
+  ): Promise<ReadyToGoProductsEntity[]> {
+    return this.adminHubService.getRtgProductsAuth(admin);
+  }
+
+  @Get('/getRtgProduct')
+  async getRtgProducts(
+    @GetUser() admin: AdminAuthEntity,
+  ): Promise<ReadyToGoProductsEntity[]> {
+    return this.adminHubService.getRtgProductsAuth(admin);
+  }
+
   @Get('/getProductRateWithId/:rateId')
   @UsePipes(ValidationPipe)
   async getProductRateWithId(
@@ -88,6 +122,14 @@ export class AdminHubController {
     @GetUser() admin: AdminAuthEntity,
   ): Promise<ProductRateEntity | any> {
     return await this.adminHubService.getProductRateWithId(rateId, admin);
+  }
+
+  @Get('/getRtgProductsWithId/:reqId')
+  async getRtgProductsWithId(
+    @GetUser() admin: AdminAuthEntity,
+    @Param('reqId') reqId: string,
+  ): Promise<ReadyToGoProductsEntity> {
+    return await this.adminHubService.getRtgProductsWithId(admin, reqId);
   }
 
   @Patch('updateProductRate/:rateId')
@@ -116,6 +158,23 @@ export class AdminHubController {
       admin,
       updateProductRate,
     );
+  }
+
+  @Patch('updateRtgProduct:reqId')
+  @UsePipes(ValidationPipe)
+  async updateRtgProducts (
+    @GetUser() admin: AdminAuthEntity,
+    @Param("reqId") rtgId: string,
+    @Request() req: Request | any,
+    @Body() updateRtgProductDto: UpdateRtgProductDto
+  ): Promise<ReadyToGoProductsEntity> {
+    return await this.adminHubService.updateRtgProduct(
+      admin,
+      rtgId,
+      req,
+      updateRtgProductDto
+
+    )
   }
 
   @Post('/uploadProduct')
@@ -259,12 +318,12 @@ export class AdminHubController {
   @UsePipes(ValidationPipe)
   async createStudioDetails(
     @GetUser() admin: AdminAuthEntity,
-    @Body() adminStudioDetailsDto: AdminStudioDetailsDto
-  ) : Promise<StudioObject> {
+    @Body() adminStudioDetailsDto: AdminStudioDetailsDto,
+  ): Promise<StudioObject> {
     return await this.adminHubService.createStudioDetails(
       admin,
-      adminStudioDetailsDto
-    )
+      adminStudioDetailsDto,
+    );
   }
 
   @Patch('updateStudioDetails/:studioId')
@@ -272,12 +331,12 @@ export class AdminHubController {
   async updateStudioDetails(
     @GetUser() admin: AdminAuthEntity,
     @Param('studioId') studioId: string,
-    @Body() updateStudioDetailsDto: UpdateStudioDetailsDto
+    @Body() updateStudioDetailsDto: UpdateStudioDetailsDto,
   ): Promise<AdminStudioEntity> {
     return this.adminHubService.updateStudioDetails(
       admin,
       studioId,
-      updateStudioDetailsDto
-    )
+      updateStudioDetailsDto,
+    );
   }
 }

@@ -428,11 +428,13 @@ export class OrderDto {
   @IsNotEmpty()
   quantity: string;
 
+  @IsString()
+  @IsNotEmpty()
+  price: string;
+
   content?: string[];
 
   @IsString()
   @IsNotEmpty()
   deliveryDate: string;
-
- 
 }

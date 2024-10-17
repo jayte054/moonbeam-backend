@@ -9,10 +9,10 @@ import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity'
 import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import { UpdateProductDto, UploadProductDto } from '../adminHubDto/adminHubDto';
-import { ProductEntity } from '../productEntity/productEntity';
+import { ProductEntity } from '../productGalleryEntity/productGalleryEntity';
 
 @Injectable()
-export class AdminProductRepository extends Repository<ProductEntity> {
+export class AdminProductGalleryRepository extends Repository<ProductEntity> {
   private logger = new Logger('AdminProductRepository');
   constructor(
     private dataSource: DataSource,

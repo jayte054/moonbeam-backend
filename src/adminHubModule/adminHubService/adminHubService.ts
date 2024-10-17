@@ -10,13 +10,15 @@ import {
   UpdateDesignRateDto,
   UpdateProductDto,
   UpdateProductRateDto,
+  UpdateRtgProductDto,
   UpdateStudioDetailsDto,
   UploadProductDto,
+  UploadRtgProductDto,
 } from '../adminHubDto/adminHubDto';
 import { AdminProductRateRepository } from '../adminProductRateRepository/adminProductRateRepository';
-import { AdminProductRepository } from '../adminProductRepository/adminProductRepository';
+import { AdminProductGalleryRepository } from '../adminProductGalleryRepository/adminProductGalleryRepository';
 import { AdminProductDesignRateRepository } from '../adminProductDesignRateRepository/adminProductDesignRateRepository';
-import { ProductEntity } from '../productEntity/productEntity';
+import { ProductEntity } from '../productGalleryEntity/productGalleryEntity';
 import { ProductRateEntity } from '../productRateEntity/productRateEntity';
 import { ProductDesignRateEntity } from '../ProductDesignRateEntity/ProductDesignRateEntity';
 import { SurprisePackageEntity } from '../surprisePackageEntity/surprisePackageEntity';
@@ -26,29 +28,34 @@ import {
   SurprisePackageDto,
   UpdateSurprisePackageDto,
 } from '../adminHubDto/adminHubDto';
-import { StudioObject, SurprisePackageObject } from '../types';
+import { rtgProductObject, StudioObject, SurprisePackageObject } from '../types';
 import { AdminBudgetCakeRateRepository } from '../adminProductRateRepository/adminBudgetCakeRateRepository copy';
 import { BudgetCakeRateEntity } from '../productRateEntity/budgetCakeRateEntity';
 import { AdminStudioDetailsRepository } from '../adminStudioRepository/adminStudioRepository';
 import { async } from 'rxjs';
 import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
+import { ReadyToGoProductsRepository } from '../rtgProductsRepository/rtgProductsRepository';
+import { ReadyToGoProductsEntity } from '../rtgProductsEntity/rtgProductsEntity';
 
 @Injectable()
 export class AdminHubService {
   private logger = new Logger('AdminHubService');
   constructor(
     @InjectRepository(AdminProductRateRepository)
-    @InjectRepository(AdminProductRepository)
-    @InjectRepository(AdminProductDesignRateRepository)
-    @InjectRepository(SurprisePackageRepository)
-    @InjectRepository(AdminBudgetCakeRateRepository)
-    @InjectRepository(AdminStudioDetailsRepository)
     private adminProductRateRepository: AdminProductRateRepository,
-    private adminProductRepository: AdminProductRepository,
+
+    @InjectRepository(AdminProductGalleryRepository)
+    private adminProductRepository: AdminProductGalleryRepository,
+    @InjectRepository(AdminProductDesignRateRepository)
     private adminProductDesignRateRepository: AdminProductDesignRateRepository,
+    @InjectRepository(SurprisePackageRepository)
     private surprisePackageRepository: SurprisePackageRepository,
+    @InjectRepository(AdminBudgetCakeRateRepository)
     private adminBudgetCakeRateRepository: AdminBudgetCakeRateRepository,
+    @InjectRepository(AdminStudioDetailsRepository)
     private adminStudioDetailsRepository: AdminStudioDetailsRepository,
+    @InjectRepository(ReadyToGoProductsRepository)
+    private readyToGoProductsRepository: ReadyToGoProductsRepository,
   ) {}
 
   productRate = async (
@@ -71,6 +78,18 @@ export class AdminHubService {
     );
   };
 
+  uploadRtgProduct = async (
+    admin: AdminAuthEntity,
+    req: Request,
+    uploadRtgProductDto: UploadRtgProductDto,
+  ): Promise<rtgProductObject> => {
+    return await this.readyToGoProductsRepository.uploadRtgProduct(
+      admin,
+      req,
+      uploadRtgProductDto,
+    );
+  };
+
   getProductRates = async (
     admin: AdminAuthEntity,
   ): Promise<ProductRateEntity[]> => {
@@ -87,6 +106,16 @@ export class AdminHubService {
     return await this.adminBudgetCakeRateRepository.getCakeVariantRates();
   };
 
+  getRtgProductsAuth = async (
+    admin: AdminAuthEntity,
+  ): Promise<ReadyToGoProductsEntity[]> => {
+    return await this.readyToGoProductsRepository.getRtgProductsAuth(admin);
+  };
+
+  getRtgProducts = async (): Promise<ReadyToGoProductsEntity[]> => {
+    return await this.readyToGoProductsRepository.getRtgProducts();
+  };
+
   getProductRateWithId = async (
     rateId: string,
     admin: AdminAuthEntity,
@@ -94,6 +123,16 @@ export class AdminHubService {
     return await this.adminProductRateRepository.getProductRateWithId(
       rateId,
       admin,
+    );
+  };
+
+  getRtgProductsWithId = async (
+    admin: AdminAuthEntity,
+    rtgId: string,
+  ): Promise<ReadyToGoProductsEntity> => {
+    return await this.readyToGoProductsRepository.getRtgProductsWithId(
+      admin,
+      rtgId,
     );
   };
 
@@ -162,6 +201,20 @@ export class AdminHubService {
       admin,
       updateProductDto,
       req,
+    );
+  };
+
+  updateRtgProduct = async (
+    admin: AdminAuthEntity, 
+    rtgId: string, 
+    req: Request, 
+    updateRtgProductDto: UpdateRtgProductDto
+  ): Promise<ReadyToGoProductsEntity> => {
+    return await this.readyToGoProductsRepository.updateRtgProduct(
+      admin,
+      rtgId,
+      req,
+      updateRtgProductDto,
     );
   };
 
@@ -280,16 +333,24 @@ export class AdminHubService {
   updateStudioDetails = async (
     admin: AdminAuthEntity,
     studioId: string,
-    updateStudioDetailsDto: UpdateStudioDetailsDto
-    ): Promise<AdminStudioEntity> => {
-      return this.adminStudioDetailsRepository.updateStudioDetails(
-        admin,
-        studioId,
-        updateStudioDetailsDto
-      )
-    }
+    updateStudioDetailsDto: UpdateStudioDetailsDto,
+  ): Promise<AdminStudioEntity> => {
+    return this.adminStudioDetailsRepository.updateStudioDetails(
+      admin,
+      studioId,
+      updateStudioDetailsDto,
+    );
+  };
 
-    defaultStudioAddress = async (studioId: string): Promise<AdminStudioEntity> => {
-      return await this.adminStudioDetailsRepository.defaultStudioAddress(studioId)
-    }
+  defaultStudioAddress = async (
+    studioId: string,
+  ): Promise<AdminStudioEntity> => {
+    return await this.adminStudioDetailsRepository.defaultStudioAddress(
+      studioId,
+    );
+  };
+
+  deleteRtgProduct = async (admin: AdminAuthEntity, rtgId: string): Promise<string> => {
+    return await this.readyToGoProductsRepository.deleteRtgProduct(admin, rtgId)
+  }
 }
