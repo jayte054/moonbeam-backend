@@ -18,6 +18,7 @@ import {
   FoilCakeDto,
   RequestDto,
   OrderDto,
+  RtgOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ProductRepository } from '../productOrderRepository/productOrderRepository';
@@ -34,6 +35,7 @@ import {
   silverPackageOrderType,
   RequestObject,
   OrderObject,
+  RtgOrderObject,
 } from 'src/types';
 import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
 import { SurprisePackageOrderEntity } from '../productOrderEntity/surprisePackageOrderEntity';
@@ -54,6 +56,7 @@ import { RequestRepository } from '../productOrderRepository/requestRepository';
 import { RequestEntity } from '../productOrderEntity/requestEntity';
 import { OrderEntity } from '../productOrderEntity/ordersEntity';
 import { OrderRepository } from '../productOrderRepository/ordersRepository';
+import { RtgOrderRepository } from '../productOrderRepository/rtgOrderRepository';
 
 @Injectable()
 export class ProductService {
@@ -79,7 +82,9 @@ export class ProductService {
     @InjectRepository(RequestRepository)
     private requestRepository: RequestRepository,
     @InjectRepository(OrderRepository)
-    private orderRepository: OrderRepository
+    private orderRepository: OrderRepository,
+    @InjectRepository(RtgOrderRepository)
+    private rtgOrderRepository: RtgOrderRepository,
   ) {}
 
   async createCustomProductOrder(
@@ -202,6 +207,14 @@ export class ProductService {
     user: AuthEntity,
   ): Promise<VariantCakeObject> {
     return await this.cakeVariantRepository.cakeParfaitOrder(foilCakeDto, user);
+  }
+
+  async createRtgOrder(
+    user: AuthEntity,
+    rtgOrderDto:RtgOrderDto,
+    req: Request
+  ): Promise<RtgOrderObject> {
+    return await this.rtgOrderRepository.createRtgOrder(user, rtgOrderDto, req)
   }
 
   async addToCart(user: AuthEntity, cartDto: CartDto): Promise<CartObject> {

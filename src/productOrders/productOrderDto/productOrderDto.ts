@@ -438,3 +438,27 @@ export class OrderDto {
   @IsNotEmpty()
   deliveryDate: string;
 }
+
+export class RtgOrderDto {
+  @IsString()
+  @IsNotEmpty()
+  orderName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  orderType: string;
+
+  cakeMessage?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  deliveryDate: string;
+
+  @IsString()
+  @IsNotEmpty()
+  price: string;
+
+  @IsString()
+  @IsNotEmpty()
+  status: OrderStatus;
+}

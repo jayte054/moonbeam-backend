@@ -2,6 +2,7 @@ import { Controller, Get, Param, Patch, UsePipes, ValidationPipe } from '@nestjs
 import { AdminHubService } from '../adminHubService/adminHubService';
 import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
 import { ProductEntity } from '../productGalleryEntity/productGalleryEntity';
+import { ReadyToGoProductsEntity } from '../rtgProductsEntity/rtgProductsEntity';
 import { SurprisePackageEntity } from '../surprisePackageEntity/surprisePackageEntity';
 
 @Controller('bareAdminHub')
@@ -35,6 +36,11 @@ export class BareAdminHubController {
     return await this.adminHubService.getStudioWithId(
       studioId
     )
+  }
+
+  @Get("/getRtgProducts")
+  async getRtgProducts(): Promise<ReadyToGoProductsEntity[]> {
+    return await this.adminHubService.getRtgProducts()
   }
 
   @Patch('/defaultStudioAddress/:studioId')

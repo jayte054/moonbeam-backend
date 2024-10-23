@@ -26,6 +26,7 @@ import { PaymentEntity } from 'src/paymentModule/paymentEntity/paymentEntity';
 import { RequestEntity } from 'src/productOrders/productOrderEntity/requestEntity';
 import { OrderEntity } from 'src/productOrders/productOrderEntity/ordersEntity';
 import { ReadyToGoProductsEntity } from 'src/adminHubModule/rtgProductsEntity/rtgProductsEntity';
+import { RtgOrderEntity } from 'src/productOrders/rtgOrderEntity/rtgOrderEntity';
 
 const dbConfig: any | unknown = config.get('db');
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -62,6 +63,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     RequestEntity,
     OrderEntity,
     ReadyToGoProductsEntity,
+    RtgOrderEntity,
   ],
   synchronize: process.env.TypeORM_SYNC || dbConfig.synchronize,
   migrations: ['dist/migrations/*.js'], // Specify your migration directory,

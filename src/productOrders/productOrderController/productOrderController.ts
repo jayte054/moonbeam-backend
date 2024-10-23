@@ -32,6 +32,7 @@ import {
   UpdateCustomChopOrderDto,
   FoilCakeDto,
   OrderDto,
+  RtgOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductService } from '../productOrderService/productOrderService';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
@@ -45,6 +46,7 @@ import {
   goldPackageOrderType,
   silverPackageOrderType,
   OrderObject,
+  RtgOrderObject,
 } from 'src/types';
 import { ChopsOrderEntity } from '../productOrderEntity/chopsOrderEntity';
 import { SurprisePackageEntity } from 'src/adminHubModule/surprisePackageEntity/surprisePackageEntity';
@@ -120,6 +122,18 @@ export class ProductController {
       user,
       req,
     );
+  }
+
+  @Post('/cretateRtgOrder')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(ValidationPipe)
+  async createRtgOrder(
+    @GetUser() user: AuthEntity,
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req: Request | any,
+    @Body() rtgOrderDto: RtgOrderDto
+  ): Promise<RtgOrderObject> {
+    return await this.productService.createRtgOrder(user, rtgOrderDto, req)
   }
 
   @Post('/budgetCakeOrder')

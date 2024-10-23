@@ -23,6 +23,7 @@ import { CustomPackageOrderEntity } from 'src/productOrders/productOrderEntity/c
 import { CustomChopsOrderEntity } from 'src/productOrders/productOrderEntity/customChopsEntity';
 import { CakeVariantEntity } from 'src/productOrders/productOrderEntity/cakeVariantEntity';
 import { CartEntity } from 'src/productOrders/productOrderEntity/cartEntity';
+import { RtgOrderEntity } from 'src/productOrders/rtgOrderEntity/rtgOrderEntity';
 
 @Injectable()
 export class MailerService {
@@ -305,14 +306,52 @@ export class MailerService {
     }
   }
 
-  async defaultMail(
-    email: string,
-    cartItem: CartEntity
-  ): Promise<any> {
+  async rtgOrderMail(email: string, order: RtgOrderEntity): Promise<any> {
+    const name = order.orderName;
+    const type = order.orderType;
+    const price = order.price;
+    const status = order.status;
+    const message = order.cakeMessage;
+    const deliveryDate = order.deliveryDate;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.logger.error(`Invalid email format: ${email}`);
+      throw new BadRequestException(`Invalid email format: ${email}`);
+    }
+
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: Gmail_User,
+      to: email,
+      subject: 'Moonbeam Cakes Order',
+      html: ` 
+          Dear ${email}, This is to notify you that your order </br> 
+             <p> Order Name: ${name}</p>
+             <p> Inches: ${type}</p>
+             <p> Price: ${price}</p>
+             <p> Status: ${status}</p>
+             <p> Description: ${message}</p>
+             <p> DeliveryDate: ${deliveryDate} </p>  </br> 
+          has been successfully placed.
+          We will get back to you shortly`,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.verbose(`User ${email} product order mail sent successfully`);
+    } catch (error) {
+      this.logger.error(`User ${email} invalid email address`);
+      throw new InternalServerErrorException(
+        `user with email ${email} not found`,
+      );
+    }
+  }
+
+  async defaultMail(email: string, cartItem: CartEntity): Promise<any> {
     const name = cartItem.itemName;
     const quantity = cartItem.quantity;
     const price = cartItem.price;
-    const status = "delivery in progress";
+    const status = 'delivery in progress';
     const deliveryDate = cartItem.deliveryDate;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

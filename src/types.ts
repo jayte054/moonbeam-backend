@@ -276,3 +276,15 @@ export interface OrderObject {
   deliveryDate: string;
   userId: string;
 }
+
+export interface RtgOrderObject {
+    rtgOrderId: string;
+    orderName: string;
+    orderType: string;
+    cakeMessage?: string;
+    status: string;
+    orderDate: string;
+    deliveryDate: string;
+    price: string;
+    userId: string;
+}

@@ -56,6 +56,7 @@ export class ReadyToGoProductsRepository extends Repository<ReadyToGoProductsEnt
         adminId: admin.id,
       };
     } catch (error) {
+        console.log(error)
       this.logger.error(`failed to upload ready to go products`);
       throw new InternalServerErrorException(`failed to upload new product`);
     }
@@ -176,7 +177,7 @@ export class ReadyToGoProductsRepository extends Repository<ReadyToGoProductsEnt
 
         this.logger.verbose(`"ready to go product" with id ${rtgId}`)
         return `product with id ${rtgId} successfully deleted`
-        
+
     }catch (error) {
         this.logger.error(`failed to delete product with id ${rtgId}`)
         throw new InternalServerErrorException("failed to delete product")
