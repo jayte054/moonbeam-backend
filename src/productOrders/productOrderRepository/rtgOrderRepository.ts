@@ -7,6 +7,7 @@ import { MailerService } from "src/mailerModule/mailerService";
 import { RtgOrderObject } from "src/types";
 import { DataSource, Repository } from "typeorm";
 import { CartDto, RtgOrderDto } from "../productOrderDto/productOrderDto";
+import { OrderStatus } from "../ProductOrderEnum/productOrderEnum";
 import { RtgOrderEntity } from "../rtgOrderEntity/rtgOrderEntity";
 import { CartRepository } from "./cartRepository";
 
@@ -26,17 +27,16 @@ export class RtgOrderRepository extends Repository<RtgOrderEntity> {
     createRtgOrder = async (
         user: AuthEntity, 
         rtgOrderDto: RtgOrderDto, 
-        req: Request): Promise<RtgOrderObject> => {
+        ): Promise<RtgOrderObject> => {
             const {
                 orderName, 
                 orderType, 
                 cakeMessage, 
                 deliveryDate, 
                 price,
-                status,
+                imageUrl,
             } = rtgOrderDto;
 
-        const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(req.file)
 
         const order = new RtgOrderEntity();
 
@@ -45,8 +45,8 @@ export class RtgOrderRepository extends Repository<RtgOrderEntity> {
         order.cakeMessage = cakeMessage;
         order.deliveryDate = deliveryDate;
         order.price = price;
-        order.status = status;
-        order.imageUrl = cloudinaryUrl.secure_url;
+        order.status = OrderStatus.progress;
+        order.imageUrl = imageUrl;
         order.orderDate = new Date().toLocaleDateString('en-US', {
         day: '2-digit',
         month: '2-digit',

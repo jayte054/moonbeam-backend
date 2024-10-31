@@ -11,6 +11,7 @@ import {
   UsePipes,
   ValidationPipe,
   UploadedFile,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -44,6 +45,7 @@ import { BudgetCakeRateEntity } from '../productRateEntity/budgetCakeRateEntity'
 import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
 // import { Request as Req, Request } from 'express';
 import { ReadyToGoProductsEntity } from '../rtgProductsEntity/rtgProductsEntity';
+import { GetAdmin } from 'src/authModule/getAdminDecorator/getAdminDecorator';
 
 @Controller('adminHub')
 @UseGuards(AuthGuard())
@@ -160,28 +162,29 @@ export class AdminHubController {
     );
   }
 
-  @Patch('updateRtgProduct:reqId')
+  @Patch('updateRtgProduct:rtgId')
   @UsePipes(ValidationPipe)
-  async updateRtgProducts (
+  async updateRtgProducts(
     @GetUser() admin: AdminAuthEntity,
-    @Param("reqId") rtgId: string,
+    @Param('rtgId') rtgId: string,
     @Request() req: Request | any,
-    @Body() updateRtgProductDto: UpdateRtgProductDto
+    @Body() updateRtgProductDto: UpdateRtgProductDto,
   ): Promise<ReadyToGoProductsEntity> {
     return await this.adminHubService.updateRtgProduct(
       admin,
       rtgId,
       req,
-      updateRtgProductDto
-
-    )
+      updateRtgProductDto,
+    );
   }
 
   @Post('/uploadProduct')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   async uploadProduct(
+    // @GetAdmin() admin: AdminAuthEntity,
     @GetUser() admin: AdminAuthEntity,
+    @UploadedFile() file: Express.Multer.File,
     @Request() req: Request | any,
     @Body() uploadProductDto: UploadProductDto,
   ): Promise<ProductEntity | any> {
@@ -207,7 +210,7 @@ export class AdminHubController {
     return await this.adminHubService.getProductsWithId(productId, admin);
   }
 
-  @Patch('/updateProduct/:ProductId')
+  @Patch('/updateProduct/:productId')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   async updateProduct(
@@ -338,5 +341,21 @@ export class AdminHubController {
       studioId,
       updateStudioDetailsDto,
     );
+  }
+
+  @Delete('/deleteProduct/:productId')
+  async deleteProduct(
+    @GetAdmin() admin: AdminAuthEntity,
+    @Param('productId') productId: string
+  ): Promise<string> {
+    return await this.adminHubService.deleteProduct(admin, productId)
+  }
+
+  @Delete('/deleteRtgProduct/:rtgId')
+  async deleteRtgProduct(
+    @GetAdmin() admin: AdminAuthEntity,
+    @Param('rtgId') rtgId: string
+  ): Promise<string> {
+    return await this.adminHubService.deleteRtgProduct(admin, rtgId)
   }
 }

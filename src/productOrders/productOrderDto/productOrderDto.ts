@@ -460,5 +460,5 @@ export class RtgOrderDto {
 
   @IsString()
   @IsNotEmpty()
-  status: OrderStatus;
+  imageUrl: string;
 }

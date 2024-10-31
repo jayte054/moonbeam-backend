@@ -125,15 +125,15 @@ export class ProductController {
   }
 
   @Post('/cretateRtgOrder')
-  @UseInterceptors(FileInterceptor('file'))
+  // @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   async createRtgOrder(
     @GetUser() user: AuthEntity,
-    @UploadedFile() file: Express.Multer.File,
-    @Request() req: Request | any,
+    // @UploadedFile() file: Express.Multer.File,
+    // @Request() req: Request | any,
     @Body() rtgOrderDto: RtgOrderDto
   ): Promise<RtgOrderObject> {
-    return await this.productService.createRtgOrder(user, rtgOrderDto, req)
+    return await this.productService.createRtgOrder(user, rtgOrderDto);
   }
 
   @Post('/budgetCakeOrder')

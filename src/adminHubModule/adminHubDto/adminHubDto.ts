@@ -88,11 +88,11 @@ export class AdminHubDto {
   @IsString()
   pancakes_corndogs_waffelsRate?: string;
 
-  @IsString()
-  foilCakeRate: string;
+  // @IsString()
+  // foilCakeRate: string;
 
-  @IsString()
-  cakeParfaitRate: string;
+  // @IsString()
+  // cakeParfaitRate: string;
 }
 
 export class AdminBudgetHubDto {
@@ -196,9 +196,9 @@ export class UpdateProductRateDto {
 
   pancakes_corndogs_waffelsRate?: string;
 
-  foilCakeRate: string;
+  foilCakeRate?: string;
 
-  cakeParfaitRate: string;
+  cakeParfaitRate?: string;
 }
 
 export class UploadProductDto {
@@ -211,8 +211,8 @@ export class UploadProductDto {
   @MaxLength(150)
   description: string;
 
-  @IsDateString()
-  date: string;
+  // @IsDateString()
+  // date: string;
 }
 
 export class UpdateProductDto {
@@ -276,8 +276,6 @@ export class SurprisePackageDto {
   itemEleven?: string;
 
   itemTwelve?: string;
-
-  imageUrl: string;
 
   @IsNotEmpty()
   price: string;

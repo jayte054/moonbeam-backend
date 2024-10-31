@@ -47,7 +47,7 @@ export class AdminProductGalleryRepository extends Repository<ProductEntity> {
     try {
       await product.save();
       this.logger.verbose(
-        `product with id ${product.productId} saved successfully by admin ${product.adminId}`,
+        `product with id ${product.productId} saved successfully `,
       );
     } catch (error) {
       console.log(error);
@@ -56,7 +56,7 @@ export class AdminProductGalleryRepository extends Repository<ProductEntity> {
     }
 
     return {
-      id: product.productId,
+      productId: product.productId,
       type: product.type,
       imageUrl: product.imageUrl,
       description: product.description,
@@ -124,6 +124,7 @@ export class AdminProductGalleryRepository extends Repository<ProductEntity> {
     updateProductDto?: UpdateProductDto,
     req?: Request,
   ): Promise<ProductEntity> => {
+    console.log(updateProductDto)
     const { type, file, description } = updateProductDto;
 
     const product = await this.getProductsWithId(productId, admin);
@@ -137,8 +138,8 @@ export class AdminProductGalleryRepository extends Repository<ProductEntity> {
       }
       product.imageUrl = newImage.secure_url;
     }
-    product.type = type;
-    product.description = description;
+    product.type = type || product.type;
+    product.description = description || product.description;
 
     try {
       await product.save();
@@ -160,4 +161,26 @@ export class AdminProductGalleryRepository extends Repository<ProductEntity> {
     const publicId = filename.split('.')[0];
     return publicId;
   }
+
+  deleteProduct = async (
+    admin: AdminAuthEntity,
+    productId: string
+    ): Promise<string> => {
+      try {
+        const product = await this.delete({
+          productId,
+          adminId: admin.id
+        })
+
+        if(!product) {
+          this.logger.debug(`product with id ${productId} not found`)
+          throw new NotFoundException(`product with id ${productId} not found`)
+        }
+        this.logger.verbose(`product with id ${productId} successfully deleted`)
+        return (`product with id ${productId} successfully deleted`)
+      } catch (error) {
+        this.logger.error(`failed to delete item with id ${productId}`);
+        throw new InternalServerErrorException('failed to delete item');
+      }
+    }
 }

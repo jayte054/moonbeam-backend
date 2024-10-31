@@ -21,6 +21,7 @@ import { DefaultStudioEntity } from 'src/deliveryModule/defaultStudioAddressEnti
 import { PaymentEntity } from 'src/paymentModule/paymentEntity/paymentEntity';
 import { RequestEntity } from 'src/productOrders/productOrderEntity/requestEntity';
 import { OrderEntity } from 'src/productOrders/productOrderEntity/ordersEntity';
+import { RtgOrderEntity } from 'src/productOrders/rtgOrderEntity/rtgOrderEntity';
 
 @Entity()
 @Unique(['email'])
@@ -98,24 +99,39 @@ export class AuthEntity extends BaseEntity {
   })
   variantId: CakeVariantEntity;
 
-  @OneToMany(() => CartEntity, (itemId) => itemId.user, {eager: true})
+  @OneToMany(() => CartEntity, (itemId) => itemId.user, { eager: true })
   itemId: CartEntity;
 
-  @OneToMany(() => DeliveryAddressEntity, (deliveryAddressId) => deliveryAddressId.user, {eager: true})
+  @OneToMany(
+    () => DeliveryAddressEntity,
+    (deliveryAddressId) => deliveryAddressId.user,
+    { eager: true },
+  )
   deliveryAddressId: DeliveryAddressEntity;
 
-  @OneToMany(() => DefaultStudioEntity, (studioId) => studioId.user, {eager: true})
+  @OneToMany(() => DefaultStudioEntity, (studioId) => studioId.user, {
+    eager: true,
+  })
   studioId: string;
 
-  @OneToMany(() => PaymentEntity, (paymentId) => paymentId.user, {eager: true})
+  @OneToMany(() => PaymentEntity, (paymentId) => paymentId.user, {
+    eager: true,
+  })
   paymentId: string;
 
-  @OneToMany(() => RequestEntity, (requestId) => requestId.user, {eager: true})
+  @OneToMany(() => RequestEntity, (requestId) => requestId.user, {
+    eager: true,
+  })
   requestId: string;
 
-  @OneToMany(() => OrderEntity, (orderId) => orderId.user, {eager: true})
+  @OneToMany(() => OrderEntity, (orderId) => orderId.user, { eager: true })
   orderId: string;
-  
+
+  @OneToMany(() => RtgOrderEntity, (rtgOrderId) => rtgOrderId.user, {
+    eager: true,
+  })
+  rtgOrderId: string;
+
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
     return hash === this.password;

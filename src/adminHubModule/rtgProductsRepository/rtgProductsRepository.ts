@@ -140,10 +140,10 @@ export class ReadyToGoProductsRepository extends Repository<ReadyToGoProductsEnt
         }
         rtgProduct.rtgImageUrl = newImage.secure_url;
     }
-    rtgProduct.rtgName = rtgName;
-    rtgProduct.rtgType = rtgType;
-    rtgProduct.rtgPrice = rtgPrice;
-    rtgProduct.rtgDescription = rtgDescription;
+    rtgProduct.rtgName = rtgName || rtgProduct.rtgName;
+    rtgProduct.rtgType = rtgType || rtgProduct.rtgType;
+    rtgProduct.rtgPrice = rtgPrice || rtgProduct.rtgPrice;
+    rtgProduct.rtgDescription = rtgDescription || rtgProduct.rtgDescription;
 
     try {
         await rtgProduct.save();

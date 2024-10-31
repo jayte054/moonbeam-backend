@@ -223,34 +223,39 @@ export class AdminProductRateRepository extends Repository<ProductRateEntity> {
 
     const rates = await this.getProductRateWithId(rateId, admin);
 
-    rates.chocolateCakeRate = chocolateCakeRate;
-    rates.strawberryCakeRate = strawberryCakeRate;
-    rates.vanillaCakeRate = vanillaCakeRate;
-    rates.redvelvetCakeRate = redvelvetCakeRate;
-    rates.carrotCakeRate = carrotCakeRate;
-    rates.cheeseCakeRate = cheeseCakeRate;
-    rates.bananaCakeRate = bananaCakeRate;
-    rates.appleCakeRate = appleCakeRate;
-    rates.lemonCakeRate = lemonCakeRate;
-    rates.coffeeCakeRate = coffeeCakeRate;
-    rates.coconutCakeRate = coconutCakeRate;
-    rates.blueberryCakeRate = blueberryCakeRate;
-    rates.samosaRate = samosaRate;
-    rates.springRollRate = springRollRate;
-    rates.samosa_springrollRate = samosa_springrollRate;
-    rates.puffRate = puffRate;
-    rates.pepperedMeatRate = pepperedMeatRate;
-    rates.puff_pepperedMeatRate = puff_pepperedMeatRate;
-    rates.samosa_pepperedMeatRate = samosa_pepperedMeatRate;
-    rates.springroll_pepperedMeatRate = springroll_pepperedMeatRate;
-    rates.meatPieRate = meatPieRate;
-    rates.donutsRate = donutsRate;
-    rates.cinamonRollsRate = cinamonRollsRate;
-    rates.pancakesRate = pancakesRate;
-    rates.corndogsRate = corndogsRate;
-    rates.waffelsRate = waffelsRate;
-    rates.meatpie_donutsRate = meatpie_donutsRate;
-    rates.pancakes_corndogs_waffelsRate = pancakes_corndogs_waffelsRate;
+    rates.chocolateCakeRate = chocolateCakeRate || rates.chocolateCakeRate;
+    rates.strawberryCakeRate = strawberryCakeRate || rates.strawberryCakeRate;
+    rates.vanillaCakeRate = vanillaCakeRate || rates.vanillaCakeRate;
+    rates.redvelvetCakeRate = redvelvetCakeRate || rates.redvelvetCakeRate;
+    rates.carrotCakeRate = carrotCakeRate || rates.carrotCakeRate;
+    rates.cheeseCakeRate = cheeseCakeRate || rates.cheeseCakeRate;
+    rates.bananaCakeRate = bananaCakeRate || rates.bananaCakeRate;
+    rates.appleCakeRate = appleCakeRate || rates.appleCakeRate;
+    rates.lemonCakeRate = lemonCakeRate || rates.lemonCakeRate;
+    rates.coffeeCakeRate = coffeeCakeRate || rates.coffeeCakeRate;
+    rates.coconutCakeRate = coconutCakeRate || rates.coconutCakeRate;
+    rates.blueberryCakeRate = blueberryCakeRate || rates.blueberryCakeRate;
+    rates.samosaRate = samosaRate || rates.samosaRate;
+    rates.springRollRate = springRollRate || rates.springRollRate;
+    rates.samosa_springrollRate =
+      samosa_springrollRate || rates.samosa_springrollRate;
+    rates.puffRate = puffRate || rates.puffRate;
+    rates.pepperedMeatRate = pepperedMeatRate || rates.pepperedMeatRate;
+    rates.puff_pepperedMeatRate =
+      puff_pepperedMeatRate || rates.puff_pepperedMeatRate;
+    rates.samosa_pepperedMeatRate =
+      samosa_pepperedMeatRate || rates.samosa_pepperedMeatRate;
+    rates.springroll_pepperedMeatRate =
+      springroll_pepperedMeatRate || rates.springroll_pepperedMeatRate;
+    rates.meatPieRate = meatPieRate || rates.meatPieRate;
+    rates.donutsRate = donutsRate || rates.donutsRate;
+    rates.cinamonRollsRate = cinamonRollsRate || rates.cinamonRollsRate;
+    rates.pancakesRate = pancakesRate || rates.pancakesRate;
+    rates.corndogsRate = corndogsRate || rates.corndogsRate;
+    rates.waffelsRate = waffelsRate || rates.waffelsRate;
+    rates.meatpie_donutsRate = meatpie_donutsRate || rates.meatpie_donutsRate;
+    rates.pancakes_corndogs_waffelsRate =
+      pancakes_corndogs_waffelsRate || rates.pancakes_corndogs_waffelsRate;
 
     try {
       if (admin.isAdmin === true) {

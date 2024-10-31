@@ -46,7 +46,6 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
       itemTen,
       itemEleven,
       itemTwelve,
-      imageUrl,
       price,
       description,
     } = surprisePackageDto;

@@ -353,4 +353,7 @@ export class AdminHubService {
   deleteRtgProduct = async (admin: AdminAuthEntity, rtgId: string): Promise<string> => {
     return await this.readyToGoProductsRepository.deleteRtgProduct(admin, rtgId)
   }
+  deleteProduct = async (admin:AdminAuthEntity, productId: string): Promise<string> => {
+    return await this.adminProductRepository.deleteProduct(admin, productId)
+  }
 }

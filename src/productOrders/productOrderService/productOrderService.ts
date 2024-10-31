@@ -212,9 +212,8 @@ export class ProductService {
   async createRtgOrder(
     user: AuthEntity,
     rtgOrderDto:RtgOrderDto,
-    req: Request
   ): Promise<RtgOrderObject> {
-    return await this.rtgOrderRepository.createRtgOrder(user, rtgOrderDto, req)
+    return await this.rtgOrderRepository.createRtgOrder(user, rtgOrderDto)
   }
 
   async addToCart(user: AuthEntity, cartDto: CartDto): Promise<CartObject> {
