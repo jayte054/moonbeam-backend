@@ -96,7 +96,7 @@ export class AdminHubController {
     return this.adminHubService.getProductRates(admin);
   }
 
-  @Get('/getProductRates')
+  @Get('/getBudgetRates')
   async getBudgetCakeRates(
     @GetUser() admin: AdminAuthEntity,
   ): Promise<BudgetCakeRateEntity[]> {
@@ -255,10 +255,10 @@ export class AdminHubController {
     );
   }
 
-  @Patch('/updateDesignRate/:id')
+  @Patch('/updateDesignRate/:designId')
   @UsePipes(ValidationPipe)
   async updateDesignRate(
-    @Param('id') designId: string,
+    @Param('designId') designId: string,
     @GetUser() admin: AdminAuthEntity,
     @Body() updateDesignRateDto: UpdateDesignRateDto,
   ): Promise<ProductDesignRateEntity | string> {
@@ -346,16 +346,16 @@ export class AdminHubController {
   @Delete('/deleteProduct/:productId')
   async deleteProduct(
     @GetAdmin() admin: AdminAuthEntity,
-    @Param('productId') productId: string
+    @Param('productId') productId: string,
   ): Promise<string> {
-    return await this.adminHubService.deleteProduct(admin, productId)
+    return await this.adminHubService.deleteProduct(admin, productId);
   }
 
   @Delete('/deleteRtgProduct/:rtgId')
   async deleteRtgProduct(
     @GetAdmin() admin: AdminAuthEntity,
-    @Param('rtgId') rtgId: string
+    @Param('rtgId') rtgId: string,
   ): Promise<string> {
-    return await this.adminHubService.deleteRtgProduct(admin, rtgId)
+    return await this.adminHubService.deleteRtgProduct(admin, rtgId);
   }
 }

@@ -116,10 +116,10 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
 
     const designRate = await this.getProductDesignRateWithId(designId, admin);
 
-    designRate.nakedRate = nakedRate;
-    designRate.butterCreamRate = butterCreamRate;
-    designRate.fundantRate = fundantRate;
-    designRate.covering = covering;
+    designRate.nakedRate = nakedRate || designRate.nakedRate;
+    designRate.butterCreamRate = butterCreamRate || designRate.butterCreamRate;
+    designRate.fundantRate = fundantRate || designRate.fundantRate;
+    designRate.covering = covering || designRate.covering;
 
     try {
       if (admin.isAdmin === true) {

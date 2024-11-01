@@ -191,20 +191,20 @@ export class AdminBudgetCakeRateRepository extends Repository<BudgetCakeRateEnti
 
     const rates = await this.getBudgetCakeRatesWithId(rateId, admin);
 
-    rates.chocolateCakeRate = chocolateCakeRate;
-    rates.strawberryCakeRate = strawberryCakeRate;
-    rates.vanillaCakeRate = vanillaCakeRate;
-    rates.redvelvetCakeRate = redvelvetCakeRate;
-    rates.carrotCakeRate = carrotCakeRate;
-    rates.cheeseCakeRate = cheeseCakeRate;
-    rates.bananaCakeRate = bananaCakeRate;
-    rates.appleCakeRate = appleCakeRate;
-    rates.lemonCakeRate = lemonCakeRate;
-    rates.coffeeCakeRate = coffeeCakeRate;
-    rates.coconutCakeRate = coconutCakeRate;
-    rates.blueberryCakeRate = blueberryCakeRate;
-    rates.foilCakeRate = foilCakeRate;
-    rates.cakeParfaitRate = cakeParfaitRate;
+   rates.chocolateCakeRate = chocolateCakeRate || rates.chocolateCakeRate;
+   rates.strawberryCakeRate = strawberryCakeRate || rates.strawberryCakeRate;
+   rates.vanillaCakeRate = vanillaCakeRate || rates.vanillaCakeRate;
+   rates.redvelvetCakeRate = redvelvetCakeRate || rates.redvelvetCakeRate;
+   rates.carrotCakeRate = carrotCakeRate || rates.carrotCakeRate;
+   rates.cheeseCakeRate = cheeseCakeRate || rates.cheeseCakeRate;
+   rates.bananaCakeRate = bananaCakeRate || rates.bananaCakeRate;
+   rates.appleCakeRate = appleCakeRate || rates.appleCakeRate;
+   rates.lemonCakeRate = lemonCakeRate || rates.lemonCakeRate;
+   rates.coffeeCakeRate = coffeeCakeRate || rates.coffeeCakeRate;
+   rates.coconutCakeRate = coconutCakeRate || rates.coconutCakeRate;
+   rates.blueberryCakeRate = blueberryCakeRate || rates.blueberryCakeRate;
+    rates.foilCakeRate = foilCakeRate || rates.foilCakeRate;
+    rates.cakeParfaitRate = cakeParfaitRate || rates.cakeParfaitRate;
 
     try {
       if (admin.isAdmin === true) {
