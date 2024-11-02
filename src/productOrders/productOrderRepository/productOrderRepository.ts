@@ -350,8 +350,9 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
   async updateOrder(
     id: string,
     user: AuthEntity,
-    updateOrderDto?: UpdateOrderDto,
-    req?: Request,
+    updateOrderDto: UpdateOrderDto,
+    req: Request,
+    file: Express.Multer.File
   ): Promise<ProductOrderEntity | any> {
     const {
       type,
@@ -360,7 +361,6 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       inches,
       description,
       orderName,
-      file,
       productFlavour,
       designCovering,
     } = updateOrderDto;

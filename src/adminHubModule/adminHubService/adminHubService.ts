@@ -194,27 +194,31 @@ export class AdminHubService {
     productId: string,
     admin: AdminAuthEntity,
     updateProductDto: UpdateProductDto,
-    req?: Request,
+    req: Request,
+    file: Express.Multer.File,
   ): Promise<ProductEntity> => {
     return await this.adminProductRepository.updateProduct(
       productId,
       admin,
-      updateProductDto,
       req,
+      file,
+      updateProductDto,
     );
   };
 
   updateRtgProduct = async (
-    admin: AdminAuthEntity, 
-    rtgId: string, 
-    req: Request, 
-    updateRtgProductDto: UpdateRtgProductDto
+    admin: AdminAuthEntity,
+    rtgId: string,
+    req: Request,
+    updateRtgProductDto: UpdateRtgProductDto,
+    file: Express.Multer.File
   ): Promise<ReadyToGoProductsEntity> => {
     return await this.readyToGoProductsRepository.updateRtgProduct(
       admin,
       rtgId,
       req,
       updateRtgProductDto,
+      file
     );
   };
 
@@ -303,12 +307,14 @@ export class AdminHubService {
     updateSurprisePackageDto: UpdateSurprisePackageDto,
     packageId: string,
     req: Request,
+    file: Express.Multer.File
   ): Promise<SurprisePackageObject> => {
     return await this.surprisePackageRepository.updateSurprisePackage(
       admin,
       updateSurprisePackageDto,
       packageId,
       req,
+      file
     );
   };
 
@@ -350,10 +356,19 @@ export class AdminHubService {
     );
   };
 
-  deleteRtgProduct = async (admin: AdminAuthEntity, rtgId: string): Promise<string> => {
-    return await this.readyToGoProductsRepository.deleteRtgProduct(admin, rtgId)
-  }
-  deleteProduct = async (admin:AdminAuthEntity, productId: string): Promise<string> => {
-    return await this.adminProductRepository.deleteProduct(admin, productId)
-  }
+  deleteRtgProduct = async (
+    admin: AdminAuthEntity,
+    rtgId: string,
+  ): Promise<string> => {
+    return await this.readyToGoProductsRepository.deleteRtgProduct(
+      admin,
+      rtgId,
+    );
+  };
+  deleteProduct = async (
+    admin: AdminAuthEntity,
+    productId: string,
+  ): Promise<string> => {
+    return await this.adminProductRepository.deleteProduct(admin, productId);
+  };
 }

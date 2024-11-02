@@ -415,11 +415,11 @@ export class ProductController {
     @Param('id') id: string,
     @GetUser() user: AuthEntity,
     @Body() updateOrderDto: UpdateOrderDto,
-    // @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
     @Request() req: Request | any,
   ): Promise<ProductOrderEntity> {
     console.log('wahala');
-    return await this.productService.updateOrder(id, user, updateOrderDto, req);
+    return await this.productService.updateOrder(id, user, updateOrderDto, req, file);
   }
 
   @Put('/:id/cancelOrder')

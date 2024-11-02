@@ -372,13 +372,15 @@ export class ProductService {
     id: string,
     user: AuthEntity,
     updateOrderDto: UpdateOrderDto,
-    req?: Request,
+    req: Request,
+    file: Express.Multer.File
   ): Promise<ProductOrderEntity> {
     return await this.productRepository.updateOrder(
       id,
       user,
       updateOrderDto,
       req,
+      file
     );
   }
 

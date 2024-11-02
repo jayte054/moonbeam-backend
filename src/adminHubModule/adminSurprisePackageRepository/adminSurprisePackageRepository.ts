@@ -162,7 +162,9 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
     updateSurprisePackageDto: UpdateSurprisePackageDto,
     packageId: string,
     req: Request,
+    file: Express.Multer.File
   ): Promise<SurprisePackageObject> => {
+    console.log("bronze",updateSurprisePackageDto);
     const {
       packageName,
       itemOne,
@@ -177,14 +179,12 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
       itemTen,
       itemEleven,
       itemTwelve,
-      file,
       price,
       description,
     } = updateSurprisePackageDto;
-    console.log(packageId);
 
     const saidPackage = await this.getPackageWithId(packageId, admin);
-    console.log(saidPackage);
+    console.log(  file  );
 
     if (file) {
       const newImage = await this.cloudinaryService.uploadImage(req.file);
@@ -196,21 +196,21 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
       saidPackage.imageUrl = newImage.secure_url;
     }
 
-    saidPackage.packageName = packageName;
-    saidPackage.itemOne = itemOne;
-    saidPackage.itemTwo = itemTwo;
-    saidPackage.itemThree = itemThree;
-    saidPackage.itemFour = itemFour;
-    saidPackage.itemFive = itemFive;
-    saidPackage.itemSix = itemSix;
-    saidPackage.itemSeven = itemSeven;
-    saidPackage.itemEight = itemEight;
-    saidPackage.itemNine = itemNine;
-    saidPackage.itemTen = itemTen;
-    saidPackage.itemEleven = itemEleven;
-    saidPackage.itemTwelve = itemTwelve;
-    saidPackage.price = price;
-    saidPackage.description = description;
+    saidPackage.packageName = packageName || saidPackage.packageName;
+    saidPackage.itemOne = itemOne || saidPackage.itemOne;
+    saidPackage.itemTwo = itemTwo || saidPackage.itemTwo;
+    saidPackage.itemThree = itemThree || saidPackage.itemThree;
+    saidPackage.itemFour = itemFour || saidPackage.itemFour;
+    saidPackage.itemFive = itemFive || saidPackage.itemFive;
+    saidPackage.itemSix = itemSix || saidPackage.itemSix;
+    saidPackage.itemSeven = itemSeven || saidPackage.itemSeven;
+    saidPackage.itemEight = itemEight || saidPackage.itemEight;
+    saidPackage.itemNine = itemNine || saidPackage.itemNine;
+    saidPackage.itemTen = itemTen || saidPackage.itemTen;
+    saidPackage.itemEleven = itemEleven || saidPackage.itemEleven;
+    saidPackage.itemTwelve = itemTwelve || saidPackage.itemTwelve;
+    saidPackage.price = price || saidPackage.price;
+    saidPackage.description = description || saidPackage.description;
 
     try {
       if (admin.isAdmin === true) {

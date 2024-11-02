@@ -111,9 +111,7 @@ export class AdminProductGalleryRepository extends Repository<ProductEntity> {
       this.logger.verbose(`product with id ${productId} fetched successfully`);
       return productWithId;
     } catch (error) {
-       this.logger.error(
-        `product with id ${productId} fetched unsuccessfully`,
-      );
+      this.logger.error(`product with id ${productId} fetched unsuccessfully`);
       throw new NotFoundException('product not found');
     }
   };
@@ -121,11 +119,12 @@ export class AdminProductGalleryRepository extends Repository<ProductEntity> {
   updateProduct = async (
     productId: string,
     admin: AdminAuthEntity,
+    req: Request,
+    file: Express.Multer.File,
     updateProductDto?: UpdateProductDto,
-    req?: Request,
   ): Promise<ProductEntity> => {
-    console.log(updateProductDto)
-    const { type, file, description } = updateProductDto;
+    console.log(updateProductDto);
+    const { type, description } = updateProductDto;
 
     const product = await this.getProductsWithId(productId, admin);
 
@@ -164,23 +163,23 @@ export class AdminProductGalleryRepository extends Repository<ProductEntity> {
 
   deleteProduct = async (
     admin: AdminAuthEntity,
-    productId: string
-    ): Promise<string> => {
-      try {
-        const product = await this.delete({
-          productId,
-          adminId: admin.id
-        })
+    productId: string,
+  ): Promise<string> => {
+    try {
+      const product = await this.delete({
+        productId,
+        adminId: admin.id,
+      });
 
-        if(!product) {
-          this.logger.debug(`product with id ${productId} not found`)
-          throw new NotFoundException(`product with id ${productId} not found`)
-        }
-        this.logger.verbose(`product with id ${productId} successfully deleted`)
-        return (`product with id ${productId} successfully deleted`)
-      } catch (error) {
-        this.logger.error(`failed to delete item with id ${productId}`);
-        throw new InternalServerErrorException('failed to delete item');
+      if (!product) {
+        this.logger.debug(`product with id ${productId} not found`);
+        throw new NotFoundException(`product with id ${productId} not found`);
       }
+      this.logger.verbose(`product with id ${productId} successfully deleted`);
+      return `product with id ${productId} successfully deleted`;
+    } catch (error) {
+      this.logger.error(`failed to delete item with id ${productId}`);
+      throw new InternalServerErrorException('failed to delete item');
     }
+  };
 }

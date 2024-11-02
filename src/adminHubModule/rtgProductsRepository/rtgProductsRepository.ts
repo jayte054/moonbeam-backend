@@ -119,13 +119,13 @@ export class ReadyToGoProductsRepository extends Repository<ReadyToGoProductsEnt
     admin: AdminAuthEntity, 
     rtgId: string, 
     req: Request, 
-    updateRtgProductDto: UpdateRtgProductDto
+    updateRtgProductDto: UpdateRtgProductDto,
+    file: Express.Multer.File
     ): Promise<ReadyToGoProductsEntity> => {
     const {
         rtgName, 
         rtgType, 
         rtgPrice, 
-        file, 
         rtgDescription
     } = updateRtgProductDto;
 

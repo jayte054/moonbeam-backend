@@ -163,18 +163,21 @@ export class AdminHubController {
   }
 
   @Patch('updateRtgProduct:rtgId')
+  @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   async updateRtgProducts(
     @GetUser() admin: AdminAuthEntity,
     @Param('rtgId') rtgId: string,
     @Request() req: Request | any,
     @Body() updateRtgProductDto: UpdateRtgProductDto,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<ReadyToGoProductsEntity> {
     return await this.adminHubService.updateRtgProduct(
       admin,
       rtgId,
       req,
       updateRtgProductDto,
+      file,
     );
   }
 
@@ -216,6 +219,7 @@ export class AdminHubController {
   async updateProduct(
     @Param('productId') productId: string,
     @GetUser() admin: AdminAuthEntity,
+    @UploadedFile() file: Express.Multer.File,
     @Body() updateProductDto: UpdateProductDto,
     @Request() req: Request | any,
   ): Promise<ProductEntity> {
@@ -224,6 +228,7 @@ export class AdminHubController {
       admin,
       updateProductDto,
       req,
+      file,
     );
   }
 
@@ -306,6 +311,7 @@ export class AdminHubController {
     @GetUser() admin: AdminAuthEntity,
     @Body() updateSurprisePackageDto: UpdateSurprisePackageDto,
     @Param('packageId') packageId: string,
+    @UploadedFile() file: Express.Multer.File,
     @Request() req: Request | any,
   ): Promise<SurprisePackageObject> {
     console.log(packageId);
@@ -314,6 +320,7 @@ export class AdminHubController {
       updateSurprisePackageDto,
       packageId,
       req,
+      file,
     );
   }
 
