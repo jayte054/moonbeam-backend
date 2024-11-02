@@ -132,14 +132,14 @@ export class AdminStudioDetailsRepository extends Repository<AdminStudioEntity> 
                 throw new InternalServerErrorException(" Wrong Admin")
             }
 
-            studio.studioTitle = studioTitle;
-            studio.studioAddress = studioAddress;
-            studio.LGA = LGA;
-            studio.state = state;
-            studio.phoneNumber = phoneNumber;
-            studio.deliveryBaseFee = deliveryBaseFee;
-            studio.deliveryPricePerKm = deliveryPricePerKm;
-            studio.defaultStudioAddress = defaultStudioAddress;
+            studio.studioTitle = studioTitle || studio.studioTitle;
+            studio.studioAddress = studioAddress || studio.studioAddress;
+            studio.LGA = LGA || studio.LGA;
+            studio.state = state || studio.state;
+            studio.phoneNumber = phoneNumber || studio.phoneNumber;
+            studio.deliveryBaseFee = deliveryBaseFee || studio.deliveryBaseFee;
+            studio.deliveryPricePerKm = deliveryPricePerKm || studio.deliveryPricePerKm;
+            studio.defaultStudioAddress = defaultStudioAddress || studio.defaultStudioAddress;
 
             try {
                 await studio.save()
