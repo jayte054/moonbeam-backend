@@ -352,7 +352,7 @@ export class AdminHubController {
 
   @Delete('/deleteProduct/:productId')
   async deleteProduct(
-    @GetAdmin() admin: AdminAuthEntity,
+    @GetUser() admin: AdminAuthEntity,
     @Param('productId') productId: string,
   ): Promise<string> {
     return await this.adminHubService.deleteProduct(admin, productId);
@@ -360,7 +360,7 @@ export class AdminHubController {
 
   @Delete('/deleteRtgProduct/:rtgId')
   async deleteRtgProduct(
-    @GetAdmin() admin: AdminAuthEntity,
+    @GetUser() admin: AdminAuthEntity,
     @Param('rtgId') rtgId: string,
   ): Promise<string> {
     return await this.adminHubService.deleteRtgProduct(admin, rtgId);

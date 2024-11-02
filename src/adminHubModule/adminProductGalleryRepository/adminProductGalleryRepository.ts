@@ -166,6 +166,7 @@ export class AdminProductGalleryRepository extends Repository<ProductEntity> {
     productId: string,
   ): Promise<string> => {
     try {
+      console.log(admin)
       const product = await this.delete({
         productId,
         adminId: admin.id,
@@ -178,6 +179,7 @@ export class AdminProductGalleryRepository extends Repository<ProductEntity> {
       this.logger.verbose(`product with id ${productId} successfully deleted`);
       return `product with id ${productId} successfully deleted`;
     } catch (error) {
+      console.log(error)
       this.logger.error(`failed to delete item with id ${productId}`);
       throw new InternalServerErrorException('failed to delete item');
     }
