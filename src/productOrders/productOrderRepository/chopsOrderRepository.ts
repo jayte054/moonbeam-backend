@@ -198,7 +198,7 @@ export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
     try {
       await order.save();
       await this.mailerService.chopsOrderMail(email, order);
-      await this.cartRepository.addToCart(user, cartDto)
+      await this.cartRepository.addToCart(user, cartDto);
       this.logger.verbose(
         `user ${user} has successfully placed an order ${order.id}`,
       );

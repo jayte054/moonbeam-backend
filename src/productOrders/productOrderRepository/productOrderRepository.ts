@@ -40,7 +40,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     private cloudinaryService: CloudinaryService,
     private readonly mailerService: MailerService,
     @InjectRepository(CartRepository)
-    private cartRepository: CartRepository
+    private cartRepository: CartRepository,
   ) {
     super(ProductOrderEntity, dataSource.createEntityManager());
   }
@@ -258,16 +258,16 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       deliveryDate: '',
     };
 
-    cartDto["itemName"] = order.orderName;
-    cartDto["price"] = order.price;
+    cartDto['itemName'] = order.orderName;
+    cartDto['price'] = order.price;
     cartDto['imageUrl'] = order.imageUrl;
     cartDto['productOrderId'] = order.id;
     cartDto['itemType'] = order.type;
-    cartDto['deliveryDate'] = order.deliveryDate
+    cartDto['deliveryDate'] = order.deliveryDate;
 
     try {
       await order.save();
-      await this.cartRepository.addToCart(user, cartDto)
+      await this.cartRepository.addToCart(user, cartDto);
       await this.mailerService.productOrderMail(email, order);
       this.logger.verbose(
         `user ${user} has successfully placed an order ${order.id}`,
@@ -302,20 +302,18 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     const query = this.createQueryBuilder('orderName');
     query.where('orderName.userId = :userId', { userId: user.id });
     console.log(user);
-    
+
     try {
       const orders = await query.getMany();
       console.log(orders);
       this.logger.verbose(
         `user with id ${user.id} orders fetched successfully`,
       );
-    return orders;
-
+      return orders;
     } catch (error) {
       this.logger.error(`orders for user ${user.id} not found`);
       throw new NotFoundException(`orders for user ${user.id} not found`);
     }
-
   }
 
   async getOrderWithId(
@@ -352,7 +350,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     user: AuthEntity,
     updateOrderDto: UpdateOrderDto,
     req: Request,
-    file: Express.Multer.File
+    file: Express.Multer.File,
   ): Promise<ProductOrderEntity | any> {
     const {
       type,

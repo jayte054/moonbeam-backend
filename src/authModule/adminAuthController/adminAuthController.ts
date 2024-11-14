@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -13,6 +14,9 @@ import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.
 import { ResetPasswordDto } from '../authDto/resetPasswordDto';
 import { AdminAuthEntity } from '../adminAuthEntity/adminAuthEntity';
 import { GetUser } from '../getUserDecorator/getUserDecorator';
+import { UserDto } from '../authDto/userDto';
+import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/productOrderEntity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('adminAuth')
 export class AdminAuthController {
@@ -49,8 +53,11 @@ export class AdminAuthController {
   }
 
   @Get('/getAllUsers')
+  @UseGuards(AuthGuard())
   @UsePipes(ValidationPipe)
-  async getAllUsers(@GetUser() admin: AdminAuthEntity): Promise<any> {
+  async getAllUsers(
+    @GetUser() admin: AdminAuthEntity,
+  ): Promise<UserDto[] | ProductOrderEntity[] | any> {
     return await this.adminAuthService.getAllUsers(admin);
   }
 }

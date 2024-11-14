@@ -1,9 +1,12 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
 import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.dto';
 import { AuthCredentialsDto } from '../authDto/authCredentialsDto';
 import { AuthSigninDto } from '../authDto/authSigninDto';
 import { ResetPasswordDto } from '../authDto/resetPasswordDto';
 import { AuthService } from '../authService/authService';
+import { GetUser } from '../getUserDecorator/getUserDecorator';
+import { AdminAuthEntity } from '../adminAuthEntity/adminAuthEntity';
+import { AuthEntity } from '../authEntity/authEntity';
 
 @Controller('auth')
 export class AuthController {
@@ -36,5 +39,10 @@ export class AuthController {
     @Body() resetPasswordDto: ResetPasswordDto,
   ): Promise<string | any> {
     return await this.authService.resetPassword(resetPasswordDto);
+  }
+
+  @Get('/getAll')
+  async getAll() {
+    return await this.authService.getAll();
   }
 }

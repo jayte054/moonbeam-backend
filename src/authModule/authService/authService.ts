@@ -33,7 +33,7 @@ export class AuthService {
     );
 
     try {
-    const { id, email, firstname, lastname, phoneNumber } = userDetails;
+      const { id, email, firstname, lastname, phoneNumber } = userDetails;
 
       if (!userDetails) {
         throw new UnauthorizedException('invalid credentials');
@@ -80,5 +80,9 @@ export class AuthService {
 
   async getAllUsers(admin: AdminAuthEntity): Promise<AuthEntity[]> {
     return await this.authRepository.getAllUsers(admin);
+  }
+
+  async getAll(): Promise<AuthEntity[]> {
+    return await this.authRepository.getAll();
   }
 }

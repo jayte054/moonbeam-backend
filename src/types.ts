@@ -1,5 +1,9 @@
 import { AuthEntity } from './authModule/authEntity/authEntity';
-import { OrderStatus, ProductFlavours, VariantType } from './productOrders/ProductOrderEnum/productOrderEnum';
+import {
+  OrderStatus,
+  ProductFlavours,
+  VariantType,
+} from './productOrders/ProductOrderEnum/productOrderEnum';
 
 export type bronzePackageObject = {
   itemOne: string;
@@ -153,12 +157,12 @@ export type diamondPackageOrderType = {
   userId: string;
 };
 
-export type customPackageOrderType = { 
+export type customPackageOrderType = {
   orderName: string;
-  item: string[]; 
-  deliveryDate: string;  
+  item: string[];
+  deliveryDate: string;
   addInfo: string;
-}
+};
 
 export type chopsOrderType = {
   orderName: string;
@@ -166,17 +170,17 @@ export type chopsOrderType = {
   numberOfPacks: string;
   deliveryDate: string;
   description: string;
-}
+};
 
 export type CartObject = {
   itemName: string;
-  price:string;
-  imageUrl:string;
+  price: string;
+  imageUrl: string;
   quantity: string;
   productOrderId: string;
   deliveryDate: string;
-  userId: string
-}
+  userId: string;
+};
 
 export type VariantCakeObject = {
   variantId: string;
@@ -191,13 +195,13 @@ export type VariantCakeObject = {
 };
 
 export interface DeliveryAddressObject {
-  deliveryAddressId: string
+  deliveryAddressId: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
   additionalPhoneNumber?: string;
-  deliveryAddress: string; 
-  region: string;  
+  deliveryAddress: string;
+  region: string;
   city: string;
   defaultAddress: boolean;
   userId: string;
@@ -254,15 +258,15 @@ export interface ReferenceObject {
 }
 
 export interface RequestObject {
-    requestId: string;
-    requestTitle: string;
-    orderType: string;
-    quantity: string;
-    content: string | string[];
-    deliveryDate: string;
-    status: string;
-    productOrderId: string;
-    userId: string
+  requestId: string;
+  requestTitle: string;
+  orderType: string;
+  quantity: string;
+  content: string | string[];
+  deliveryDate: string;
+  status: string;
+  productOrderId: string;
+  userId: string;
 }
 
 export interface OrderObject {
@@ -278,13 +282,29 @@ export interface OrderObject {
 }
 
 export interface RtgOrderObject {
-    rtgOrderId: string;
-    orderName: string;
-    orderType: string;
-    cakeMessage?: string;
-    status: string;
-    orderDate: string;
-    deliveryDate: string;
-    price: string;
-    userId: string;
+  rtgOrderId: string;
+  orderName: string;
+  orderType: string;
+  cakeMessage?: string;
+  status: string;
+  orderDate: string;
+  deliveryDate: string;
+  price: string;
+  userId: string;
+}
+
+export interface AllOrdersDto {
+  id: string;
+  orderType: string;
+  date: string;
+  amount: string;
+  status: string;
+}
+
+export interface PaidOrdersDto {
+  id: string;
+  orderType: string | string[] | undefined;
+  date: string;
+  amount: string;
+  status: string;
 }

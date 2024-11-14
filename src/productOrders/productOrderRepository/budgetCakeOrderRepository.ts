@@ -137,7 +137,7 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
       imageUrl: '',
       productOrderId: '',
       itemType: '',
-      deliveryDate: ''
+      deliveryDate: '',
     };
 
     cartDto['itemName'] = order.orderName;
@@ -231,7 +231,7 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
     user: AuthEntity,
     updateOrderDto: UpdateOrderDto,
     req: Request,
-    file: Express.Multer.File
+    file: Express.Multer.File,
   ): Promise<BudgetCakeOrderEntity | any> {
     const {
       type,
@@ -294,7 +294,7 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
     order.orderName = orderName || order.orderName;
     order.type = type || order.type;
     order.layers = Number(layers) || order.layers;
-    order.inches = Number(inches)|| order.inches;
+    order.inches = Number(inches) || order.inches;
     order.deliveryDate = deliveryDate || order.deliveryDate;
     order.description = description || order.description;
     order.productFlavour = productFlavour || order.productFlavour;

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './authController/authController';
 import { AuthEntity } from './authEntity/authEntity';
@@ -14,11 +14,14 @@ import { AdminAuthRepository } from './adminAuthRepository/adminAuthRepository';
 import { AdminAuthService } from './adminAuthService/adminAuthService';
 import { AdminAuthEntity } from './adminAuthEntity/adminAuthEntity';
 import { AdminAuthController } from './adminAuthController/adminAuthController';
+import { ProductsModule } from 'src/productOrders/products.module';
+import { AllOrdersRepository } from 'src/productOrders/productOrderRepository/allOrdersRepository';
 
 const jwtConfig: any | unknown = config.get('jwt');
 
 @Module({
   imports: [
+    forwardRef(() => ProductsModule),
     MailerModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({

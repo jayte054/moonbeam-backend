@@ -12,9 +12,7 @@ import {
   UpdateOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
-import {
-  OrderStatus,
-} from '../ProductOrderEnum/productOrderEnum';
+import { OrderStatus } from '../ProductOrderEnum/productOrderEnum';
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
 import { v4 as uuid } from 'uuid';
@@ -32,7 +30,7 @@ export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
     private cloudinaryService: CloudinaryService,
     private readonly mailerService: MailerService,
     @InjectRepository(RequestRepository)
-    private requestRepository: RequestRepository
+    private requestRepository: RequestRepository,
   ) {
     super(CustomOrderEntity, dataSource.createEntityManager());
   }
@@ -87,7 +85,7 @@ export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
     const requestDto: RequestDto = {
       requestTitle: order.orderName,
       orderType: order.type,
-      content: ["custom cake"],
+      content: ['custom cake'],
       imageUrl: order.imageUrl,
       deliveryDate: order.deliveryDate,
       status: order.status,
@@ -96,7 +94,7 @@ export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
 
     try {
       await order.save();
-      await this.requestRepository.addRequest(user,requestDto)
+      await this.requestRepository.addRequest(user, requestDto);
       await this.mailerService.customOrderMail(user.email, order);
       this.logger.verbose(
         `user ${user} has successfully requested a custom order ${order.customCakeId}`,
@@ -135,12 +133,11 @@ export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
       this.logger.verbose(
         `user with id ${user.id} orders fetched successfully`,
       );
-    return orders;
+      return orders;
     } catch (error) {
       this.logger.error(`orders for user ${user.id} not found`);
       throw new NotFoundException(`orders for user ${user.id} not found`);
     }
-
   }
 
   async getOrderWithId(

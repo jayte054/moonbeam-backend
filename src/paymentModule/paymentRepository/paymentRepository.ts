@@ -1,22 +1,27 @@
-import { Injectable, InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import crypto from "crypto";
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import crypto from 'crypto';
 import CryptoJS from 'crypto-js';
-import { AuthEntity } from "src/authModule/authEntity/authEntity";
-import { MailerService } from "src/mailerModule/mailerService";
-import { CartEntity } from "src/productOrders/productOrderEntity/cartEntity";
-import { ProductType } from "src/productOrders/ProductOrderEnum/productOrderEnum";
-import { BudgetCakeOrderRepository } from "src/productOrders/productOrderRepository/budgetCakeOrderRepository";
-import { CakeVariantRepository } from "src/productOrders/productOrderRepository/cakeVariantRepository";
-import { CartRepository } from "src/productOrders/productOrderRepository/cartRepository";
-import { ChopsOrderRepository } from "src/productOrders/productOrderRepository/chopsOrderRepository";
-import { ProductRepository } from "src/productOrders/productOrderRepository/productOrderRepository";
-import { SurprisePackageOrderRepository } from "src/productOrders/productOrderRepository/surprisePackageOrderRepository";
-import { ProductService } from "src/productOrders/productOrderService/productOrderService";
-import { CartObject, PaymentObject, verificationDto } from "src/types";
-import { DataSource, Repository } from "typeorm";
-import { PaymentDto } from "../paymentDto/paymentDto";
-import { PaymentEntity } from "../paymentEntity/paymentEntity";
+import { AuthEntity } from 'src/authModule/authEntity/authEntity';
+import { MailerService } from 'src/mailerModule/mailerService';
+import { CartEntity } from 'src/productOrders/productOrderEntity/cartEntity';
+import { ProductType } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
+import { BudgetCakeOrderRepository } from 'src/productOrders/productOrderRepository/budgetCakeOrderRepository';
+import { CakeVariantRepository } from 'src/productOrders/productOrderRepository/cakeVariantRepository';
+import { CartRepository } from 'src/productOrders/productOrderRepository/cartRepository';
+import { ChopsOrderRepository } from 'src/productOrders/productOrderRepository/chopsOrderRepository';
+import { ProductRepository } from 'src/productOrders/productOrderRepository/productOrderRepository';
+import { SurprisePackageOrderRepository } from 'src/productOrders/productOrderRepository/surprisePackageOrderRepository';
+import { ProductService } from 'src/productOrders/productOrderService/productOrderService';
+import { CartObject, PaymentObject, verificationDto } from 'src/types';
+import { DataSource, Repository } from 'typeorm';
+import { PaymentDto } from '../paymentDto/paymentDto';
+import { PaymentEntity } from '../paymentEntity/paymentEntity';
 
 @Injectable()
 export class PaymentRepository extends Repository<PaymentEntity> {
@@ -235,113 +240,112 @@ export class PaymentRepository extends Repository<PaymentEntity> {
       const cartItems: CartEntity[] = await this.cartRepository.fetchCartItems(
         user,
       );
-    //   const productIds = cartItems.map((cartItem) => {
-    //     return cartItem.productOrderId;
-    //   });
-    //   const products = await Promise.all(
-    //     productIds.map(async (productId) => {
-    //       return (
-    //         (await this.productRepository.getOrderWithId(productId, user)) ||
-    //         (await this.budgetCakeOrderRepository.getOrderWithId(
-    //           productId,
-    //           user,
-    //         )) ||
-    //         (await this.cakeVariantRepository.getOrderWithId(
-    //           productId,
-    //           user,
-    //         )) ||
-    //         (await this.chopsOrderRepository.getChopOrderWithId(
-    //           productId,
-    //           user,
-    //         )) ||
-    //         (await this.surprisePackageOrderRepository.getSurprisePackageOrdersWithId(
-    //           productId,
-    //           user,
-    //         ))
-    //       );
-    //     }),
-    //   );
-    //   const productMap: { [key: string]: string } = {
-    //     [ProductType.Traditional]: 'Traditional',
-    //     [ProductType.Wedding]: 'Wedding',
-    //     [ProductType.Birthday]: 'Birthday',
-    //     [ProductType.Anniversary]: 'Anniversary',
-    //     [ProductType.Chops_Pastries]: 'Chops / Pastries',
-    //     [ProductType.Surprise_Package]: 'surprise package',
-    //     [ProductType.Cake_Variant]: 'cake variant',
-    //   };
+      //   const productIds = cartItems.map((cartItem) => {
+      //     return cartItem.productOrderId;
+      //   });
+      //   const products = await Promise.all(
+      //     productIds.map(async (productId) => {
+      //       return (
+      //         (await this.productRepository.getOrderWithId(productId, user)) ||
+      //         (await this.budgetCakeOrderRepository.getOrderWithId(
+      //           productId,
+      //           user,
+      //         )) ||
+      //         (await this.cakeVariantRepository.getOrderWithId(
+      //           productId,
+      //           user,
+      //         )) ||
+      //         (await this.chopsOrderRepository.getChopOrderWithId(
+      //           productId,
+      //           user,
+      //         )) ||
+      //         (await this.surprisePackageOrderRepository.getSurprisePackageOrdersWithId(
+      //           productId,
+      //           user,
+      //         ))
+      //       );
+      //     }),
+      //   );
+      //   const productMap: { [key: string]: string } = {
+      //     [ProductType.Traditional]: 'Traditional',
+      //     [ProductType.Wedding]: 'Wedding',
+      //     [ProductType.Birthday]: 'Birthday',
+      //     [ProductType.Anniversary]: 'Anniversary',
+      //     [ProductType.Chops_Pastries]: 'Chops / Pastries',
+      //     [ProductType.Surprise_Package]: 'surprise package',
+      //     [ProductType.Cake_Variant]: 'cake variant',
+      //   };
 
-    //   // Send email for each product
-    //   await Promise.all(
-    //     products.map(async (product) => {
-    //       const productType = productMap[product.type];
+      //   // Send email for each product
+      //   await Promise.all(
+      //     products.map(async (product) => {
+      //       const productType = productMap[product.type];
 
-    //       switch (productType) {
-    //         case 'Traditional':
-    //         case 'Wedding':
-    //         case 'Birthday':
-    //         case 'Anniversary':
-    //           // Send product order or budget cake mail
-    //           await this.mailerService.productOrderMail(user.email, product);
-    //           await this.mailerService.budgetCakeOrderMail(user.email, product);
-    //           break;
+      //       switch (productType) {
+      //         case 'Traditional':
+      //         case 'Wedding':
+      //         case 'Birthday':
+      //         case 'Anniversary':
+      //           // Send product order or budget cake mail
+      //           await this.mailerService.productOrderMail(user.email, product);
+      //           await this.mailerService.budgetCakeOrderMail(user.email, product);
+      //           break;
 
-    //         case 'Chops / Pastries':
-    //           // Send chops order mail
-    //           await this.mailerService.chopsOrderMail(user.email, product);
-    //           break;
+      //         case 'Chops / Pastries':
+      //           // Send chops order mail
+      //           await this.mailerService.chopsOrderMail(user.email, product);
+      //           break;
 
-    //         case 'surprise package':
-    //           // Send surprise package email based on package type
-    //           if (product.bronzePackage) {
-    //             await this.mailerService.bronzePackageOrderMail(
-    //               user.email,
-    //               product,
-    //             );
-    //           } else if (product.silverPackage) {
-    //             await this.mailerService.silverPackageOrderMail(
-    //               user.email,
-    //               product,
-    //             );
-    //           } else if (product.goldPackage) {
-    //             await this.mailerService.goldPackageOrderMail(
-    //               user.email,
-    //               product,
-    //             );
-    //           } else if (product.diamondPackage) {
-    //             await this.mailerService.diamondPackageOrderMail(
-    //               user.email,
-    //               product,
-    //             );
-    //           }
-    //           break;
+      //         case 'surprise package':
+      //           // Send surprise package email based on package type
+      //           if (product.bronzePackage) {
+      //             await this.mailerService.bronzePackageOrderMail(
+      //               user.email,
+      //               product,
+      //             );
+      //           } else if (product.silverPackage) {
+      //             await this.mailerService.silverPackageOrderMail(
+      //               user.email,
+      //               product,
+      //             );
+      //           } else if (product.goldPackage) {
+      //             await this.mailerService.goldPackageOrderMail(
+      //               user.email,
+      //               product,
+      //             );
+      //           } else if (product.diamondPackage) {
+      //             await this.mailerService.diamondPackageOrderMail(
+      //               user.email,
+      //               product,
+      //             );
+      //           }
+      //           break;
 
-    //         case 'cake variant':
-    //           // Handle specific cake variant types
-    //           if (product.type === 'foilCake') {
-    //             await this.mailerService.foilCakeOrderMail(user.email, product);
-    //           } else if (product.type === 'cakeParfait') {
-    //             await this.mailerService.cakeParfaitOrderMail(
-    //               user.email,
-    //               product,
-    //             );
-    //           }
-    //           break;
+      //         case 'cake variant':
+      //           // Handle specific cake variant types
+      //           if (product.type === 'foilCake') {
+      //             await this.mailerService.foilCakeOrderMail(user.email, product);
+      //           } else if (product.type === 'cakeParfait') {
+      //             await this.mailerService.cakeParfaitOrderMail(
+      //               user.email,
+      //               product,
+      //             );
+      //           }
+      //           break;
 
-    //         default:
-    //           // Fallback email for unknown product types
-             const sendMail = cartItems.map(
-               async (cartItem) => {
-                 await this.mailerService.defaultMail(user.email, cartItem);
-                 await this.cartRepository.deleteCartItem(user, cartItem.itemId);
-             }); 
-             return Promise.all(sendMail)
-            //   break;
-    //       }
-    //     }),
-    //   );
+      //         default:
+      //           // Fallback email for unknown product types
+      const sendMail = cartItems.map(async (cartItem) => {
+        await this.mailerService.defaultMail(user.email, cartItem);
+        await this.cartRepository.deleteCartItem(user, cartItem.itemId);
+      });
+      return Promise.all(sendMail);
+      //   break;
+      //       }
+      //     }),
+      //   );
     } catch (error) {
-        console.log(error)
+      console.log(error);
       this.logger.error(`failed to send order mail for user ${user.email}`);
       throw new InternalServerErrorException('failed to send order mail');
     }

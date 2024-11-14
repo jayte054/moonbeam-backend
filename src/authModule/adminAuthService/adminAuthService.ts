@@ -9,6 +9,8 @@ import { ResetPasswordEmailDto } from 'src/mailerModule/mailerDto/resetpassword.
 import { ResetPasswordDto } from '../authDto/resetPasswordDto';
 import { AuthRepository } from '../authRepository/authRepository';
 import { AdminAuthEntity } from '../adminAuthEntity/adminAuthEntity';
+import { UserDto } from '../authDto/userDto';
+import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/productOrderEntity';
 
 @Injectable()
 export class AdminAuthService {
@@ -35,7 +37,6 @@ export class AdminAuthService {
     const adminDetails = await this.adminAuthRepository.validateAdminPassword(
       adminAuthSigninDto,
     );
-
 
     try {
       const { id, email, firstname, lastname, phoneNumber } = adminDetails;
@@ -80,7 +81,9 @@ export class AdminAuthService {
     return await this.adminAuthRepository.adminResetPassword(resetPasswordDto);
   }
 
-  async getAllUsers(admin: AdminAuthEntity): Promise<any> {
+  async getAllUsers(
+    admin: AdminAuthEntity,
+  ): Promise<UserDto[] | ProductOrderEntity[] | any> {
     return await this.authRepository.getAllUsers(admin);
   }
 }

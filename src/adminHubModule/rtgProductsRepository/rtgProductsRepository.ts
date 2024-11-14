@@ -1,11 +1,19 @@
-import { Injectable, InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { Request } from 'express';
-import { AdminAuthEntity } from "src/authModule/adminAuthEntity/adminAuthEntity";
-import { CloudinaryService } from "src/cloudinary/cloudinaryService/cloudinaryService";
-import { DataSource, FindOneOptions, Repository } from "typeorm";
-import { UpdateRtgProductDto, UploadRtgProductDto } from "../adminHubDto/adminHubDto";
-import { ReadyToGoProductsEntity } from "../rtgProductsEntity/rtgProductsEntity";
-import { rtgProductObject } from "../types";
+import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
+import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
+import { DataSource, FindOneOptions, Repository } from 'typeorm';
+import {
+  UpdateRtgProductDto,
+  UploadRtgProductDto,
+} from '../adminHubDto/adminHubDto';
+import { ReadyToGoProductsEntity } from '../rtgProductsEntity/rtgProductsEntity';
+import { rtgProductObject } from '../types';
 
 @Injectable()
 export class ReadyToGoProductsRepository extends Repository<ReadyToGoProductsEntity> {
@@ -56,7 +64,7 @@ export class ReadyToGoProductsRepository extends Repository<ReadyToGoProductsEnt
         adminId: admin.id,
       };
     } catch (error) {
-        console.log(error)
+      console.log(error);
       this.logger.error(`failed to upload ready to go products`);
       throw new InternalServerErrorException(`failed to upload new product`);
     }
@@ -93,52 +101,50 @@ export class ReadyToGoProductsRepository extends Repository<ReadyToGoProductsEnt
     }
   };
 
-  getRtgProductsWithId = async (admin: AdminAuthEntity, rtgId: string): Promise<ReadyToGoProductsEntity> => {
+  getRtgProductsWithId = async (
+    admin: AdminAuthEntity,
+    rtgId: string,
+  ): Promise<ReadyToGoProductsEntity> => {
     try {
-        const rtgProduct = await this.findOne({
-            where: {
-                rtgId,
-                adminId: admin.id,
-            }
-        })
+      const rtgProduct = await this.findOne({
+        where: {
+          rtgId,
+          adminId: admin.id,
+        },
+      });
 
-        if(!rtgProduct) {
-            this.logger.error(`product with id ${rtgId} not found`);
-            throw new NotFoundException(`product not found`)
-        }
+      if (!rtgProduct) {
+        this.logger.error(`product with id ${rtgId} not found`);
+        throw new NotFoundException(`product not found`);
+      }
 
-        this.logger.verbose(`product with id ${rtgId} successfully fetched`)
-        return rtgProduct;
+      this.logger.verbose(`product with id ${rtgId} successfully fetched`);
+      return rtgProduct;
     } catch (error) {
       this.logger.error(`failed to fetch product with id ${rtgId}`);
       throw new InternalServerErrorException();
     }
-  }
+  };
 
   updateRtgProduct = async (
-    admin: AdminAuthEntity, 
-    rtgId: string, 
-    req: Request, 
+    admin: AdminAuthEntity,
+    rtgId: string,
+    req: Request,
     updateRtgProductDto: UpdateRtgProductDto,
-    file: Express.Multer.File
-    ): Promise<ReadyToGoProductsEntity> => {
-    const {
-        rtgName, 
-        rtgType, 
-        rtgPrice, 
-        rtgDescription
-    } = updateRtgProductDto;
+    file: Express.Multer.File,
+  ): Promise<ReadyToGoProductsEntity> => {
+    const { rtgName, rtgType, rtgPrice, rtgDescription } = updateRtgProductDto;
 
     const rtgProduct = await this.getRtgProductsWithId(admin, rtgId);
 
     if (file) {
-        const newImage = await this.cloudinaryService.uploadImage(req.file);
+      const newImage = await this.cloudinaryService.uploadImage(req.file);
 
-        if(rtgProduct.rtgImageUrl) {
-            const oldPublicId = this.extractPublicId(rtgProduct.rtgImageUrl);
-            await this.cloudinaryService.deleteImage(oldPublicId)
-        }
-        rtgProduct.rtgImageUrl = newImage.secure_url;
+      if (rtgProduct.rtgImageUrl) {
+        const oldPublicId = this.extractPublicId(rtgProduct.rtgImageUrl);
+        await this.cloudinaryService.deleteImage(oldPublicId);
+      }
+      rtgProduct.rtgImageUrl = newImage.secure_url;
     }
     rtgProduct.rtgName = rtgName || rtgProduct.rtgName;
     rtgProduct.rtgType = rtgType || rtgProduct.rtgType;
@@ -146,41 +152,46 @@ export class ReadyToGoProductsRepository extends Repository<ReadyToGoProductsEnt
     rtgProduct.rtgDescription = rtgDescription || rtgProduct.rtgDescription;
 
     try {
-        await rtgProduct.save();
-        this.logger.verbose(`"ready to go product" with id ${rtgId} successfully updated`)
-        return rtgProduct;
+      await rtgProduct.save();
+      this.logger.verbose(
+        `"ready to go product" with id ${rtgId} successfully updated`,
+      );
+      return rtgProduct;
     } catch (error) {
-        this.logger.error(`failed to update "ready to go product" with id ${rtgId}`)
-        throw new InternalServerErrorException("failed to update product")
+      this.logger.error(
+        `failed to update "ready to go product" with id ${rtgId}`,
+      );
+      throw new InternalServerErrorException('failed to update product');
     }
-
-  }
+  };
 
   private extractPublicId(rtgImageUrl: string): string {
     const parts = rtgImageUrl.split('/');
     const filename = parts[parts.length - 1];
     const publicId = filename.split('.')[0];
-    return publicId
+    return publicId;
   }
 
-  deleteRtgProduct = async (admin: AdminAuthEntity, rtgId: string): Promise<string> => {
+  deleteRtgProduct = async (
+    admin: AdminAuthEntity,
+    rtgId: string,
+  ): Promise<string> => {
     try {
-        const product = await this.delete({
-            rtgId,
-            adminId: admin.id
-        })
+      const product = await this.delete({
+        rtgId,
+        adminId: admin.id,
+      });
 
-        if(!product) {
-            this.logger.error(`product with id ${rtgId} not found`)
-            throw new NotFoundException(`product not found`)
-        }
+      if (!product) {
+        this.logger.error(`product with id ${rtgId} not found`);
+        throw new NotFoundException(`product not found`);
+      }
 
-        this.logger.verbose(`"ready to go product" with id ${rtgId}`)
-        return `product with id ${rtgId} successfully deleted`
-
-    }catch (error) {
-        this.logger.error(`failed to delete product with id ${rtgId}`)
-        throw new InternalServerErrorException("failed to delete product")
+      this.logger.verbose(`"ready to go product" with id ${rtgId}`);
+      return `product with id ${rtgId} successfully deleted`;
+    } catch (error) {
+      this.logger.error(`failed to delete product with id ${rtgId}`);
+      throw new InternalServerErrorException('failed to delete product');
     }
-  }
+  };
 }

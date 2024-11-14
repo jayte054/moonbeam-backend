@@ -81,7 +81,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       imageUrl: '',
       productOrderId: '',
       itemType: '',
-      deliveryDate: ''
+      deliveryDate: '',
     };
 
     try {
@@ -91,7 +91,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       cartDto['price'] = packageOrder.price;
       cartDto['imageUrl'] = packageOrder.imageUrl;
       cartDto['productOrderId'] = packageOrder.packageId;
-      cartDto['itemType'] = "bronzePackage";
+      cartDto['itemType'] = 'bronzePackage';
       cartDto['deliveryDate'] = packageOrder.deliveryDate;
 
       // await this.mailerService.bronzePackageOrderMail(user.email, packageOrder);
@@ -170,24 +170,24 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
     });
     packageOrder.user = user;
 
-     const cartDto: CartDto = {
-       itemName: '',
-       price: '',
-       imageUrl: '',
-       productOrderId: '',
-       itemType: '',
-       deliveryDate: ''
-     };
+    const cartDto: CartDto = {
+      itemName: '',
+      price: '',
+      imageUrl: '',
+      productOrderId: '',
+      itemType: '',
+      deliveryDate: '',
+    };
 
     try {
       await packageOrder.save();
 
-       cartDto['itemName'] = packageOrder.packageOrderName;
-       cartDto['price'] = packageOrder.price;
-       cartDto['imageUrl'] = packageOrder.imageUrl;
-       cartDto['productOrderId'] = packageOrder.packageId;
-       cartDto['itemType'] = 'silverPackage';
-       cartDto['deliveryDate'] = packageOrder.deliveryDate;
+      cartDto['itemName'] = packageOrder.packageOrderName;
+      cartDto['price'] = packageOrder.price;
+      cartDto['imageUrl'] = packageOrder.imageUrl;
+      cartDto['productOrderId'] = packageOrder.packageId;
+      cartDto['itemType'] = 'silverPackage';
+      cartDto['deliveryDate'] = packageOrder.deliveryDate;
 
       await this.mailerService.silverPackageOrderMail(user.email, packageOrder);
       await this.cartRepository.addToCart(user, cartDto);
@@ -267,14 +267,14 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
     });
     packageOrder.user = user;
 
-     const cartDto: CartDto = {
-       itemName: '',
-       price: '',
-       imageUrl: '',
-       productOrderId: '',
-       itemType: '',
-       deliveryDate: '',
-     };
+    const cartDto: CartDto = {
+      itemName: '',
+      price: '',
+      imageUrl: '',
+      productOrderId: '',
+      itemType: '',
+      deliveryDate: '',
+    };
 
     try {
       await packageOrder.save();
@@ -369,14 +369,14 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
     });
     packageOrder.user = user;
 
-     const cartDto: CartDto = {
-       itemName: '',
-       price: '',
-       imageUrl: '',
-       productOrderId: '',
-       itemType: '',
-       deliveryDate: '',
-     };
+    const cartDto: CartDto = {
+      itemName: '',
+      price: '',
+      imageUrl: '',
+      productOrderId: '',
+      itemType: '',
+      deliveryDate: '',
+    };
 
     try {
       await packageOrder.save();

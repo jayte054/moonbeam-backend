@@ -17,6 +17,9 @@ import { ResetPasswordDto } from '../authDto/resetPasswordDto';
 import { PasswordResetTokenEntity } from '../passwordResetTokenEntity/passwordResetTokenEntity';
 import { AdminAuthEntity } from '../adminAuthEntity/adminAuthEntity';
 import { UserDto } from '../authDto/userDto';
+import { ProductOrderEntity } from 'src/productOrders/productOrderEntity/productOrderEntity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AllOrdersRepository } from 'src/productOrders/productOrderRepository/allOrdersRepository';
 
 @Injectable()
 export class AuthRepository extends Repository<AuthEntity> {
@@ -24,6 +27,7 @@ export class AuthRepository extends Repository<AuthEntity> {
   constructor(
     private dataSource: DataSource,
     private readonly mailerService: MailerService,
+    private allOrderRepository: AllOrdersRepository,
   ) {
     super(AuthEntity, dataSource.createEntityManager());
   }
@@ -152,24 +156,71 @@ export class AuthRepository extends Repository<AuthEntity> {
     }
   }
 
-  async getAllUsers(admin: AdminAuthEntity): Promise<UserDto[] | any> {
-    const options: FindOneOptions<AuthEntity> = {};
-    const users: AuthEntity[] = await this.find(options);
+  async getAllUsers(
+    admin: AdminAuthEntity,
+    page = 1,
+    limit = 10,
+  ): Promise<UserDto[] | any> {
+    try {
+      console.log('yes');
+      const skip = (page - 1) * limit;
 
-    if (!users) {
-      this.logger.error(`users not found`);
-      throw new NotFoundException(`users not found by ${admin.id}`);
+      const users = await this.createQueryBuilder('auth')
+        .skip(skip) // Applying offset
+        .take(limit)
+        .select()
+        .getMany();
+
+      console.log('yeah');
+      if (!users) {
+        this.logger.error(`users not found`);
+        throw new NotFoundException(`users not found by ${admin.id}`);
+      }
+
+      const userInfo = await Promise.all(
+        users.map(async (user: any) => {
+          const orders = await this.allOrderRepository.allPaidUserOrders(
+            user.id,
+          );
+
+          if (!orders) {
+            return null;
+          }
+
+          const _user = {
+            id: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            orders: orders.length,
+          };
+          return _user;
+        }),
+      );
+
+      const filteredUserInfo = userInfo.filter((user) => user !== null);
+
+      this.logger.verbose(`Users fetched successfully by admin ${admin.id}`);
+      return filteredUserInfo;
+      // return userInfo;
+    } catch (error) {
+      console.log(error);
     }
-
-    const userInfo: UserDto[] = users.map((user) => ({
-      id: user.id,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      orderName: user.orderName,
-    }));
-    this.logger.verbose(`Users fetched successfully by admin ${admin.id}`);
-    return userInfo;
   }
+
+  getAll = async (): Promise<AuthEntity[]> => {
+    try {
+      const users = await this.createQueryBuilder('auth').select().getMany();
+
+      if (!users.length) {
+        console.warn('No users found.');
+      }
+      console.log('yeah');
+      console.log(users);
+      return users;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 }

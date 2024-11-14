@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import {Covering} from "src/productOrders/ProductOrderEnum/productOrderEnum"
+import { Covering } from 'src/productOrders/ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class ProductDesignRateEntity extends BaseEntity {

@@ -6,5 +6,5 @@ export class UserDto {
   lastname: string;
   phoneNumber: string;
   email: string;
-  orderName: ProductOrderEntity;
+  orders: string;
 }

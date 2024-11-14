@@ -11,7 +11,6 @@ import { ProfileModule } from './profile/profileModule';
 import { DeliveryModule } from './deliveryModule/deliveryModule';
 import { PaymentModule } from './paymentModule/paymentModule';
 
-
 @Module({
   imports: [
     AuthModule,
@@ -23,7 +22,7 @@ import { PaymentModule } from './paymentModule/paymentModule';
     AdminHubModule,
     ProfileModule,
     DeliveryModule,
-    PaymentModule
+    PaymentModule,
   ],
 })
 export class AppModule {}

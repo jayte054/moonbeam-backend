@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/authModule/authmodule';
 import { MailerModule } from 'src/mailerModule/mailerModule';
@@ -30,12 +30,13 @@ import { OrderEntity } from './productOrderEntity/ordersEntity';
 import { OrderRepository } from './productOrderRepository/ordersRepository';
 import { RtgOrderEntity } from './rtgOrderEntity/rtgOrderEntity';
 import { RtgOrderRepository } from './productOrderRepository/rtgOrderRepository';
+import { AllOrdersRepository } from './productOrderRepository/allOrdersRepository';
 
 @Module({
   imports: [
-    MailerModule,
-    CloudinaryModule,
-    AuthModule,
+    forwardRef(() => MailerModule),
+    forwardRef(() => CloudinaryModule),
+    forwardRef(() => AuthModule),
     TypeOrmModule.forFeature([
       ProductOrderEntity,
       ChopsOrderEntity,
@@ -67,7 +68,9 @@ import { RtgOrderRepository } from './productOrderRepository/rtgOrderRepository'
     OrderRepository,
     RtgOrderRepository,
     ProductService,
+    AllOrdersRepository,
   ],
   controllers: [ProductController],
+  exports: [AllOrdersRepository],
 })
 export class ProductsModule {}

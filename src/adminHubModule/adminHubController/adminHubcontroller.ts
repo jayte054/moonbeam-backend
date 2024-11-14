@@ -39,7 +39,11 @@ import {
   SurprisePackageDto,
   UpdateSurprisePackageDto,
 } from '../adminHubDto/adminHubDto';
-import { rtgProductObject, StudioObject, SurprisePackageObject } from '../types';
+import {
+  rtgProductObject,
+  StudioObject,
+  SurprisePackageObject,
+} from '../types';
 import { SurprisePackageEntity } from '../surprisePackageEntity/surprisePackageEntity';
 import { BudgetCakeRateEntity } from '../productRateEntity/budgetCakeRateEntity';
 import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';

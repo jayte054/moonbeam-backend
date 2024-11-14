@@ -1,6 +1,12 @@
-import { AuthEntity } from "src/authModule/authEntity/authEntity";
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { OrderStatus } from "../ProductOrderEnum/productOrderEnum";
+import { AuthEntity } from 'src/authModule/authEntity/authEntity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { OrderStatus } from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class CustomPackageOrderEntity extends BaseEntity {
@@ -10,7 +16,7 @@ export class CustomPackageOrderEntity extends BaseEntity {
   @Column()
   orderName: string;
 
-  @Column('text', {array:true})
+  @Column('text', { array: true })
   item: string[];
 
   @Column({
@@ -20,7 +26,7 @@ export class CustomPackageOrderEntity extends BaseEntity {
   })
   status: OrderStatus;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   price?: string;
 
   @Column({ type: 'timestamp', nullable: false })
