@@ -1,5 +1,12 @@
-import { AuthEntity } from "src/authModule/authEntity/authEntity";
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { AuthEntity } from 'src/authModule/authEntity/authEntity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { CategoryType } from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class RequestEntity extends BaseEntity {
@@ -11,6 +18,9 @@ export class RequestEntity extends BaseEntity {
 
   @Column()
   orderType: string;
+
+  @Column()
+  category: string;
 
   @Column('text', { array: true })
   content: string[];

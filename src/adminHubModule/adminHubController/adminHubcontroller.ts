@@ -284,6 +284,11 @@ export class AdminHubController {
     return await this.adminHubService.fetchProfiles(admin);
   }
 
+  @Get('/fetchPaidOrders')
+  async fetchUserOrders(@GetUser() admin: AdminAuthEntity) {
+    return await this.adminHubService.fetchUserOrders(admin);
+  }
+
   @Post('/surprisePackage')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)

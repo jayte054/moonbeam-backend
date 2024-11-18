@@ -14,6 +14,7 @@ import { v4 as uuid } from 'uuid';
 import { CartDto, FoilCakeDto } from '../productOrderDto/productOrderDto';
 import { CakeVariantEntity } from '../productOrderEntity/cakeVariantEntity';
 import {
+  CategoryType,
   OrderStatus,
   ProductFlavours,
   VariantType,
@@ -51,6 +52,7 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
     foilCakeOrder.orderName = orderName;
     foilCakeOrder.quantity = quantity;
     foilCakeOrder.type = VariantType.foilCake;
+    foilCakeOrder.category = CategoryType.foilCake;
     foilCakeOrder.description = description;
     foilCakeOrder.productFlavour = productFlavour;
 
@@ -74,6 +76,7 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
       quantity: foilCakeOrder.quantity,
       productOrderId: foilCakeOrder.variantId,
       itemType: foilCakeOrder.type,
+      category: foilCakeOrder.category,
       deliveryDate: foilCakeOrder.deliveryDate,
     };
 
@@ -117,6 +120,7 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
     parfaitOrder.orderName = orderName;
     parfaitOrder.quantity = quantity;
     parfaitOrder.type = VariantType.cakeParfait;
+    parfaitOrder.category = CategoryType.cakeParfait;
     parfaitOrder.description = description;
 
     const price = Number(quantity) * cakeParfaitRate;
@@ -139,6 +143,7 @@ export class CakeVariantRepository extends Repository<CakeVariantEntity> {
       quantity: parfaitOrder.quantity,
       productOrderId: parfaitOrder.variantId,
       itemType: parfaitOrder.type,
+      category: parfaitOrder.category,
       deliveryDate: parfaitOrder.deliveryDate,
     };
 

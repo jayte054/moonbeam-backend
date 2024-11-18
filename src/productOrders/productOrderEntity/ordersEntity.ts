@@ -6,6 +6,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import {
+  DeliveryStatus,
+  CategoryType,
+} from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class OrderEntity extends BaseEntity {
@@ -27,11 +31,17 @@ export class OrderEntity extends BaseEntity {
   @Column()
   price: string;
 
+  @Column()
+  category: CategoryType;
+
   @Column('text', { array: true })
   content?: string[];
 
   @Column()
   deliveryDate: string;
+
+  @Column()
+  deliveryStatus: DeliveryStatus;
 
   @ManyToOne(() => AuthEntity, (user) => user.orderId, { eager: false })
   user: AuthEntity;

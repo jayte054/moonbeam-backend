@@ -13,7 +13,10 @@ import {
   UpdateSurprisePackageOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
-import { OrderStatus } from '../ProductOrderEnum/productOrderEnum';
+import {
+  CategoryType,
+  OrderStatus,
+} from '../ProductOrderEnum/productOrderEnum';
 import { fetchPackages } from '../productUtility';
 import {
   bronzePackageOrderType,
@@ -63,6 +66,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       itemSix: bronzePackageData.itemSix,
       description: bronzePackageData.description,
     };
+    packageOrder.category = CategoryType.bronzePackage;
     packageOrder.deliveryDate = deliveryDate;
     packageOrder.price = bronzePackageData.price;
     packageOrder.imageUrl = bronzePackageData.imageUrl;
@@ -81,6 +85,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       imageUrl: '',
       productOrderId: '',
       itemType: '',
+      category: '',
       deliveryDate: '',
     };
 
@@ -92,6 +97,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       cartDto['imageUrl'] = packageOrder.imageUrl;
       cartDto['productOrderId'] = packageOrder.packageId;
       cartDto['itemType'] = 'bronzePackage';
+      cartDto['category'] = packageOrder.category;
       cartDto['deliveryDate'] = packageOrder.deliveryDate;
 
       // await this.mailerService.bronzePackageOrderMail(user.email, packageOrder);
@@ -119,6 +125,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
         itemSix: packageOrder.bronzePackage.itemSix,
         description: packageOrder.bronzePackage.description,
       },
+      category: packageOrder.category,
       imageUrl: packageOrder.imageUrl,
       price: packageOrder.price,
       addInfo: packageOrder.addInfo,
@@ -158,6 +165,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       itemEight: silverPackageData.itemEight,
       description: silverPackageData.description,
     };
+    packageOrder.category = CategoryType.silverPackage;
     packageOrder.deliveryDate = deliveryDate;
     packageOrder.price = silverPackageData.price;
     packageOrder.imageUrl = silverPackageData.imageUrl;
@@ -176,6 +184,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       imageUrl: '',
       productOrderId: '',
       itemType: '',
+      category: '',
       deliveryDate: '',
     };
 
@@ -187,6 +196,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       cartDto['imageUrl'] = packageOrder.imageUrl;
       cartDto['productOrderId'] = packageOrder.packageId;
       cartDto['itemType'] = 'silverPackage';
+      cartDto['category'] = packageOrder.category;
       cartDto['deliveryDate'] = packageOrder.deliveryDate;
 
       await this.mailerService.silverPackageOrderMail(user.email, packageOrder);
@@ -215,6 +225,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
         itemEight: packageOrder.silverPackage.itemEight,
         description: packageOrder.silverPackage.description,
       },
+      category: packageOrder.category,
       imageUrl: packageOrder.imageUrl,
       price: packageOrder.price,
       addInfo: packageOrder.addInfo,
@@ -255,6 +266,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       itemTen: goldPackageData.itemTen,
       description: goldPackageData.description,
     };
+    packageOrder.category = CategoryType.goldPackage;
     packageOrder.deliveryDate = deliveryDate;
     packageOrder.price = goldPackageData.price;
     packageOrder.imageUrl = goldPackageData.imageUrl;
@@ -273,6 +285,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       imageUrl: '',
       productOrderId: '',
       itemType: '',
+      category: '',
       deliveryDate: '',
     };
 
@@ -284,6 +297,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       cartDto['imageUrl'] = packageOrder.imageUrl;
       cartDto['productOrderId'] = packageOrder.packageId;
       cartDto['itemType'] = 'goldPackage';
+      cartDto['category'] = packageOrder.category;
       cartDto['deliveryDate'] = packageOrder.deliveryDate;
 
       await this.mailerService.goldPackageOrderMail(user.email, packageOrder);
@@ -315,6 +329,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
         itemTen: packageOrder.goldPackage.itemTen,
         description: packageOrder.goldPackage.description,
       },
+      category: packageOrder.category,
       imageUrl: packageOrder.imageUrl,
       price: packageOrder.price,
       addInfo: packageOrder.addInfo,
@@ -357,6 +372,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       itemTwelve: diamondPackageData.itemTwelve,
       description: diamondPackageData.description,
     };
+    packageOrder.category = CategoryType.diamondPackage;
     packageOrder.deliveryDate = deliveryDate;
     packageOrder.price = diamondPackageData.price;
     packageOrder.imageUrl = diamondPackageData.imageUrl;
@@ -375,6 +391,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       imageUrl: '',
       productOrderId: '',
       itemType: '',
+      category: '',
       deliveryDate: '',
     };
 
@@ -387,6 +404,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
       cartDto['productOrderId'] = packageOrder.packageId;
       cartDto['itemType'] = 'silverPackage';
       cartDto['deliveryDate'] = packageOrder.deliveryDate;
+      cartDto['category'] = packageOrder.category;
 
       await this.mailerService.diamondPackageOrderMail(
         user.email,
@@ -421,6 +439,7 @@ export class SurprisePackageOrderRepository extends Repository<SurprisePackageOr
         itemTwelve: packageOrder.diamondPackage.itemTwelve,
         description: packageOrder.diamondPackage.description,
       },
+      category: packageOrder.category,
       imageUrl: packageOrder.imageUrl,
       price: packageOrder.price,
       addInfo: packageOrder.addInfo,

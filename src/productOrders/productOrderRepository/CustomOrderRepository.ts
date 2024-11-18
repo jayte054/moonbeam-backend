@@ -12,7 +12,10 @@ import {
   UpdateOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
-import { OrderStatus } from '../ProductOrderEnum/productOrderEnum';
+import {
+  CategoryType,
+  OrderStatus,
+} from '../ProductOrderEnum/productOrderEnum';
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
 import { v4 as uuid } from 'uuid';
@@ -62,6 +65,7 @@ export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
     order.customCakeId = uuid();
     order.orderName = orderName;
     order.type = type;
+    order.category = CategoryType.customCake;
     order.imageUrl = cloudinaryUrl.secure_url;
     order.productFlavour = productFlavour;
     order.designCovering = designCovering;
@@ -85,6 +89,7 @@ export class CustomCakeOrderRepository extends Repository<CustomOrderEntity> {
     const requestDto: RequestDto = {
       requestTitle: order.orderName,
       orderType: order.type,
+      category: order.category,
       content: ['custom cake'],
       imageUrl: order.imageUrl,
       deliveryDate: order.deliveryDate,

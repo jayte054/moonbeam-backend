@@ -36,7 +36,7 @@ import {
 } from '../productOrderDto/productOrderDto';
 import { ProductService } from '../productOrderService/productOrderService';
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
-import { ChopsOrderType } from '../productOrderRepository/chopsOrderRepository';
+import { ChopsOrderType } from '../../types';
 import {
   bronzePackageOrderType,
   chopsOrderType,
@@ -131,7 +131,7 @@ export class ProductController {
     @GetUser() user: AuthEntity,
     // @UploadedFile() file: Express.Multer.File,
     // @Request() req: Request | any,
-    @Body() rtgOrderDto: RtgOrderDto
+    @Body() rtgOrderDto: RtgOrderDto,
   ): Promise<RtgOrderObject> {
     return await this.productService.createRtgOrder(user, rtgOrderDto);
   }
@@ -419,7 +419,13 @@ export class ProductController {
     @Request() req: Request | any,
   ): Promise<ProductOrderEntity> {
     console.log('wahala');
-    return await this.productService.updateOrder(id, user, updateOrderDto, req, file);
+    return await this.productService.updateOrder(
+      id,
+      user,
+      updateOrderDto,
+      req,
+      file,
+    );
   }
 
   @Put('/:id/cancelOrder')

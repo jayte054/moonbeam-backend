@@ -14,7 +14,7 @@ import { ProductRepository } from './productOrderRepository';
 import { RequestRepository } from './requestRepository';
 import { RtgOrderRepository } from './rtgOrderRepository';
 import { SurprisePackageOrderRepository } from './surprisePackageOrderRepository';
-import { AllOrdersDto, PaidOrdersDto } from 'src/types';
+import { AllOrdersDto, AllOrdersObject, PaidOrdersDto } from 'src/types';
 
 @Injectable()
 export class AllOrdersRepository {
@@ -173,10 +173,14 @@ export class AllOrdersRepository {
       }
       const orders: PaidOrdersDto[] = paidOrders.map((orders) => ({
         id: orders.orderId,
+        orderName: orders.orderName,
         orderType: orders.content,
+        category: orders.category,
         date: orders.orderDate,
         amount: orders.price,
         status: 'paid',
+        deliveryStatus: orders.deliveryStatus,
+        deliveryDate: orders.deliveryDate,
       }));
       this.logger.verbose(`fetched paid orders for id ${userId}`);
       return orders;
@@ -186,7 +190,7 @@ export class AllOrdersRepository {
     }
   };
 
-  getAllOrders = async (): Promise<AllOrdersDto[]> => {
+  getAllOrders = async (): Promise<AllOrdersObject> => {
     try {
       const [
         budgetCakeOrders,
@@ -210,95 +214,127 @@ export class AllOrdersRepository {
         this.surprisePackageOrderRepository.find(),
       ]);
 
-      const formattedBudgetCakeOrders = budgetCakeOrders.map((order) => ({
-        id: order.budgetCakeId,
-        orderType: order.type,
-        date: order.date,
-        amount: order.price,
-        status: order.status,
-      }));
+      const formattedBudgetCakeOrders: AllOrdersDto[] = budgetCakeOrders.map(
+        (order) => ({
+          id: order.budgetCakeId,
+          orderType: order.type,
+          orderDate: order.orderDate,
+          deliveryDate: order.deliveryDate,
+          amount: order.price,
+          status: order.status,
+        }),
+      );
 
-      const formattedChopOrders = chopsOrders.map((order) => ({
+      const formattedChopOrders: AllOrdersDto[] = chopsOrders.map((order) => ({
         id: order.id,
         orderType: order.type,
-        date: order.date,
+        orderDate: order.orderDate,
+        deliveryDate: order.deliveryDate,
         amount: order.price,
         status: order.status,
       }));
 
-      const formattedCakeVariantOrders = cakeVariantOrders.map((order) => ({
-        id: order.variantId,
-        orderType: order.type,
-        date: order.orderDate,
-        amount: order.price,
-        status: order.status,
-      }));
+      const formattedCakeVariantOrders: AllOrdersDto[] = cakeVariantOrders.map(
+        (order) => ({
+          id: order.variantId,
+          orderType: order.type,
+          orderDate: order.orderDate,
+          deliveryDate: order.deliveryDate,
+          amount: order.price,
+          status: order.status,
+        }),
+      );
 
-      const formattedCustomCakeOrders = customCakeOrders.map((order) => ({
-        id: order.customCakeId,
-        orderType: order.type,
-        date: order.date,
-        amount: order.price,
-        status: order.status,
-      }));
+      const formattedCustomCakeOrders: AllOrdersDto[] = customCakeOrders.map(
+        (order) => ({
+          id: order.customCakeId,
+          orderType: order.type,
+          orderDate: order.orderDate,
+          deliveryDate: order.deliveryDate,
+          amount: order.price,
+          status: order.status,
+        }),
+      );
 
-      const formattedCustomPackageOrders = customPackageOrders.map((order) => ({
-        id: order.customPackageId,
-        orderType: 'custom package',
-        date: order.orderDate,
-        amount: order.price,
-        status: order.status,
-      }));
+      const formattedCustomPackageOrders: AllOrdersDto[] =
+        customPackageOrders.map((order) => ({
+          id: order.customPackageId,
+          orderType: 'custom package',
+          orderDate: order.orderDate,
+          deliveryDate: order.deliveryDate,
+          amount: order.price,
+          status: order.status,
+        }));
 
-      const formattedProductsOrders = products.map((order) => ({
+      const formattedProductsOrders: AllOrdersDto[] = products.map((order) => ({
         id: order.id,
         orderType: order.type,
-        date: order.date,
+        orderDate: order.orderDate,
+        deliveryDate: order.deliveryDate,
         amount: order.price,
         status: order.status,
       }));
 
-      const formattedChopRequestOrders = chopRequestOrders.map((order) => ({
-        id: order.requestId,
-        orderType: order.orderType,
-        date: order.deliveryDate,
-        amount: 'null',
-        status: order.status,
-      }));
+      const formattedChopRequestOrders: AllOrdersDto[] = chopRequestOrders.map(
+        (order) => ({
+          id: order.requestId,
+          orderType: order.orderType,
+          deliveryDate: order.deliveryDate,
+          amount: 'null',
+          status: order.status,
+        }),
+      );
 
-      const formattedRtgOrders = rtgOrders.map((order) => ({
+      const formattedRtgOrders: AllOrdersDto[] = rtgOrders.map((order) => ({
         id: order.rtgOrderId,
         orderType: order.orderType,
-        date: order.orderDate,
+        orderDate: order.orderDate,
+        deliveryDate: order.deliveryDate,
         amount: order.price,
         status: order.status,
       }));
 
-      const formattedPackageOrders = packageOrders.map((order) => ({
-        id: order.packageId,
-        orderType:
-          order.bronzePackage.toString() ||
-          order.silverPackage.toString() ||
-          order.goldPackage.toString() ||
-          order.diamondPackage.toString(),
-        date: order.orderDate,
-        amount: order.price,
-        status: order.status,
-      }));
+      const formattedPackageOrders: AllOrdersDto[] = packageOrders.map(
+        (order) => ({
+          id: order.packageId,
+          orderType:
+            order.bronzePackage.toString() ||
+            order.silverPackage.toString() ||
+            order.goldPackage.toString() ||
+            order.diamondPackage.toString(),
+          orderDate: order.orderDate,
+          deliveryDate: order.deliveryDate,
+          amount: order.price,
+          status: order.status,
+        }),
+      );
 
-      const allOrders = [
-        ...formattedBudgetCakeOrders,
-        ...formattedCakeVariantOrders,
-        ...formattedChopOrders,
-        ...formattedChopRequestOrders,
-        ...formattedCustomCakeOrders,
-        ...formattedCustomPackageOrders,
-        ...formattedPackageOrders,
-        ...formattedProductsOrders,
-        ...formattedRtgOrders,
-      ];
+      //   const allOrders = [
+      //     ...formattedBudgetCakeOrders,
+      //     ...formattedCakeVariantOrders,
+      //     ...formattedChopOrders,
+      //     ...formattedChopRequestOrders,
+      //     ...formattedCustomCakeOrders,
+      //     ...formattedCustomPackageOrders,
+      //     ...formattedPackageOrders,
+      //     ...formattedProductsOrders,
+      //     ...formattedRtgOrders,
+      //   ];
+
+      const _allOrders: AllOrdersObject = {
+        budgetCake: formattedBudgetCakeOrders,
+        cakeVariant: formattedCakeVariantOrders,
+        chopOrders: formattedChopOrders,
+        chopRequestOrders: formattedChopRequestOrders,
+        customCakeOrders: formattedCustomCakeOrders,
+        customPackageOrders: formattedCustomPackageOrders,
+        packageOrders: formattedPackageOrders,
+        customProductOrders: formattedProductsOrders,
+        rtgOrders: formattedRtgOrders,
+      };
+
       this.logger.verbose('successfully fetched all orders');
-      return allOrders;
+      return _allOrders;
     } catch (error) {
       this.logger.error('failed to fetch orders');
       throw new InternalServerErrorException('failed to fetch orders');
@@ -314,9 +350,13 @@ export class AllOrdersRepository {
       }
       const orders: PaidOrdersDto[] = paidOrders.map((orders) => ({
         id: orders.orderId,
+        orderName: orders.orderName,
         orderType: orders.content,
+        category: orders.category,
         date: orders.orderDate,
         amount: orders.price,
+        deliveryStatus: orders.deliveryStatus,
+        deliveryDate: orders.deliveryDate,
         status: 'paid',
       }));
       this.logger.verbose(`fetched paid orders`);

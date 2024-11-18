@@ -16,7 +16,10 @@ import {
   UpdateCustomPackageOrderDto,
 } from '../productOrderDto/productOrderDto';
 import { CustomPackageOrderEntity } from '../productOrderEntity/customPacakgeOrderEntity';
-import { OrderStatus } from '../ProductOrderEnum/productOrderEnum';
+import {
+  CategoryType,
+  OrderStatus,
+} from '../ProductOrderEnum/productOrderEnum';
 import { RequestRepository } from './requestRepository';
 
 @Injectable()
@@ -40,6 +43,7 @@ export class CustomPackageOrderRepository extends Repository<CustomPackageOrderE
     const order = new CustomPackageOrderEntity();
     order.orderName = orderName;
     order.item = item;
+    order.category = CategoryType.customPackage;
     order.deliveryDate = deliveryDate;
     order.addInfo = addInfo;
     order.orderDate = new Date().toLocaleDateString('en-US', {
@@ -55,6 +59,7 @@ export class CustomPackageOrderRepository extends Repository<CustomPackageOrderE
       const requestDto: RequestDto = {
         requestTitle: order.orderName,
         orderType: 'surprise package',
+        category: order.category,
         content: order.item,
         deliveryDate: order.deliveryDate,
         productOrderId: order.customPackageId,
@@ -67,6 +72,7 @@ export class CustomPackageOrderRepository extends Repository<CustomPackageOrderE
       return {
         orderName: order.orderName,
         item: order.item,
+        category: order.category,
         deliveryDate: order.deliveryDate,
         addInfo: order.addInfo,
       };

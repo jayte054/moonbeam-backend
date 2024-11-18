@@ -1,6 +1,15 @@
-import { AuthEntity } from "src/authModule/authEntity/authEntity";
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { OrderStatus } from "../ProductOrderEnum/productOrderEnum";
+import { AuthEntity } from 'src/authModule/authEntity/authEntity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import {
+  CategoryType,
+  OrderStatus,
+} from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class CustomChopsOrderEntity extends BaseEntity {
@@ -12,6 +21,9 @@ export class CustomChopsOrderEntity extends BaseEntity {
 
   @Column()
   chopType: string;
+
+  @Column()
+  category: CategoryType;
 
   @Column()
   numberOfPacks: string;

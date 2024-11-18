@@ -18,6 +18,8 @@ import {
   ChopProductType,
   PastryPackageType,
   Covering,
+  DeliveryStatus,
+  CategoryType,
 } from '../ProductOrderEnum/productOrderEnum';
 import {
   bronzePackageObject,
@@ -144,6 +146,8 @@ export class UpdateGenericChopsOrderDto {
   description?: string;
 
   type: ChopProductType; //change to ChopProductType to cover pastry options and chops option
+
+  category: CategoryType;
 
   chopPackageType?: ChopPackageType;
 
@@ -356,6 +360,10 @@ export class CartDto {
   @IsNotEmpty()
   itemType: string;
 
+  @IsString()
+  @IsNotEmpty()
+  category: string;
+
   quantity?: string;
 
   @IsString()
@@ -397,6 +405,10 @@ export class RequestDto {
   orderType: string;
 
   @IsString()
+  @IsNotEmpty()
+  category: string;
+
+  @IsString()
   @IsArray()
   content: string[];
 
@@ -435,8 +447,15 @@ export class OrderDto {
   content?: string[];
 
   @IsString()
+  category: CategoryType;
+
+  @IsString()
   @IsNotEmpty()
   deliveryDate: string;
+
+  @IsString()
+  @IsNotEmpty()
+  deliveryStatus: DeliveryStatus;
 }
 
 export class RtgOrderDto {

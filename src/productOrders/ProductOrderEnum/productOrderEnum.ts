@@ -5,7 +5,7 @@ export enum ProductType {
   Anniversary = 'Anniversary',
   Chops_Pastries = 'Chops / Pastries',
   Surprise_Package = 'surprise package',
-  Cake_Variant = 'cake variant'
+  Cake_Variant = 'cake variant',
 }
 
 export enum ProductInch {
@@ -126,6 +126,29 @@ export enum BronzePackage {
 }
 
 export enum VariantType {
-  foilCake = "foilCake",
-  cakeParfait = "cakeParfait"
+  foilCake = 'foilCake',
+  cakeParfait = 'cakeParfait',
+}
+
+export enum DeliveryStatus {
+  resolved = 'resolved',
+  unresolved = 'unresolved',
+}
+
+export enum CategoryType {
+  budgetCake = 'budgetCake',
+  specialCake = 'specialCake',
+  chops = 'chops',
+  pastry = 'pastry',
+  bronzePackage = 'bronzePackage',
+  silverPackage = 'silverPackage',
+  goldPackage = 'goldPackage',
+  diamondPackage = 'diamondPackage',
+  cakeParfait = 'cakeParfait',
+  foilCake = 'foilCake',
+  customCake = 'customCake',
+  customPackage = 'customPackage',
+  customChops = 'customChops',
+  rtgCakes = 'rtgCakes',
+  rtgChops = 'rtgChops',
 }

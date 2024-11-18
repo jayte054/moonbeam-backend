@@ -1,6 +1,15 @@
-import { AuthEntity } from "src/authModule/authEntity/authEntity";
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { OrderStatus } from "../ProductOrderEnum/productOrderEnum";
+import { AuthEntity } from 'src/authModule/authEntity/authEntity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import {
+  CategoryType,
+  OrderStatus,
+} from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class RtgOrderEntity extends BaseEntity {
@@ -13,7 +22,10 @@ export class RtgOrderEntity extends BaseEntity {
   @Column()
   orderType: string;
 
-  @Column({nullable: true})
+  @Column()
+  category: CategoryType;
+
+  @Column({ nullable: true })
   cakeMessage?: string;
 
   @Column()

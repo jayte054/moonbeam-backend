@@ -6,7 +6,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { OrderStatus } from '../ProductOrderEnum/productOrderEnum';
+import {
+  CategoryType,
+  OrderStatus,
+} from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class CustomPackageOrderEntity extends BaseEntity {
@@ -18,6 +21,9 @@ export class CustomPackageOrderEntity extends BaseEntity {
 
   @Column('text', { array: true })
   item: string[];
+
+  @Column()
+  category: CategoryType;
 
   @Column({
     type: 'enum',

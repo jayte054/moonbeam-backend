@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/authModule/authmodule';
 import { CloudinaryModule } from 'src/cloudinary/cloudinaryModule';
@@ -18,11 +18,16 @@ import { AdminStudioEntity } from './adminStudioDetailsEntity/adminStudioDetails
 import { AdminStudioDetailsRepository } from './adminStudioRepository/adminStudioRepository';
 import { ReadyToGoProductsEntity } from './rtgProductsEntity/rtgProductsEntity';
 import { ReadyToGoProductsRepository } from './rtgProductsRepository/rtgProductsRepository';
+import { AdminHubOrderRepository } from './adminHubOrderRepository/adminHubOrderRepository';
+import { ProductsModule } from 'src/productOrders/products.module';
+import { AllOrdersRepository } from 'src/productOrders/productOrderRepository/allOrdersRepository';
 
 @Module({
   imports: [
     CloudinaryModule,
     AuthModule,
+    // forwardRef(() => ProductsModule),
+    ProductsModule,
     TypeOrmModule.forFeature([
       ProductRateEntity,
       ProductEntity,
@@ -41,6 +46,7 @@ import { ReadyToGoProductsRepository } from './rtgProductsRepository/rtgProducts
     SurprisePackageRepository,
     AdminStudioDetailsRepository,
     ReadyToGoProductsRepository,
+    // AdminHubOrderRepository,
     AdminHubService,
   ],
   controllers: [AdminHubController, BareAdminHubController],

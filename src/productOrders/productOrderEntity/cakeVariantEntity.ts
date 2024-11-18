@@ -6,7 +6,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { OrderStatus, ProductFlavours, VariantType } from '../ProductOrderEnum/productOrderEnum';
+import {
+  CategoryType,
+  OrderStatus,
+  ProductFlavours,
+  VariantType,
+} from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class CakeVariantEntity extends BaseEntity {
@@ -22,7 +27,10 @@ export class CakeVariantEntity extends BaseEntity {
   @Column()
   type: VariantType;
 
-  @Column({nullable: true})
+  @Column()
+  category: CategoryType;
+
+  @Column({ nullable: true })
   productFlavour?: ProductFlavours;
 
   @Column()
@@ -32,7 +40,7 @@ export class CakeVariantEntity extends BaseEntity {
   price: string;
 
   @Column()
-  status: OrderStatus
+  status: OrderStatus;
 
   @Column()
   orderDate: string;

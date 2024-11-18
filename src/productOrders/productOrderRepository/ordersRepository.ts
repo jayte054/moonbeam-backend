@@ -9,6 +9,7 @@ import { OrderObject } from 'src/types';
 import { DataSource, Repository } from 'typeorm';
 import { OrderDto } from '../productOrderDto/productOrderDto';
 import { OrderEntity } from '../productOrderEntity/ordersEntity';
+import { DeliveryStatus } from '../ProductOrderEnum/productOrderEnum';
 
 @Injectable()
 export class OrderRepository extends Repository<OrderEntity> {
@@ -21,8 +22,15 @@ export class OrderRepository extends Repository<OrderEntity> {
     user: AuthEntity,
     orderDto: OrderDto,
   ): Promise<OrderObject> => {
-    const { orderName, imageUrl, quantity, content, deliveryDate, price } =
-      orderDto;
+    const {
+      orderName,
+      imageUrl,
+      quantity,
+      content,
+      deliveryDate,
+      price,
+      category,
+    } = orderDto;
 
     const newOrder = new OrderEntity();
     newOrder.orderName = orderName;
@@ -30,14 +38,16 @@ export class OrderRepository extends Repository<OrderEntity> {
     newOrder.quantity = quantity;
     newOrder.content = content;
     newOrder.price = price;
+    newOrder.category = category;
     newOrder.orderDate = new Date().toLocaleDateString('en-US', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
     });
     newOrder.deliveryDate = deliveryDate;
+    newOrder.deliveryStatus = DeliveryStatus.unresolved;
     newOrder.userId = user.id;
-    console.log(newOrder);
+    console.log('order', newOrder);
 
     try {
       await newOrder.save();
@@ -74,6 +84,7 @@ export class OrderRepository extends Repository<OrderEntity> {
       }
       return orders;
     } catch (error) {
+      console.log(error);
       this.logger.error(`failed to fetch orders for user ${user.id}`);
       throw new InternalServerErrorException('failed to fetch orders');
     }

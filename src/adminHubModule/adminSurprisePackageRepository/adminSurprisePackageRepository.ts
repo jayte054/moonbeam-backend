@@ -162,9 +162,9 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
     updateSurprisePackageDto: UpdateSurprisePackageDto,
     packageId: string,
     req: Request,
-    file: Express.Multer.File
+    file: Express.Multer.File,
   ): Promise<SurprisePackageObject> => {
-    console.log("bronze",updateSurprisePackageDto);
+    console.log('bronze', updateSurprisePackageDto);
     const {
       packageName,
       itemOne,
@@ -184,7 +184,7 @@ export class SurprisePackageRepository extends Repository<SurprisePackageEntity>
     } = updateSurprisePackageDto;
 
     const saidPackage = await this.getPackageWithId(packageId, admin);
-    console.log(  file  );
+    console.log(file);
 
     if (file) {
       const newImage = await this.cloudinaryService.uploadImage(req.file);

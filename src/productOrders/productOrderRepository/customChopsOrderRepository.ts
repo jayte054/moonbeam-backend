@@ -1,14 +1,26 @@
-import { Injectable, InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { AuthEntity } from "src/authModule/authEntity/authEntity";
-import { CloudinaryService } from "src/cloudinary/cloudinaryService/cloudinaryService";
-import { MailerService } from "src/mailerModule/mailerService";
-import { chopsOrderType } from "src/types";
-import { DataSource, Repository } from "typeorm";
-import { CreateChopsOrderDto, RequestDto, UpdateCustomChopOrderDto } from "../productOrderDto/productOrderDto";
-import { CustomChopsOrderEntity } from "../productOrderEntity/customChopsEntity";
-import { OrderStatus } from "../ProductOrderEnum/productOrderEnum";
-import { RequestRepository } from "./requestRepository";
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AuthEntity } from 'src/authModule/authEntity/authEntity';
+import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
+import { MailerService } from 'src/mailerModule/mailerService';
+import { chopsOrderType } from 'src/types';
+import { DataSource, Repository } from 'typeorm';
+import {
+  CreateChopsOrderDto,
+  RequestDto,
+  UpdateCustomChopOrderDto,
+} from '../productOrderDto/productOrderDto';
+import { CustomChopsOrderEntity } from '../productOrderEntity/customChopsEntity';
+import {
+  CategoryType,
+  OrderStatus,
+} from '../ProductOrderEnum/productOrderEnum';
+import { RequestRepository } from './requestRepository';
 
 @Injectable()
 export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
@@ -17,7 +29,7 @@ export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
     private dataSource: DataSource,
     private readonly mailerService: MailerService,
     @InjectRepository(RequestRepository)
-    private requestRepository: RequestRepository
+    private requestRepository: RequestRepository,
   ) {
     super(CustomChopsOrderEntity, dataSource.createEntityManager());
   }
@@ -26,12 +38,14 @@ export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
     createChopsOrderDto: CreateChopsOrderDto,
     user: AuthEntity,
   ): Promise<chopsOrderType> {
-    const {orderName, chopType, numberOfPacks, deliveryDate, description} = createChopsOrderDto;
+    const { orderName, chopType, numberOfPacks, deliveryDate, description } =
+      createChopsOrderDto;
 
-    const order = new CustomChopsOrderEntity()
+    const order = new CustomChopsOrderEntity();
 
     order.orderName = orderName;
     order.chopType = chopType;
+    order.category = CategoryType.customChops;
     order.numberOfPacks = numberOfPacks;
     order.orderDate = new Date().toLocaleDateString('en-US', {
       day: '2-digit',
@@ -43,11 +57,12 @@ export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
     order.status = OrderStatus.progress;
     order.user = user;
 
-    try{
+    try {
       await order.save();
       const requestDto: RequestDto = {
         requestTitle: order.orderName,
         orderType: 'surprise package',
+        category: order.category,
         content: [order.chopType],
         quantity: order.numberOfPacks,
         deliveryDate: order.deliveryDate,
@@ -55,62 +70,85 @@ export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
         productOrderId: order.chopsId,
       };
       await this.requestRepository.addRequest(user, requestDto);
-      await this.mailerService.customChopsOrderMail(user.email, order)
+      await this.mailerService.customChopsOrderMail(user.email, order);
       this.logger.verbose(
         `custom order request with id ${order.chopsId} has been successfully created `,
       );
       return {
         orderName: order.orderName,
         chopType: order.chopType,
+        category: order.category,
         numberOfPacks: order.numberOfPacks,
         deliveryDate: order.deliveryDate,
         description: order.description,
       };
     } catch (error) {
-        console.log(error)
-        this.logger.error(`failed to create custom chop order`);
-        throw new InternalServerErrorException(`failed to create custom chop order`)
+      console.log(error);
+      this.logger.error(`failed to create custom chop order`);
+      throw new InternalServerErrorException(
+        `failed to create custom chop order`,
+      );
     }
   }
 
-  async getCustomChopsOrder(user: AuthEntity): Promise<CustomChopsOrderEntity[]> {
+  async getCustomChopsOrder(
+    user: AuthEntity,
+  ): Promise<CustomChopsOrderEntity[]> {
     const query = this.createQueryBuilder('orderName');
-    query.where('orderName.userId = :userId', {userId: user.id});
+    query.where('orderName.userId = :userId', { userId: user.id });
 
-    const orders = await query.getMany()
+    const orders = await query.getMany();
 
-    try{
-        this.logger.verbose('successfully fetched custom chop orders');
-        return orders;
+    try {
+      this.logger.verbose('successfully fetched custom chop orders');
+      return orders;
     } catch (error) {
-        console.log(error)
-        this.logger.error('failed to fetch custom chop orders')
-        throw new InternalServerErrorException(`failed to fetch custom chop orders`)
+      console.log(error);
+      this.logger.error('failed to fetch custom chop orders');
+      throw new InternalServerErrorException(
+        `failed to fetch custom chop orders`,
+      );
     }
   }
 
-  async getCustomChopOrderWithId(chopsId: string, user: AuthEntity): Promise<CustomChopsOrderEntity> {
+  async getCustomChopOrderWithId(
+    chopsId: string,
+    user: AuthEntity,
+  ): Promise<CustomChopsOrderEntity> {
     const orderWithId = this.findOne({
-        where: {
-            chopsId,
-            userId: user.id
-        }
-    })
+      where: {
+        chopsId,
+        userId: user.id,
+      },
+    });
 
     if (!orderWithId) {
-        throw new NotFoundException(`order with id ${orderWithId} not found`)
+      throw new NotFoundException(`order with id ${orderWithId} not found`);
     }
     try {
-        this.logger.verbose(`order with id ${chopsId} successfully fetched`)
-        return orderWithId;
+      this.logger.verbose(`order with id ${chopsId} successfully fetched`);
+      return orderWithId;
     } catch (error) {
-        this.logger.error(`failed to fetch order with id ${chopsId}`)
-        throw new InternalServerErrorException(`failed to fetch custom chop order with id ${chopsId}`)
+      this.logger.error(`failed to fetch order with id ${chopsId}`);
+      throw new InternalServerErrorException(
+        `failed to fetch custom chop order with id ${chopsId}`,
+      );
     }
   }
 
-  async updateCustomChopOrder(updateCustomChopOrder: UpdateCustomChopOrderDto, user: AuthEntity, chopsId: string): Promise<CustomChopsOrderEntity> {
-    const {orderName, chopType, numberOfPacks, deliveryDate, description, status} = updateCustomChopOrder;
+  async updateCustomChopOrder(
+    updateCustomChopOrder: UpdateCustomChopOrderDto,
+    user: AuthEntity,
+    chopsId: string,
+  ): Promise<CustomChopsOrderEntity> {
+    const {
+      orderName,
+      chopType,
+      numberOfPacks,
+      deliveryDate,
+      description,
+      status,
+    } = updateCustomChopOrder;
 
     const order = await this.getCustomChopOrderWithId(chopsId, user);
 
@@ -122,12 +160,16 @@ export class CustomChopsRepository extends Repository<CustomChopsOrderEntity> {
     order.status = status || order.status;
 
     try {
-        await order.save();
-        this.logger.verbose(`successfully fetched custom chop order with id ${chopsId}`)
-        return order;
+      await order.save();
+      this.logger.verbose(
+        `successfully fetched custom chop order with id ${chopsId}`,
+      );
+      return order;
     } catch (error) {
-        this.logger.error(`failed to update order with id ${chopsId}`)
-        throw new InternalServerErrorException(`failed to update order with id ${chopsId}`)
+      this.logger.error(`failed to update order with id ${chopsId}`);
+      throw new InternalServerErrorException(
+        `failed to update order with id ${chopsId}`,
+      );
     }
   }
 }

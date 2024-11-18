@@ -9,6 +9,7 @@ import {
 import {
   DesignCovering,
   OrderStatus,
+  CategoryType,
   ProductFlavours,
   ProductInch,
   ProductLayers,
@@ -25,6 +26,9 @@ export class BudgetCakeOrderEntity extends BaseEntity {
 
   @Column()
   type: ProductType;
+
+  @Column()
+  category: CategoryType;
 
   @Column()
   imageUrl: string;

@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AdminAuthEntity } from 'src/authModule/adminAuthEntity/adminAuthEntity';
@@ -28,14 +33,23 @@ import {
   SurprisePackageDto,
   UpdateSurprisePackageDto,
 } from '../adminHubDto/adminHubDto';
-import { rtgProductObject, StudioObject, SurprisePackageObject } from '../types';
+import {
+  rtgProductObject,
+  StudioObject,
+  SurprisePackageObject,
+} from '../types';
 import { AdminBudgetCakeRateRepository } from '../adminProductRateRepository/adminBudgetCakeRateRepository copy';
 import { BudgetCakeRateEntity } from '../productRateEntity/budgetCakeRateEntity';
 import { AdminStudioDetailsRepository } from '../adminStudioRepository/adminStudioRepository';
-import { async } from 'rxjs';
 import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
 import { ReadyToGoProductsRepository } from '../rtgProductsRepository/rtgProductsRepository';
 import { ReadyToGoProductsEntity } from '../rtgProductsEntity/rtgProductsEntity';
+import {
+  AdminHubOrderRepository,
+  // fetchUserOrders,
+} from '../adminHubOrderRepository/adminHubOrderRepository';
+import { AllOrdersRepository } from 'src/productOrders/productOrderRepository/allOrdersRepository';
+import { PaidOrdersDto } from 'src/types';
 
 @Injectable()
 export class AdminHubService {
@@ -43,7 +57,6 @@ export class AdminHubService {
   constructor(
     @InjectRepository(AdminProductRateRepository)
     private adminProductRateRepository: AdminProductRateRepository,
-
     @InjectRepository(AdminProductGalleryRepository)
     private adminProductRepository: AdminProductGalleryRepository,
     @InjectRepository(AdminProductDesignRateRepository)
@@ -56,6 +69,8 @@ export class AdminHubService {
     private adminStudioDetailsRepository: AdminStudioDetailsRepository,
     @InjectRepository(ReadyToGoProductsRepository)
     private readyToGoProductsRepository: ReadyToGoProductsRepository,
+    // @InjectRepository(AdminHubOrderRepository)
+    private allOrdersRepository: AllOrdersRepository,
   ) {}
 
   productRate = async (
@@ -190,6 +205,27 @@ export class AdminHubService {
     );
   };
 
+  fetchUserOrders = async (
+    admin: AdminAuthEntity,
+  ): Promise<PaidOrdersDto[]> => {
+    if (!admin.isAdmin) {
+      this.logger.error('user is not an admin');
+      throw new InternalServerErrorException('user not allowed');
+    }
+    try {
+      const orders = await this.allOrdersRepository.allPaidOrders();
+
+      if (!orders) {
+        this.logger.error('orders table empty');
+        throw new NotFoundException('no orders to fetch');
+      }
+      return orders;
+    } catch (error) {
+      this.logger.error('failed to fetch orders');
+      throw new InternalServerErrorException('failed to fetch orders');
+    }
+  };
+
   updateProduct = async (
     productId: string,
     admin: AdminAuthEntity,
@@ -211,14 +247,14 @@ export class AdminHubService {
     rtgId: string,
     req: Request,
     updateRtgProductDto: UpdateRtgProductDto,
-    file: Express.Multer.File
+    file: Express.Multer.File,
   ): Promise<ReadyToGoProductsEntity> => {
     return await this.readyToGoProductsRepository.updateRtgProduct(
       admin,
       rtgId,
       req,
       updateRtgProductDto,
-      file
+      file,
     );
   };
 
@@ -307,14 +343,14 @@ export class AdminHubService {
     updateSurprisePackageDto: UpdateSurprisePackageDto,
     packageId: string,
     req: Request,
-    file: Express.Multer.File
+    file: Express.Multer.File,
   ): Promise<SurprisePackageObject> => {
     return await this.surprisePackageRepository.updateSurprisePackage(
       admin,
       updateSurprisePackageDto,
       packageId,
       req,
-      file
+      file,
     );
   };
 

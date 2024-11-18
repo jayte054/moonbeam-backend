@@ -30,6 +30,7 @@ export class CartRepository extends Repository<CartEntity> {
       productOrderId,
       itemType,
       deliveryDate,
+      category,
     } = cartDto;
 
     const cartItem = new CartEntity();
@@ -39,6 +40,7 @@ export class CartRepository extends Repository<CartEntity> {
     cartItem.quantity = quantity || '1';
     cartItem.productOrderId = productOrderId;
     cartItem.itemType = itemType;
+    cartItem.category = category;
     cartItem.deliveryDate = deliveryDate;
     cartItem.user = user;
 
@@ -52,6 +54,7 @@ export class CartRepository extends Repository<CartEntity> {
         price: cartItem.price,
         imageUrl: cartItem.imageUrl,
         quantity: cartItem.quantity,
+        category: cartItem.category,
         productOrderId: cartItem.productOrderId,
         deliveryDate: cartItem.deliveryDate,
         userId: cartItem.user.id,

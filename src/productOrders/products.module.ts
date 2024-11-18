@@ -31,12 +31,14 @@ import { OrderRepository } from './productOrderRepository/ordersRepository';
 import { RtgOrderEntity } from './rtgOrderEntity/rtgOrderEntity';
 import { RtgOrderRepository } from './productOrderRepository/rtgOrderRepository';
 import { AllOrdersRepository } from './productOrderRepository/allOrdersRepository';
+import { AdminHubModule } from 'src/adminHubModule/adminHubModule';
 
 @Module({
   imports: [
     forwardRef(() => MailerModule),
     forwardRef(() => CloudinaryModule),
     forwardRef(() => AuthModule),
+    // forwardRef(() => AdminHubModule),
     TypeOrmModule.forFeature([
       ProductOrderEntity,
       ChopsOrderEntity,

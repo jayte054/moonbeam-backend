@@ -25,6 +25,7 @@ import {
   PastryPackageType,
   Covering,
   NumberOfPacks,
+  CategoryType,
 } from '../ProductOrderEnum/productOrderEnum';
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
@@ -35,25 +36,7 @@ import { CloudinaryUrlDto } from '../../cloudinary/coundinaryDto/cloudinaryUrlDt
 import { UpdateSurprisePackageDto } from 'src/adminHubModule/adminHubDto/adminHubDto';
 import { CartRepository } from './cartRepository';
 import { InjectRepository } from '@nestjs/typeorm';
-
-export type ChopsOrderType = {
-  id: string;
-  orderTitle: string;
-  type: ChopProductType;
-  imageUrl: string;
-  chopPackageType: ChopPackageType;
-  customChopPackage: string;
-  numberOfPacks: NumberOfPacks;
-  customNumberOfPacks: string;
-  pastryPackageType: PastryPackageType;
-  customPastryPackage: string;
-  covering: Covering;
-  price: string;
-  deliveryDate: string;
-  userId: string;
-  description: string;
-  status: OrderStatus;
-};
+import { ChopsOrderType } from 'src/types';
 
 @Injectable()
 export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
@@ -86,6 +69,7 @@ export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
       customPastryPackage,
       covering,
     } = genericChopsOrderDto;
+    console.log(genericChopsOrderDto);
 
     const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
       req.file,
@@ -143,6 +127,8 @@ export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
     order.id = uuid();
     order.orderTitle = orderTitle;
     order.type = type;
+    order.category =
+      order.type === 'chops' ? CategoryType.chops : CategoryType.pastry;
     order.imageUrl = cloudinaryUrl.secure_url;
     order.chopPackageType = chopPackageType;
     order.customChopPackage = customChopPackage;
@@ -183,6 +169,7 @@ export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
       price: '',
       imageUrl: '',
       itemType: '',
+      category: '',
       quantity: '',
       deliveryDate: '',
     };
@@ -194,6 +181,7 @@ export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
     cartDto['quantity'] = order.numberOfPacks;
     cartDto['deliveryDate'] = order.deliveryDate;
     cartDto['productOrderId'] = order.id;
+    cartDto['category'] = order.category;
 
     try {
       await order.save();
@@ -213,6 +201,7 @@ export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
       id: order.id,
       orderTitle: order.orderTitle,
       type: order.type,
+      category: order.category,
       imageUrl: order.imageUrl,
       chopPackageType: order.chopPackageType,
       customChopPackage: order.customChopPackage,
@@ -280,6 +269,7 @@ export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
       customNumberOfPacks,
       pastryPackageType,
       customPastryPackage,
+      category,
       covering,
     } = updateGenericChopsOrderDto;
 
@@ -338,6 +328,7 @@ export class ChopsOrderRepository extends Repository<ChopsOrderEntity> {
     saidChopOrder.numberOfPacks = numberOfPacks || saidChopOrder.numberOfPacks;
     saidChopOrder.covering = covering || saidChopOrder.covering;
     saidChopOrder.type = type || saidChopOrder.type;
+    saidChopOrder.category = category || saidChopOrder.category;
     saidChopOrder.chopPackageType =
       chopPackageType || saidChopOrder.chopPackageType;
     saidChopOrder.pastryPackageType =

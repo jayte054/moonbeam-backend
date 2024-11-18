@@ -1,6 +1,12 @@
-import { AuthEntity } from "src/authModule/authEntity/authEntity";
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { ProductType } from "../ProductOrderEnum/productOrderEnum";
+import { AuthEntity } from 'src/authModule/authEntity/authEntity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { ProductType } from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
 export class CartEntity extends BaseEntity {
@@ -16,11 +22,14 @@ export class CartEntity extends BaseEntity {
   @Column()
   price: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   imageUrl?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   quantity?: string;
+
+  @Column()
+  category: string;
 
   @Column()
   deliveryDate: string;

@@ -9,6 +9,7 @@ import { RequestObject } from 'src/types';
 import { DataSource, Repository } from 'typeorm';
 import { RequestDto } from '../productOrderDto/productOrderDto';
 import { RequestEntity } from '../productOrderEntity/requestEntity';
+import { CategoryType } from '../ProductOrderEnum/productOrderEnum';
 
 @Injectable()
 export class RequestRepository extends Repository<RequestEntity> {
@@ -24,6 +25,7 @@ export class RequestRepository extends Repository<RequestEntity> {
     const {
       requestTitle,
       orderType,
+      category,
       quantity,
       imageUrl,
       deliveryDate,
@@ -36,6 +38,7 @@ export class RequestRepository extends Repository<RequestEntity> {
 
     order.requestTitle = requestTitle;
     order.orderType = orderType;
+    order.category = category;
     order.quantity = quantity || '1';
     order.content = content;
     order.imageUrl = imageUrl;

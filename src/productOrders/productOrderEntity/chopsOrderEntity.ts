@@ -14,6 +14,7 @@ import {
   PastryPackageType,
   ChopProductType,
   Covering,
+  CategoryType,
 } from '../ProductOrderEnum/productOrderEnum';
 
 @Entity()
@@ -26,6 +27,9 @@ export class ChopsOrderEntity extends BaseEntity {
 
   @Column()
   type: ChopProductType;
+
+  @Column()
+  category: CategoryType;
 
   @Column()
   imageUrl: string;

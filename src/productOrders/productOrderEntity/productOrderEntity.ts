@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import {
+  CategoryType,
   DesignCovering,
   OrderStatus,
   ProductFlavours,
@@ -25,6 +26,9 @@ export class ProductOrderEntity extends BaseEntity {
 
   @Column()
   type: ProductType;
+
+  @Column()
+  category: CategoryType;
 
   @Column()
   imageUrl: string;

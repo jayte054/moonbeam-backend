@@ -12,7 +12,10 @@ import {
   goldPackageObject,
   silverPackageObject,
 } from 'src/types';
-import { OrderStatus } from '../ProductOrderEnum/productOrderEnum';
+import {
+  CategoryType,
+  OrderStatus,
+} from '../ProductOrderEnum/productOrderEnum';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
 
 @Entity()
@@ -37,6 +40,8 @@ export class SurprisePackageOrderEntity extends BaseEntity {
 
   @Column('jsonb', { nullable: true })
   diamondPackage?: diamondPackageObject;
+
+  category: CategoryType;
 
   @Column()
   imageUrl: string;

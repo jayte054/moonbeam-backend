@@ -21,6 +21,7 @@ import {
   ProductFlavours,
   ProductType,
   ChopProductType,
+  CategoryType,
 } from '../ProductOrderEnum/productOrderEnum';
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
@@ -107,6 +108,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.id = uuid();
     order.orderName = orderName;
     order.type = type;
+    order.category = CategoryType.specialCake;
     order.imageUrl = cloudinaryUrl.secure_url;
     order.productFlavour = productFlavour;
     order.designCovering = designCovering;
@@ -222,6 +224,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     order.id = uuid();
     order.orderName = orderName;
     order.type = type;
+    order.category = CategoryType.specialCake;
     order.productFlavour = productFlavour;
     order.designCovering = designCovering;
     order.designRate = designrate.toString();
@@ -256,6 +259,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
       productOrderId: '',
       itemType: '',
       deliveryDate: '',
+      category: '',
     };
 
     cartDto['itemName'] = order.orderName;
@@ -263,6 +267,7 @@ export class ProductRepository extends Repository<ProductOrderEntity> {
     cartDto['imageUrl'] = order.imageUrl;
     cartDto['productOrderId'] = order.id;
     cartDto['itemType'] = order.type;
+    cartDto['category'] = order.category;
     cartDto['deliveryDate'] = order.deliveryDate;
 
     try {

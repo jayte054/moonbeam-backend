@@ -21,6 +21,7 @@ import {
   ProductFlavours,
   ProductType,
   ChopProductType,
+  CategoryType,
 } from '../ProductOrderEnum/productOrderEnum';
 import { Request } from 'express';
 import { CloudinaryService } from '../../cloudinary/cloudinaryService/cloudinaryService';
@@ -104,6 +105,7 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
     order.budgetCakeId = uuid();
     order.orderName = orderName;
     order.type = type;
+    order.category = CategoryType.budgetCake;
     order.productFlavour = productFlavour;
     order.designCovering = designCovering;
     order.designRate = designrate.toString();
@@ -137,6 +139,7 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
       imageUrl: '',
       productOrderId: '',
       itemType: '',
+      category: '',
       deliveryDate: '',
     };
 
@@ -146,6 +149,7 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
     cartDto['productOrderId'] = order.budgetCakeId;
     cartDto['itemType'] = order.type;
     cartDto['deliveryDate'] = order.deliveryDate;
+    cartDto['category'] = order.category;
     try {
       await order.save();
       await this.mailerService.budgetCakeOrderMail(email, order);
@@ -165,6 +169,7 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
       id: order.budgetCakeId,
       orderName: order.orderName,
       type: order.type,
+      category: order.category,
       inches: order.inches,
       layers: order.layers,
       productFlavour: order.productFlavour,
@@ -293,6 +298,7 @@ export class BudgetCakeOrderRepository extends Repository<BudgetCakeOrderEntity>
     }
     order.orderName = orderName || order.orderName;
     order.type = type || order.type;
+    order.category = CategoryType.budgetCake;
     order.layers = Number(layers) || order.layers;
     order.inches = Number(inches) || order.inches;
     order.deliveryDate = deliveryDate || order.deliveryDate;

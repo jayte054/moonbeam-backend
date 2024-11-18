@@ -23,7 +23,7 @@ import {
 import { ProductOrderEntity } from '../productOrderEntity/productOrderEntity';
 import { ProductRepository } from '../productOrderRepository/productOrderRepository';
 import { ChopsOrderRepository } from '../productOrderRepository/chopsOrderRepository';
-import { ChopsOrderType } from '../productOrderRepository/chopsOrderRepository';
+import { ChopsOrderType } from '../../types';
 import { SurprisePackageOrderRepository } from '../productOrderRepository/surprisePackageOrderRepository';
 import {
   bronzePackageOrderType,
@@ -211,21 +211,27 @@ export class ProductService {
 
   async createRtgOrder(
     user: AuthEntity,
-    rtgOrderDto:RtgOrderDto,
+    rtgOrderDto: RtgOrderDto,
   ): Promise<RtgOrderObject> {
-    return await this.rtgOrderRepository.createRtgOrder(user, rtgOrderDto)
+    return await this.rtgOrderRepository.createRtgOrder(user, rtgOrderDto);
   }
 
   async addToCart(user: AuthEntity, cartDto: CartDto): Promise<CartObject> {
     return await this.cartRepository.addToCart(user, cartDto);
   }
 
-  async addRequest(user: AuthEntity, requestDto: RequestDto): Promise<RequestObject>  {
-    return await this.requestRepository.addRequest(user, requestDto)
+  async addRequest(
+    user: AuthEntity,
+    requestDto: RequestDto,
+  ): Promise<RequestObject> {
+    return await this.requestRepository.addRequest(user, requestDto);
   }
 
-  async createOrder (user: AuthEntity, orderDto: OrderDto): Promise<OrderObject> {
-    return await this.orderRepository.createOrder(user, orderDto)
+  async createOrder(
+    user: AuthEntity,
+    orderDto: OrderDto,
+  ): Promise<OrderObject> {
+    return await this.orderRepository.createOrder(user, orderDto);
   }
 
   async getOrders(user: AuthEntity): Promise<ProductOrderEntity[]> {
@@ -251,8 +257,8 @@ export class ProductService {
     return await this.customPackageOrderRepository.getCustomPackageOrder(user);
   }
 
-  async fetchOrders (user: AuthEntity): Promise<OrderEntity[]> {
-    return await this.orderRepository.fetchOrders(user)
+  async fetchOrders(user: AuthEntity): Promise<OrderEntity[]> {
+    return await this.orderRepository.fetchOrders(user);
   }
 
   async getCustomChopsOrderWithId(
@@ -275,8 +281,11 @@ export class ProductService {
     );
   }
 
-  async fetchOrdersWithId (user: AuthEntity, orderId: string): Promise<OrderEntity> {
-    return await this.orderRepository.fetchOrderWithId(user, orderId)
+  async fetchOrdersWithId(
+    user: AuthEntity,
+    orderId: string,
+  ): Promise<OrderEntity> {
+    return await this.orderRepository.fetchOrderWithId(user, orderId);
   }
 
   async getCakeVaraintOrders(user: AuthEntity): Promise<CakeVariantEntity[]> {
@@ -311,7 +320,7 @@ export class ProductService {
   }
 
   async fetchRequests(user: AuthEntity): Promise<RequestEntity[]> {
-    return await this.requestRepository.fetchRequests(user)
+    return await this.requestRepository.fetchRequests(user);
   }
 
   async updateChopOrders(
@@ -373,14 +382,14 @@ export class ProductService {
     user: AuthEntity,
     updateOrderDto: UpdateOrderDto,
     req: Request,
-    file: Express.Multer.File
+    file: Express.Multer.File,
   ): Promise<ProductOrderEntity> {
     return await this.productRepository.updateOrder(
       id,
       user,
       updateOrderDto,
       req,
-      file
+      file,
     );
   }
 
@@ -404,8 +413,8 @@ export class ProductService {
     );
   }
 
-  async _deleteOrder (user: AuthEntity, orderId: string): Promise<string> {
-    return await this.orderRepository.deleteOrder(user, orderId)
+  async _deleteOrder(user: AuthEntity, orderId: string): Promise<string> {
+    return await this.orderRepository.deleteOrder(user, orderId);
   }
 
   async deleteOrder(id: string, user: AuthEntity): Promise<string> {
@@ -417,6 +426,6 @@ export class ProductService {
   }
 
   async deleteRequest(user: AuthEntity, requestId: string): Promise<string> {
-    return await this.requestRepository.deleteRequests(user, requestId)
+    return await this.requestRepository.deleteRequests(user, requestId);
   }
 }

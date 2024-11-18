@@ -11,7 +11,10 @@ import { MailerService } from 'src/mailerModule/mailerService';
 import { RtgOrderObject } from 'src/types';
 import { DataSource, Repository } from 'typeorm';
 import { CartDto, RtgOrderDto } from '../productOrderDto/productOrderDto';
-import { OrderStatus } from '../ProductOrderEnum/productOrderEnum';
+import {
+  CategoryType,
+  OrderStatus,
+} from '../ProductOrderEnum/productOrderEnum';
 import { RtgOrderEntity } from '../rtgOrderEntity/rtgOrderEntity';
 import { CartRepository } from './cartRepository';
 
@@ -39,6 +42,10 @@ export class RtgOrderRepository extends Repository<RtgOrderEntity> {
 
     order.orderName = orderName;
     order.orderType = orderType;
+    order.category =
+      order.orderType === 'Cakes'
+        ? CategoryType.rtgCakes
+        : CategoryType.rtgChops;
     order.cakeMessage = cakeMessage;
     order.deliveryDate = deliveryDate;
     order.price = price;
@@ -50,6 +57,7 @@ export class RtgOrderRepository extends Repository<RtgOrderEntity> {
       year: 'numeric',
     });
     order.user = user;
+    console.log(order);
 
     try {
       await order.save();
@@ -59,6 +67,7 @@ export class RtgOrderRepository extends Repository<RtgOrderEntity> {
         imageUrl: order.imageUrl,
         productOrderId: order.rtgOrderId,
         itemType: order.orderType,
+        category: order.category,
         deliveryDate: order.deliveryDate,
       };
       await this.cartRepository.addToCart(user, cartDto);

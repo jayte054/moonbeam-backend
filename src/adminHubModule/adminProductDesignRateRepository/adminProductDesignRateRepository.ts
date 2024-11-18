@@ -26,7 +26,8 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
     admin: AdminAuthEntity,
     productDesignRateDto: ProductDesignRateDto,
   ): Promise<ProductDesignRateEntity | any> => {
-    const { butterCreamRate, fundantRate, nakedRate, covering } = productDesignRateDto;
+    const { butterCreamRate, fundantRate, nakedRate, covering } =
+      productDesignRateDto;
 
     const rate = new ProductDesignRateEntity();
 
@@ -112,7 +113,8 @@ export class AdminProductDesignRateRepository extends Repository<ProductDesignRa
     admin: AdminAuthEntity,
     updateDesignRateDto: UpdateDesignRateDto,
   ): Promise<ProductDesignRateEntity | string> => {
-    const { nakedRate, butterCreamRate, fundantRate, covering } = updateDesignRateDto;
+    const { nakedRate, butterCreamRate, fundantRate, covering } =
+      updateDesignRateDto;
 
     const designRate = await this.getProductDesignRateWithId(designId, admin);
 
