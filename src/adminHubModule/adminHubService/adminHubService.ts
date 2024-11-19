@@ -50,6 +50,7 @@ import {
 } from '../adminHubOrderRepository/adminHubOrderRepository';
 import { AllOrdersRepository } from 'src/productOrders/productOrderRepository/allOrdersRepository';
 import { PaidOrdersDto } from 'src/types';
+import { fetchRequests } from '../adminUtility';
 
 @Injectable()
 export class AdminHubService {
@@ -70,6 +71,7 @@ export class AdminHubService {
     @InjectRepository(ReadyToGoProductsRepository)
     private readyToGoProductsRepository: ReadyToGoProductsRepository,
     // @InjectRepository(AdminHubOrderRepository)
+    // private adminHubOrderRepository: AdminHubOrderRepository,
     private allOrdersRepository: AllOrdersRepository,
   ) {}
 
@@ -223,6 +225,21 @@ export class AdminHubService {
     } catch (error) {
       this.logger.error('failed to fetch orders');
       throw new InternalServerErrorException('failed to fetch orders');
+    }
+  };
+
+  fetchUserRequest = async (admin: AdminAuthEntity): Promise<any> => {
+    if (!admin.isAdmin) {
+      this.logger.error('user is not an admin');
+      throw new InternalServerErrorException('user not allowed');
+    }
+
+    try {
+      const requests = await fetchRequests();
+      return requests;
+    } catch (error) {
+      this.logger.error('failed to fetch orders');
+      throw new InternalServerErrorException('failed to fetch requests');
     }
   };
 

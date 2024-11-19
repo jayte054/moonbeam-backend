@@ -56,6 +56,7 @@ export class RequestRepository extends Repository<RequestEntity> {
         requestId: order.requestId,
         requestTitle: order.requestTitle,
         orderType: order.orderType,
+        category: order.category,
         content: order.content,
         quantity: order.quantity,
         deliveryDate: order.deliveryDate,

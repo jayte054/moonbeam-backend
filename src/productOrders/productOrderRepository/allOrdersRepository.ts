@@ -174,6 +174,7 @@ export class AllOrdersRepository {
       const orders: PaidOrdersDto[] = paidOrders.map((orders) => ({
         id: orders.orderId,
         orderName: orders.orderName,
+        imageUrl: orders.imageUrl,
         orderType: orders.content,
         category: orders.category,
         date: orders.orderDate,
@@ -351,6 +352,7 @@ export class AllOrdersRepository {
       const orders: PaidOrdersDto[] = paidOrders.map((orders) => ({
         id: orders.orderId,
         orderName: orders.orderName,
+        imageUrl: orders.imageUrl,
         orderType: orders.content,
         category: orders.category,
         date: orders.orderDate,

@@ -296,6 +296,7 @@ export interface RequestObject {
   quantity: string;
   content: string | string[];
   deliveryDate: string;
+  category: string;
   status: string;
   productOrderId: string;
   userId: string;
@@ -349,6 +350,7 @@ export interface AllOrdersObject {
 export interface PaidOrdersDto {
   id: string;
   orderName: string;
+  imageUrl: string;
   orderType: string | string[] | undefined;
   category: string;
   date: string;
