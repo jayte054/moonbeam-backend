@@ -5,9 +5,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuthEntity } from 'src/authModule/authEntity/authEntity';
-import { OrderObject } from 'src/types';
+import { OrderObject, UpdatedOrderObject } from 'src/types';
 import { DataSource, Repository } from 'typeorm';
-import { OrderDto } from '../productOrderDto/productOrderDto';
+import {
+  OrderDto,
+  UpdateOrderDto,
+  UpdateUserOrderDto,
+} from '../productOrderDto/productOrderDto';
 import { OrderEntity } from '../productOrderEntity/ordersEntity';
 import { DeliveryStatus } from '../ProductOrderEnum/productOrderEnum';
 
@@ -126,6 +130,76 @@ export class OrderRepository extends Repository<OrderEntity> {
     } catch (error) {
       this.logger.error(`failed to fetch order with id ${orderId}`);
       throw new InternalServerErrorException('failed to fetch order');
+    }
+  };
+  _fetchOrderWithId = async (
+    // userId: AuthEntity,
+    orderId: string,
+  ): Promise<OrderEntity> => {
+    try {
+      const order = await this.findOne({
+        where: { orderId },
+      });
+
+      if (!order) {
+        throw new NotFoundException(`order with id ${orderId} not found`);
+      }
+
+      this.logger.verbose(`order with id ${orderId} successfully fetched`);
+      return order;
+    } catch (error) {
+      this.logger.error(`failed to fetch order with id ${orderId}`);
+      throw new InternalServerErrorException('failed to fetch order');
+    }
+  };
+
+  updateOrder = async (
+    orderId: string,
+    updateOrderDto: UpdateUserOrderDto,
+  ): Promise<UpdatedOrderObject> => {
+    const {
+      orderName,
+      category,
+      imageUrl,
+      quantity,
+      price,
+      content,
+      deliveryDate,
+      deliveryStatus,
+    } = updateOrderDto;
+    try {
+      const order = await this._fetchOrderWithId(orderId);
+
+      if (!order) {
+        this.logger.error(`order with id ${orderId} not found`);
+        throw new NotFoundException('order not found');
+      }
+
+      order.orderName = orderName || order.orderName;
+      order.category = category || order.category;
+      order.imageUrl = imageUrl || order.imageUrl;
+      order.quantity = quantity || order.quantity;
+      order.price = price || order.price;
+      order.content = content || order.content;
+      order.deliveryDate = deliveryDate || order.deliveryDate;
+      order.deliveryStatus = deliveryStatus || order.deliveryStatus;
+
+      this.logger.verbose(`order with id ${orderId} updated successfully`);
+
+      return {
+        orderId: order.orderId,
+        orderName: order.orderName,
+        orderDate: order.orderDate,
+        imageUrl: order.imageUrl,
+        quantity: order.quantity,
+        price: order.price,
+        content: order.content,
+        deliveryDate: order.deliveryDate,
+        deliveryStatus: order.deliveryStatus,
+      };
+    } catch (error) {
+      this.logger.error('failed to update order');
+      throw new InternalServerErrorException('failed to update order');
     }
   };
 

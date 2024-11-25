@@ -49,7 +49,11 @@ import { BudgetCakeRateEntity } from '../productRateEntity/budgetCakeRateEntity'
 import { AdminStudioEntity } from '../adminStudioDetailsEntity/adminStudioDetailsEntity';
 // import { Request as Req, Request } from 'express';
 import { ReadyToGoProductsEntity } from '../rtgProductsEntity/rtgProductsEntity';
-import { GetAdmin } from 'src/authModule/getAdminDecorator/getAdminDecorator';
+import {
+  UpdateRequestDto,
+  UpdateUserOrderDto,
+} from 'src/productOrders/productOrderDto/productOrderDto';
+import { RequestObject, UpdatedOrderObject } from 'src/types';
 
 @Controller('adminHub')
 @UseGuards(AuthGuard())
@@ -292,6 +296,37 @@ export class AdminHubController {
   @Get('/fetchRequests')
   async fetchUserRequests(@GetUser() admin: AdminAuthEntity) {
     return await this.adminHubService.fetchUserRequest(admin);
+  }
+
+  @Patch('/updateOrder/:orderId')
+  async updateUserOrder(
+    @GetUser() admin: AdminAuthEntity,
+    @Param('orderId') orderId: string,
+    @Body() updateOrderDto: UpdateUserOrderDto,
+  ): Promise<UpdatedOrderObject> {
+    return await this.adminHubService.updateUserOrder(
+      admin,
+      orderId,
+      updateOrderDto,
+    );
+  }
+
+  @Patch('/updateRequest/:requestId')
+  @UseInterceptors(FileInterceptor('file'))
+  async updateUserRequest(
+    @GetUser() admin: AdminAuthEntity,
+    @Param('requestId') requestId: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req: Request | any,
+    @Body() updateRequestDto: UpdateRequestDto,
+  ): Promise<RequestObject> {
+    return await this.adminHubService.updateUserRequest(
+      admin,
+      requestId,
+      updateRequestDto,
+      req,
+      file,
+    );
   }
 
   @Post('/surprisePackage')

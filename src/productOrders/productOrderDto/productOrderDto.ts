@@ -414,6 +414,8 @@ export class RequestDto {
 
   quantity?: string;
 
+  price?: string;
+
   imageUrl?: string;
 
   @IsString()
@@ -480,4 +482,29 @@ export class RtgOrderDto {
   @IsString()
   @IsNotEmpty()
   imageUrl: string;
+}
+
+export interface UpdateUserOrderDto {
+  orderName?: string;
+  category?: CategoryType;
+  imageUrl?: string;
+  quantity?: string;
+  price?: string;
+  content?: string[];
+  deliveryDate?: string;
+  deliveryStatus: DeliveryStatus;
+}
+
+export class UpdateRequestDto {
+  requestTitle?: string;
+  orderType?: string;
+  category?: string;
+  content?: string[];
+  quantity?: string;
+  price?: string;
+  file?: Express.Multer.File;
+  imageUrl?: string;
+  deliveryDate?: string;
+  status?: string;
+  productOrderId?: string;
 }

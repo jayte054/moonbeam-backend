@@ -1,4 +1,5 @@
 import {
+  Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -49,13 +50,28 @@ import {
   // fetchUserOrders,
 } from '../adminHubOrderRepository/adminHubOrderRepository';
 import { AllOrdersRepository } from 'src/productOrders/productOrderRepository/allOrdersRepository';
-import { PaidOrdersDto } from 'src/types';
-import { fetchRequests } from '../adminUtility';
+import { PaidOrdersDto, RequestObject, UpdatedOrderObject } from 'src/types';
+import {
+  _fetchOrderWithId,
+  fetchRequests,
+  updateOrder,
+  updateUserRequest,
+} from '../adminUtility';
+import { OrderEntity } from 'src/productOrders/productOrderEntity/ordersEntity';
+import { EntityManager } from 'typeorm';
+import {
+  UpdateRequestDto,
+  UpdateUserOrderDto,
+} from 'src/productOrders/productOrderDto/productOrderDto';
+import { CloudinaryService } from 'src/cloudinary/cloudinaryService/cloudinaryService';
+import { request } from 'http';
 
 @Injectable()
 export class AdminHubService {
   private logger = new Logger('AdminHubService');
   constructor(
+    @Inject(EntityManager)
+    private entityManager: EntityManager,
     @InjectRepository(AdminProductRateRepository)
     private adminProductRateRepository: AdminProductRateRepository,
     @InjectRepository(AdminProductGalleryRepository)
@@ -73,6 +89,7 @@ export class AdminHubService {
     // @InjectRepository(AdminHubOrderRepository)
     // private adminHubOrderRepository: AdminHubOrderRepository,
     private allOrdersRepository: AllOrdersRepository,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
   productRate = async (
@@ -238,8 +255,103 @@ export class AdminHubService {
       const requests = await fetchRequests();
       return requests;
     } catch (error) {
-      this.logger.error('failed to fetch orders');
+      this.logger.error('failed to fetch requests');
       throw new InternalServerErrorException('failed to fetch requests');
+    }
+  };
+
+  fetchUserOrderWithId = async (
+    admin: AdminAuthEntity,
+    orderId: string,
+  ): Promise<OrderEntity> => {
+    if (!admin.isAdmin) {
+      this.logger.error('user is not an admin');
+      throw new InternalServerErrorException('user not allowed');
+    }
+
+    try {
+      const order = await _fetchOrderWithId(orderId, this.entityManager);
+      return order;
+    } catch (error) {
+      this.logger.error('failed to fetch orders');
+      throw new InternalServerErrorException('failed to fetch orders');
+    }
+  };
+
+  updateUserOrder = async (
+    admin: AdminAuthEntity,
+    orderId: string,
+    updateOrderDto: UpdateUserOrderDto,
+  ): Promise<UpdatedOrderObject> => {
+    if (!admin.isAdmin) {
+      this.logger.error('user is not an admin');
+      throw new InternalServerErrorException('user not allowed');
+    }
+    try {
+      const order = await updateOrder(
+        orderId,
+        updateOrderDto,
+        this.entityManager,
+      );
+      this.logger.verbose(`order with id ${orderId} successfully updated`);
+      return order;
+    } catch (error) {
+      this.logger.error('failed to update order with id', orderId);
+      throw new InternalServerErrorException('failed to update order');
+    }
+  };
+
+  updateUserRequest = async (
+    admin: AdminAuthEntity,
+    requestId: string,
+    updateRequestDto: UpdateRequestDto,
+    req: Request,
+    file: Express.Multer.File,
+  ): Promise<RequestObject> => {
+    if (!admin.isAdmin) {
+      this.logger.error('User is not an admin');
+      throw new InternalServerErrorException('User not allowed');
+    }
+
+    try {
+      // Handle image upload if no URL is provided
+      if (!updateRequestDto.imageUrl) {
+        const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
+          req.file,
+        );
+        updateRequestDto.imageUrl = cloudinaryUrl;
+      }
+
+      // Update request in the database
+      const request = await updateUserRequest(
+        requestId,
+        this.entityManager,
+        updateRequestDto,
+      );
+
+      this.logger.verbose(`Request with ID ${requestId} successfully updated`);
+
+      // Return the updated request object
+      return {
+        requestId: request.requestId,
+        requestTitle: request.requestTitle,
+        orderType: request.orderType,
+        category: request.category,
+        content: request.content,
+        price: request.price,
+        imageUrl: request.imageUrl,
+        quantity: request.quantity,
+        deliveryDate: request.deliveryDate,
+        status: request.status,
+        productOrderId: request.productOrderId,
+        userId: request.userId,
+      };
+    } catch (error) {
+      console.log(error);
+      this.logger.error(
+        `Failed to update request with ID ${requestId}: ${error.message}`,
+      );
+      throw new InternalServerErrorException('Failed to update order');
     }
   };
 

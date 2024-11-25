@@ -31,6 +31,9 @@ export class RequestEntity extends BaseEntity {
   @Column({ nullable: true })
   imageUrl?: string;
 
+  @Column({ nullable: true })
+  price: string;
+
   @Column()
   deliveryDate: string;
 

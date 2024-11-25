@@ -88,6 +88,23 @@ export class RequestRepository extends Repository<RequestEntity> {
     }
   };
 
+  fetchRequestWithId = async (requestId: string): Promise<RequestEntity> => {
+    try {
+      const request = await this.findOne({
+        where: { requestId },
+      });
+
+      if (!request) {
+        throw new NotFoundException(`request with id ${requestId} not found`);
+      }
+
+      return request;
+    } catch (error) {
+      this.logger.error(`failed to fetch order with id ${requestId}`);
+      throw new InternalServerErrorException('failed to fetch order');
+    }
+  };
+
   deleteRequests = async (
     user: AuthEntity,
     requestId: string,

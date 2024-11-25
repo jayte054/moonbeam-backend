@@ -294,6 +294,8 @@ export interface RequestObject {
   requestTitle: string;
   orderType: string;
   quantity: string;
+  imageUrl?: string;
+  price?: string;
   content: string | string[];
   deliveryDate: string;
   category: string;
@@ -358,4 +360,16 @@ export interface PaidOrdersDto {
   deliveryStatus: string;
   deliveryDate: string;
   status: string;
+}
+
+export interface UpdatedOrderObject {
+  orderId: string;
+  orderName: string;
+  orderDate: string;
+  imageUrl: string;
+  quantity: string;
+  price: string;
+  content: string[];
+  deliveryDate: string;
+  deliveryStatus: string;
 }
