@@ -325,7 +325,6 @@ export class AdminHubController {
       requestId,
       updateRequestDto,
       req,
-      file,
     );
   }
 

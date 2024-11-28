@@ -306,21 +306,17 @@ export class AdminHubService {
     requestId: string,
     updateRequestDto: UpdateRequestDto,
     req: Request,
-    file: Express.Multer.File,
   ): Promise<RequestObject> => {
     if (!admin.isAdmin) {
       this.logger.error('User is not an admin');
       throw new InternalServerErrorException('User not allowed');
     }
-
+    console.log(updateRequestDto.imageUrl);
     try {
-      // Handle image upload if no URL is provided
-      if (!updateRequestDto.imageUrl) {
-        const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
-          req.file,
-        );
-        updateRequestDto.imageUrl = cloudinaryUrl;
-      }
+      const cloudinaryUrl: any = await this.cloudinaryService.uploadImage(
+        req.file,
+      );
+      updateRequestDto.imageUrl = cloudinaryUrl.secure_url;
 
       // Update request in the database
       const request = await updateUserRequest(
