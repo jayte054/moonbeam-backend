@@ -61,30 +61,36 @@ export class ProfileRepository extends Repository<ProfileEntity> {
     };
   };
 
-  getProfile = async (
-    user: AuthEntity,
-  ): Promise<ProfileEntity | any> => {
+  getProfile = async (user: AuthEntity): Promise<ProfileEntity | any> => {
     const query = this.createQueryBuilder('profile');
-    query.where('profile.firstname = :firstname', { firstname: user.firstname });
+    query.where('profile.firstname = :firstname', {
+      firstname: user.firstname,
+    });
 
     try {
-       const profile = await this.findOne({
-      where: {
-        firstname: user.firstname,
-      },
-    });
-    if (!profile) {
-      throw new NotFoundException(`profile with name ${user.firstname} not found`);
-    }
-      this.logger.verbose(`profile with name ${user.firstname} fetched successfully ${{profile}}`);
-    console.log(profile)
-    return profile;
-
+      const profile = await this.findOne({
+        where: {
+          firstname: user.firstname,
+        },
+      });
+      if (!profile) {
+        throw new NotFoundException(
+          `profile with name ${user.firstname} not found`,
+        );
+      }
+      this.logger.verbose(
+        `profile with name ${user.firstname} fetched successfully ${{
+          profile,
+        }}`,
+      );
+      console.log(profile);
+      return profile;
     } catch (error) {
       this.logger.error(`profile with name ${user.firstname} not found`);
-      throw new NotFoundException(`profile with name ${user.firstname} not found`);
+      throw new NotFoundException(
+        `profile with name ${user.firstname} not found`,
+      );
     }
-
   };
 
   updateProfile = async (

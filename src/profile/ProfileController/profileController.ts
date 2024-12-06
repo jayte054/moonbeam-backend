@@ -34,14 +34,12 @@ export class ProfileController {
     @Request() req: Request | any,
     @Body() createProfileDto: CreateProfileDto,
   ): Promise<ProfileEntity | any> {
-    console.log(user)
+    console.log(user);
     return await this.profileService.createProfile(user, createProfileDto, req);
   }
 
   @Get('getProfile')
-  async getProfile(
-    @GetUser() user: AuthEntity,
-  ): Promise<ProfileEntity | any> {
+  async getProfile(@GetUser() user: AuthEntity): Promise<ProfileEntity | any> {
     return await this.profileService.getProfile(user);
   }
 

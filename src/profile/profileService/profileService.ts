@@ -25,9 +25,7 @@ export class ProfileService {
     );
   };
 
-  getProfile = async (
-    user: AuthEntity,
-  ): Promise<ProfileEntity | any> => {
+  getProfile = async (user: AuthEntity): Promise<ProfileEntity | any> => {
     return await this.profileRepository.getProfile(user);
   };
 

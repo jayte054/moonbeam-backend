@@ -373,3 +373,21 @@ export interface UpdatedOrderObject {
   deliveryDate: string;
   deliveryStatus: string;
 }
+
+export interface ReviewObject {
+  reviewId: string;
+  email: string;
+  name: string;
+  review: string;
+  isActive: string;
+  date: string;
+}
+
+export interface ReviewResponse {
+  reviewId: string;
+  email: string;
+  name: string;
+  review: string;
+  isActive: string;
+  date: string;
+}

@@ -27,6 +27,7 @@ import { RequestEntity } from 'src/productOrders/productOrderEntity/requestEntit
 import { OrderEntity } from 'src/productOrders/productOrderEntity/ordersEntity';
 import { ReadyToGoProductsEntity } from 'src/adminHubModule/rtgProductsEntity/rtgProductsEntity';
 import { RtgOrderEntity } from 'src/productOrders/rtgOrderEntity/rtgOrderEntity';
+import { ReviewEntity } from 'src/reviewModule/reviewEntity.ts/reviewEntity';
 
 const dbConfig: any | unknown = config.get('db');
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -64,6 +65,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     OrderEntity,
     ReadyToGoProductsEntity,
     RtgOrderEntity,
+    ReviewEntity,
   ],
   synchronize: process.env.TypeORM_SYNC || dbConfig.synchronize,
   migrations: ['dist/migrations/*.js'], // Specify your migration directory,

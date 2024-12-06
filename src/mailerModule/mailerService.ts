@@ -373,7 +373,8 @@ export class MailerService {
              <p> DeliveryDate: ${deliveryDate} </p>  </br> 
           has been successfully placed.
 
-          We will get back to you shortly`,
+          Please feel free to live a review by clicking on the link 
+          <p><a href="localhost:3000/reviewPage"> Review  Page </a></p>`,
     };
 
     try {
